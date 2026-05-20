@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar - SIMPADU POLIBAN</title>
+    <link rel="stylesheet" href="signupbaru.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="card">
+            <!-- SISI KIRI: Form Pendaftaran -->
+            <div class="form-section">
+                <div class="top-nav">
+                    <div class="brand">
+                        <img src="/Asset/logopoliban.png" alt="Logo Poliban">
+                        <span>SIMPADU POLIBAN</span>
+                    </div>
+                    <div class="login-link">
+                        Sudah punya akun? <a href="/loginbaru/baru.html">Masuk</a>
+                    </div>
+                </div>
+
+                <div class="form-content">
+                    <h1>Daftarkan akun anda</h1>
+                    <p class="tagline">Gabung bersama kami dan akses akun anda.</p>
+
+                    <form id="registerForm">
+                        <div class="input-group">
+                            <label>Email</label>
+                            <input type="email" placeholder="Email@gmail.com" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Kata Sandi</label>
+                            <div class="password-field">
+                                <input type="password" class="pwd-input" placeholder="Masukkan Password" required>
+                                <i class="far fa-eye-slash toggle-pwd"></i>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Konfirmasi Kata Sandi</label>
+                            <div class="password-field">
+                                <input type="password" class="pwd-input" placeholder="Konfirmasi Password" required>
+                                <i class="far fa-eye-slash toggle-pwd"></i>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-register">Daftar Sekarang</button>
+                    </form>
+                </div>
+
+                <footer class="footer">
+                    © 2026 Politeknik Negeri Banjarmasin. All rights reserved.
+                </footer>
+            </div>
+
+            <!-- SISI KANAN: Visual -->
+            <div class="visual-section">
+                <div class="visual-header">
+                    <h2>Sistem Informasi Terpadu<br>Politeknik Negeri Banjarmasin</h2>
+                </div>
+                
+                <div class="image-frame">
+                    <img src="https://poliban.ac.id/wp-content/uploads/2021/04/Gedung-Direktorat-Poliban.jpg" alt="Kampus Poliban" class="campus-img">
+                </div>
+
+                <div class="character-wrapper">
+                    <!-- Gunakan file gambar asli anda di sini -->
+                    <img src="image_b20953.jpg" alt="Mahasiswa Poliban" class="student-chars">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="signupbaru.js"></script>
+</body>
+</html>

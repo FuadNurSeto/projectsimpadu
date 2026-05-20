@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMPADU POLIBAN - Buat Kata Sandi Baru</title>
+    <link rel="stylesheet" href="resetstyle.css">
+    <!-- Menggunakan Font Awesome untuk icon mata (show/hide password) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Bagian Kiri (Form) -->
+        <div class="left-section">
+            <header>
+                <div class="logo">
+                    <img src="/Asset/logopoliban.png" alt="Logo Poliban">
+                    <span>SIMPADU POLIBAN</span>
+                </div>
+                <div class="top-link">
+                    Ingat kata sandi anda? <a href="/loginbaru/baru.html">Masuk</a>
+                </div>
+            </header>
+
+            <main class="form-container">
+                <h1>Buat Kata Sandi Baru</h1>
+                <p class="subtitle">Buat kata sandi baru untuk akun POLIBAN Anda dengan mengisi formulir di bawah ini.</p>
+
+                <form id="resetPasswordForm">
+                    <div class="input-group">
+                        <label>Kata Sandi</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" placeholder="Kata Sandi Baru">
+                            <i class="far fa-eye-slash toggle-password"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Konfirmasi Kata Sandi</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirmPassword" placeholder="Konfirmasi Kata Sandi Baru">
+                            <i class="far fa-eye-slash toggle-password"></i>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-confirm">Konfirmasi</button>
+                </form>
+
+                <p class="info-text">
+                    Jika Anda tidak melihat informasi pembuatan ulang kata sandi akun Anda, silakan periksa kembali nanti.
+                </p>
+            </main>
+
+            <footer>
+                © 2026 Politeknik Negeri Banjarmasin. All rights reserved.
+            </footer>
+        </div>
+
+        <!-- Bagian Kanan (Gambar/Informasi) -->
+        <div class="right-section">
+            <div class="blue-card">
+                <h2>Sistem Informasi Terpadu<br>Politeknik Negeri Banjarmasin</h2>
+                
+                <div class="image-grid">
+                    <div class="grid-main">
+                        <img src="https://via.placeholder.com/600x300" alt="Mahasiswa Poliban">
+                    </div>
+                    <div class="grid-sub">
+                        <img src="https://via.placeholder.com/300x200" alt="Anugerah 2025">
+                        <img src="https://via.placeholder.com/300x200" alt="Penghargaan">
+                    </div>
+                    <div class="grid-bottom">
+                        <img src="https://via.placeholder.com/600x200" alt="Gedung Poliban">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="resetjava.js"></script>
+</body>
+</html>

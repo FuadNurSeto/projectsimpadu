@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - SIMPADU POLIBAN</title>
+    <link rel="stylesheet" href="signupstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- SISI KIRI -->
+        <section class="left-side">
+            <header class="header">
+                <div class="logo-area">
+                    <img src="../Asset/logopoliban.png" alt="Logo Poliban" class="logo">
+                    <h2>SIMPADU POLIBAN</h2>
+                </div>
+                <div class="auth-switch">
+                    Have an account? <a href="/loginbaru/baru.html">Sign in</a>
+                </div>
+            </header>
+
+            <main class="form-container">
+                <h1>Register your account</h1>
+                <p class="subtitle">Join us today and access your account.</p>
+
+                <form id="registerForm">
+                    <div class="input-group">
+                        <label>Email address</label>
+                        <input type="email" placeholder="Kelompok1@gmail.com" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" placeholder="Password Baru" required>
+                            <i class="fa-regular fa-eye-slash toggle-password"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Confirmation password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirm-password" placeholder="Konfirmasi Password Baru" required>
+                            <i class="fa-regular fa-eye-slash toggle-password"></i>
+                        </div>
+                    </div>
+
+                    <div class="terms-area">
+                        <input type="checkbox" id="terms" required checked>
+                        <label for="terms">I agree to <a href="#">Terms</a> & <a href="#">Services</a></label>
+                    </div>
+
+                    <button type="submit" class="btn-signup">Sign Up</button>
+
+                    <div class="divider">
+                        <span>Or sign up with</span>
+                    </div>
+
+                    <button type="button" class="btn-google">
+                        <div class="google-icon">
+                            <img src="../Asset/logogoogle.png" alt="G">
+                        </div>
+                        Sign up with Google
+                    </button>
+                </form>
+            </main>
+
+            <footer class="footer">
+                <p>© 2026 Politeknik Negeri Banjarmasin. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy</a> • <a href="#">Terms & Condition</a>
+                </div>
+            </footer>
+        </section>
+
+        <!-- SISI KANAN -->
+        <section class="right-side">
+            <div class="blue-card">
+                <h3>Sistem Informasi Terpadu <br> Politeknik Negeri Banjarmasin</h3>
+                <div class="image-wrapper">
+                    <img src="kampus_poliban.jpg" alt="Kampus Poliban" class="campus-img">
+                </div>
+                <img src="students_illustration.png" alt="Students" class="students-img">
+            </div>
+        </section>
+    </div>
+    <script src="signupjava.js"></script>
+</body>
+</html>

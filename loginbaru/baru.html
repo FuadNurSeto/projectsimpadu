@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SIMPADU POLIBAN</title>
+    <link rel="stylesheet" href="baru.css">
+    <!-- Menggunakan Font Inter agar terlihat modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome untuk icon mata (password) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Bagian Kiri (Form Login) -->
+        <div class="login-section">
+            <div class="header-logo">
+                <img src="../Asset/logopoliban.png" alt="Logo Poliban">
+                <span>SIMPADU POLIBAN</span>
+            </div>
+
+            <div class="login-content">
+                <h1>Selamat Datang</h1>
+                <p class="subtitle">Sistem Informasi Terpadu Politeknik Negeri Banjarmasin</p>
+
+                <form id="loginForm">
+                    <div id="error-message" class="alert-danger" style="display: none;">
+                        Email atau Kata Sandi salah. Silakan coba lagi
+                    </div>
+
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" id="email" placeholder="Masukkan Email" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Kata Sandi</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" placeholder="Masukkan password" required>
+                            <i class="far fa-eye-slash" id="togglePassword"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" checked> Tetap Masuk
+                        </label>
+                        <a href="../Reset Password/reset.html" class="forgot-password">Lupa Kata Sandi?</a>
+                    </div>
+
+                    <button type="submit" class="btn-login">Masuk</button>
+                </form>
+            </div>
+
+            <footer class="footer">
+                © 2026 Politeknik Negeri Banjarmasin. All rights reserved.
+            </footer>
+        </div>
+
+        <!-- Bagian Kanan (Ilustrasi) -->
+        <div class="illustration-section">
+            <div class="illustration-overlay">
+                
+            </div>
+            <!-- Pastikan ganti src dengan path gambar ilustrasi Anda -->
+            <img src="../Asset/Right1.png" alt="Ilustrasi Mahasiswa" class="hero-image">
+        </div>
+    </div>
+
+    <script src="baru.js"></script>
+</body>
+</html>
