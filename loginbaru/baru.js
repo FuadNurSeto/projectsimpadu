@@ -68,3 +68,33 @@ loginForm.addEventListener("submit", async function (e) {
     btnLogin.disabled = false;
   }
 });
+const emailInput = document.getElementById("email");
+
+// Validasi untuk Input Email
+emailInput.addEventListener("invalid", function () {
+  // Jika input kosong
+  if (this.validity.valueMissing) {
+    this.setCustomValidity("Email tidak boleh kosong!");
+  } 
+  // Jika input diisi tapi formatnya bukan email (tidak ada @, dsb)
+  else if (this.validity.typeMismatch) {
+    this.setCustomValidity("Format email tidak valid! Gunakan tanda '@' (Contoh: nama@domain.com)");
+  }
+});
+
+// Reset pesan error saat user mulai mengetik ulang
+emailInput.addEventListener("input", function () {
+  this.setCustomValidity("");
+});
+
+
+// Validasi untuk Input Password
+passwordInput.addEventListener("invalid", function () {
+  if (this.validity.valueMissing) {
+    this.setCustomValidity("Kata sandi tidak boleh kosong!");
+  }
+});
+
+passwordInput.addEventListener("input", function () {
+  this.setCustomValidity("");
+});
