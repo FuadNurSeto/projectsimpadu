@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMPADU POLIBAN - Akun dan Role</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-section">
+                <img src="../Asset/logopoliban.png" alt="Logo Poliban" class="logo-img">
+                <div class="logo-text">
+                    <h2>SIMPADU POLIBAN</h2>
+                    <p>Sistem Informasi Terpadu<br>Politeknik Negeri Banjarmasin</p>
+                </div>
+            </div>
+
+            <div class="user-profile">
+                <img src="https://via.placeholder.com/40" alt="User Avatar" class="avatar">
+                <div class="user-info">
+                    <h4>Kelompok 1</h4>
+                    <p>Super Admin</p>
+                </div>
+                <i class="fas fa-chevron-down dropdown-icon"></i>
+            </div>
+
+            <div class="menu-label">Main Menu</div>
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+                <a href="akunrole.html" class="nav-item active">
+                    <i class="fas fa-users-cog"></i> Akun dan Role
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="toggle-sidebar">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <h1 class="page-title">Akun dan Role</h1>
+            </header>
+
+            <section class="action-bar">
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" placeholder="Cari Pegawai..." class="search-input">
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary"><i class="fas fa-plus"></i> Tambah Pegawai</button>
+                    <button class="btn btn-outline">Urutkan <i class="fas fa-chevron-down"></i></button>
+                    <button class="btn btn-outline">Tersimpan <i class="fas fa-chevron-down"></i></button>
+                    <button class="btn btn-icon"><i class="fas fa-sliders-h"></i></button>
+                </div>
+            </section>
+
+            <section class="stats-grid">
+                <div class="stat-card blue">
+                    <div class="card-body">
+                        <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
+                        <div class="card-info">
+                            <h3>0</h3>
+                            <p>Admin Akademik</p>
+                        </div>
+                    </div>
+                    <div class="card-wave-blue"></div>
+                </div>
+
+                <div class="stat-card purple">
+                    <div class="card-body">
+                        <div class="card-icon"><i class="fas fa-user-tie"></i></div>
+                        <div class="card-info">
+                            <h3>0</h3>
+                            <p>Admin Pegawai</p>
+                        </div>
+                    </div>
+                    <div class="card-wave-purple"></div>
+                </div>
+
+                <div class="stat-card red">
+                    <div class="card-body">
+                        <div class="card-icon"><i class="fas fa-users"></i></div>
+                        <div class="card-info">
+                            <h3>0</h3>
+                            <p>Admin Mahasiswa</p>
+                        </div>
+                    </div>
+                    <div class="card-wave-red"></div>
+                </div>
+
+                <div class="stat-card green">
+                    <div class="card-body">
+                        <div class="card-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="card-info">
+                            <h3>0</h3>
+                            <p>Admin Keuangan</p>
+                        </div>
+                    </div>
+                    <div class="card-wave-green"></div>
+                </div>
+            </section>
+
+            <section class="table-container">
+                <div class="table-header">
+                    <h3>Daftar Pegawai</h3>
+                </div>
+                
+                <div class="responsive-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>NIP</th>
+                                <th>Hak Akses</th>
+                                <th>Nomor Identitas</th>
+                                <th>Tanggal Terdaftar</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <div class="empty-state">
+                    <div class="empty-icon-wrapper">
+                        <i class="fas fa-search-minus"></i>
+                    </div>
+                    <p class="empty-text">Data Tidak Ditemukan</p>
+                </div>
+
+                <div class="pagination">
+                    <div class="rows-per-page">
+                        Baris per halaman: 
+                        <select>
+                            <option>5</option>
+                            <option>10</option>
+                        </select>
+                    </div>
+                    <div class="page-info">1 dari 10</div>
+                    <div class="page-nav">
+                        <button disabled><i class="fas fa-chevron-left"></i></button>
+                        <button disabled><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
