@@ -42,21 +42,41 @@ loginForm.addEventListener("submit", async function (e) {
 
     const result = await response.json();
 
-    if (response.ok) {
-      // Simpan token dan info user ke localStorage
+if (response.ok) {
+    // 1. Ambil array role_ids dari response API
+    const roles = result.role_ids;
+
+    // 2. Validasi: Cek apakah user memiliki role 1 atau 2
+    if (roles.includes(1) || roles.includes(2)) {
+      
+      // Jika lolos validasi, simpan data ke localStorage
       localStorage.setItem("token", result.token);
-      localStorage.setItem("role_id", result.role_id);
       localStorage.setItem("user_id", result.id);
+      localStorage.setItem("name", result.name);
+      localStorage.setItem("role_ids", JSON.stringify(result.role_ids));
 
-      alert("Login Berhasil!");
+      alert("Login Berhasil! Selamat Datang, " + result.name);
 
-      // Arahkan halaman berdasarkan role_id jika diperlukan
-      window.location.href = "../Dashboard/index.html";
+      // Pengalihan halaman berdasarkan role masing-masing
+      if (roles.includes(1)) {
+        // Super Admin (role_id: 1)
+        window.location.href = "../Dashboard/super_admin.html";
+      } else if (roles.includes(2)) {
+        // Admin Akademik (role_id: 2)
+        window.location.href = "../Dashboard/admin_akademik.html";
+      }
+
     } else {
-      // Tampilkan pesan error di banner merah, bukan pop-up alert bawaan browser
-      errorMessage.innerText = "Email atau Kata Sandi salah. Silakan coba lagi";
+      // Jika user berhasil login di API tapi BUKAN Super Admin / Admin Akademik
+      errorMessage.innerText = "Akses ditolak! Akun Anda tidak memiliki hak akses ke sistem ini.";
       errorMessage.style.display = "block";
     }
+
+  } else {
+    // Jika email atau password salah secara global di API
+    errorMessage.innerText = "Email atau Kata Sandi salah. Silakan coba lagi";
+    errorMessage.style.display = "block";
+  }
   } catch (error) {
     console.error("Error:", error);
     // Tampilkan pesan error jaringan/server di banner merah
