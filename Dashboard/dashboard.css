@@ -58,14 +58,13 @@ body {
     border: 1px solid #e2e8f0;
     border-radius: 10px;
     padding: 10px 12px;
-    margin-bottom: 30px;
     cursor: pointer;
 }
 
 .avatar {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    border-radius: 30%;
     object-fit: cover;
 }
 
@@ -479,4 +478,91 @@ td {
     font-size: 16px;
     font-weight: 600;
     color: #1e293b;
+}
+/* Pembungkus utama agar posisi melayang dropdown terpaku pada area ini */
+.user-profile-wrapper {
+    position: relative;
+    margin-bottom: 30px; /* Jarak spacing sidebar dipindah ke sini */
+}
+
+/* Kotak Dropdown Menu */
+/* Cari bagian ini di dashboard.css dan sesuaikan ukurannya */
+.profile-dropdown {
+    position: absolute;
+    /* --- UBAH BAGIAN INI --- */
+    top: calc(100% + 6px);   /* Mengubah arah munculnya menjadi ke bawah bar profil */
+    /* ----------------------- */
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    z-index: 999;
+    padding: 6px;
+    display: none; /* Tetap sembunyi secara default */
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* Munculkan dropdown ketika ada class .show dari javascript */
+.profile-dropdown.show {
+    display: flex;
+}
+
+/* Item menu di dalam dropdown */
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #475569;
+    text-decoration: none;
+    background: none;
+    border: none;
+    border-radius: 6px;
+    width: 100%;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f5f9;
+    color: #1e293b;
+}
+
+.dropdown-item i {
+    font-size: 14px;
+    color: #64748b;
+    width: 16px;
+    text-align: center;
+}
+
+/* Desain khusus tombol Keluar Akun */
+.dropdown-item.logout-btn {
+    color: #ef4444;
+    border-top: 1px solid #f1f5f9;
+    margin-top: 4px;
+    padding-top: 12px;
+    border-radius: 0 0 6px 6px;
+}
+
+.dropdown-item.logout-btn i {
+    color: #ef4444;
+}
+
+.dropdown-item.logout-btn:hover {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+/* Efek rotasi membalikkan arah ikon panah kecil saat dropdown terbuka */
+.user-profile.active .dropdown-icon {
+    transform: rotate(180deg);
+}
+.dropdown-icon {
+    transition: transform 0.2s ease;
 }
