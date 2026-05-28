@@ -3,6 +3,46 @@
 // ==========================================
 let globalUsersList = [];
 
+// ==========================================
+// PROTEKSI BANNER PROFILE - Mencegah Overwrite ke "User"
+// ==========================================
+document.addEventListener("DOMContentLoaded", function () {
+  // Fungsi untuk mengunci profile banner tetap jadi "Super Admin"
+  function lockSuperAdminBanner() {
+    // 1. Target secara spesifik .user-info yang ada di dalam .user-profile (Sidebar)
+    const userInfoSection = document.querySelector(".user-profile .user-info");
+    if (!userInfoSection) return;
+
+    // 2. KUNCI PERBAIKAN: Hapus logik pembuat span badge (bubble) 
+    // Jika sudah terlanjur ada badge akibat script lama, kita hapus agar bersih
+    const existingBadge = userInfoSection.querySelector(".badge-super-admin");
+    if (existingBadge) {
+      existingBadge.remove();
+    }
+
+    // 3. Cukup kunci teks di dalam tag <p> bawaan HTML agar tetap "Super Admin"
+    const roleText = userInfoSection.querySelector("p");
+    if (roleText) {
+      roleText.innerText = "Super Admin";
+      
+      // Kembalikan ke style teks bawaan sidebar agar rapi (tanpa bentukan bubble)
+      roleText.style.color = "#64748b"; // Warna abu-abu bawaan template
+      roleText.style.fontWeight = "500";
+      roleText.style.background = "none";
+      roleText.style.border = "none";
+      roleText.style.padding = "0";
+      roleText.style.marginTop = "0";
+    }
+  }
+
+  // Panggil fungsinya
+  lockSuperAdminBanner();
+  
+  // TIPS: Jika text "User" masih muncul tipis-tipis karena delay API, 
+  // kamu bisa panggil fungsi lockSuperAdminBanner() ini tepat di dalam blok .then() 
+  // setelah fetch API selesai dimuat.
+});
+
 document.addEventListener("DOMContentLoaded", function () {
   // 1. Sidebar Toggle Responsif
   const toggleBtn = document.querySelector(".toggle-sidebar");
