@@ -77,7 +77,7 @@
                     <div class="card-body">
                         <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
                         <div class="card-info">
-                            <h3>0</h3>
+                            <h3 id="stat-akademik">0</h3>
                             <p>Admin Akademik</p>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                     <div class="card-body">
                         <div class="card-icon"><i class="fas fa-user-tie"></i></div>
                         <div class="card-info">
-                            <h3>0</h3>
+                            <h3 id="stat-pegawai">0</h3>
                             <p>Admin Pegawai</p>
                         </div>
                     </div>
@@ -99,7 +99,7 @@
                     <div class="card-body">
                         <div class="card-icon"><i class="fas fa-users"></i></div>
                         <div class="card-info">
-                            <h3>0</h3>
+                            <h3 id="stat-mahasiswa">0</h3>
                             <p>Admin Mahasiswa</p>
                         </div>
                     </div>
@@ -110,7 +110,7 @@
                     <div class="card-body">
                         <div class="card-icon"><i class="fas fa-wallet"></i></div>
                         <div class="card-info">
-                            <h3>0</h3>
+                            <h3 id="stat-keuangan">0</h3>
                             <p>Admin Keuangan</p>
                         </div>
                     </div>
@@ -136,14 +136,14 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
+                        <tbody id="table-akunrole-body"></tbody>
                     </table>
                 </div>
 
-                <div class="empty-state">
-                    <div class="empty-icon-wrapper">
-                        <i class="fas fa-search-minus"></i>
-                    </div>
+                <div class="empty-state" id="empty-state">
+                     <img src="../Asset/Frame.png" alt="Data Kosong" class="empty-image">
                     <p class="empty-text">Data Tidak Ditemukan</p>
+                    </div>
                 </div>
 
                 <div class="pagination">
