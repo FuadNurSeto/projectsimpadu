@@ -42,7 +42,7 @@
             display: flex;
             align-items: flex-start;
             gap: 20px;
-            margin-top: -55px; 
+            margin-top: -55px;
         }
 
         .avatar-wrapper {
@@ -86,7 +86,7 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            padding-top: 65px; 
+            padding-top: 65px;
         }
 
         .user-details h2 {
@@ -463,20 +463,42 @@
                 let namaRoleRaw = user.role ? user.role.nama_role : 'User';
                 let namaRoleClean = namaRoleRaw.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
 
+                // Tentukan deskripsi role lengkap berdasarkan role_id
+                let roleDescription = 'User';
+                if (user.role_id === 1) {
+                    roleDescription = 'Super Admin (Full Akses Manajemen)';
+                } else if (user.role_id === 2) {
+                    roleDescription = 'Admin Akademik';
+                } else if (user.role_id === 3) {
+                    roleDescription = 'Admin Pegawai';
+                } else if (user.role_id === 4) {
+                    roleDescription = 'Admin Mahasiswa';
+                } else if (user.role_id === 5) {
+                    roleDescription = 'Admin Keuangan';
+                }
+
                 // Masukkan data hasil API ke dalam elemen HTML
                 // A. Sisi Sidebar
                 document.getElementById('sidebarName').innerText = user.name;
                 document.getElementById('sidebarRole').innerText = namaRoleClean;
 
-                // B. Sisi Banner Profil
+                // B. Sisi Banner Profil (Sudah di-force menjadi Super Admin)
                 document.getElementById('bannerName').innerText = user.name;
                 document.getElementById('bannerEmail').innerText = `${user.email} • Politeknik Negeri Banjarmasin`;
-                document.getElementById('bannerBadge').innerText = namaRoleClean;
+                
+                const bannerBadgeElement = document.getElementById('bannerBadge');
+                if (bannerBadgeElement) {
+                    // 1. Memaksa tulisan menjadi Super Admin
+                    bannerBadgeElement.innerText = "Super Admin"; 
+                    
+                    // 2. Memaksa style badge menjadi biru bulat estetik
+                    bannerBadgeElement.style.cssText = 'display: inline-block; padding: 4px 14px; font-size: 12px; font-weight: 600; color: #1E6091; background-color: #E8F1F5; border: 1px solid #B8D0EB; border-radius: 50px; margin-top: 8px; font-family: "Poppins", sans-serif;';
+                }
 
                 // C. Sisi Form Informasi Pribadi
                 document.getElementById('formName').value = user.name;
                 document.getElementById('formEmail').value = user.email;
-                document.getElementById('formRole').value = namaRoleClean;
+                document.getElementById('formRole').value = roleDescription;
             })
             .catch(error => {
                 console.error('Error Profile Fetching:', error);
@@ -517,7 +539,7 @@
                 event.preventDefault();
             }
             // Hapus token login & data user agar aman dari local storage
-            localStorage.clear(); 
+            localStorage.clear();
             window.location.href = '../loginbaru/baru.html';
         }
 
