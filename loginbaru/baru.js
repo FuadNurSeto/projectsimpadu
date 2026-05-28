@@ -42,41 +42,51 @@ loginForm.addEventListener("submit", async function (e) {
 
     const result = await response.json();
 
-if (response.ok) {
-    // 1. Ambil array role_ids dari response API
-    const roles = result.role_ids;
+    if (response.ok) {
+      // 1. Ambil array role_ids dari response API
+      const roles = result.role_ids;
 
-    // 2. Validasi: Cek apakah user memiliki role 1 atau 2
-    if (roles.includes(1) || roles.includes(2)) {
-      
-      // Jika lolos validasi, simpan data ke localStorage
-      localStorage.setItem("token", result.token);
-      localStorage.setItem("user_id", result.id);
-      localStorage.setItem("name", result.name);
-      localStorage.setItem("role_ids", JSON.stringify(result.role_ids));
+      // 2. Validasi: Cek apakah user memiliki role 1 atau 2
+      if (roles.includes(1) || roles.includes(2)) {
+        
+        // [PERBAIKAN UTAMA] Simpan data ke localStorage dengan format yang sinkron
+        localStorage.setItem("token", result.token);
+        
+        // Membuat bungkus objek 'user' yang dinantikan oleh profil.html
+        const userObj = {
+          id: result.id,
+          name: result.name,
+          email: result.email
+        };
+        localStorage.setItem("user", JSON.stringify(userObj)); 
 
-      alert("Login Berhasil! Selamat Datang, " + result.name);
+        // Tetap pertahankan key lama ini jika halaman dashboard/akunrole kamu membutuhkannya
+        localStorage.setItem("user_id", result.id);
+        localStorage.setItem("name", result.name);
+        localStorage.setItem("role_ids", JSON.stringify(result.role_ids));
 
-      // Pengalihan halaman berdasarkan role masing-masing
-      if (roles.includes(1)) {
-        // Super Admin (role_id: 1)
-        window.location.href = "../Dashboard/super_admin.html";
-      } else if (roles.includes(2)) {
-        // Admin Akademik (role_id: 2)
-        window.location.href = "../Dashboard/admin_akademik.html";
+        alert("Login Berhasil! Selamat Datang, " + result.name);
+
+        // Pengalihan halaman berdasarkan role masing-masing
+        if (roles.includes(1)) {
+          // Super Admin (role_id: 1)
+          window.location.href = "../Dashboard/super_admin.html";
+        } else if (roles.includes(2)) {
+          // Admin Academic (role_id: 2)
+          window.location.href = "../Dashboard/admin_akademik.html";
+        }
+
+      } else {
+        // Jika user berhasil login di API tapi BUKAN Super Admin / Admin Akademik
+        errorMessage.innerText = "Akses ditolak! Akun Anda tidak memiliki hak akses ke sistem ini.";
+        errorMessage.style.display = "block";
       }
 
     } else {
-      // Jika user berhasil login di API tapi BUKAN Super Admin / Admin Akademik
-      errorMessage.innerText = "Akses ditolak! Akun Anda tidak memiliki hak akses ke sistem ini.";
+      // Jika email atau password salah secara global di API
+      errorMessage.innerText = "Email atau Kata Sandi salah. Silakan coba lagi";
       errorMessage.style.display = "block";
     }
-
-  } else {
-    // Jika email atau password salah secara global di API
-    errorMessage.innerText = "Email atau Kata Sandi salah. Silakan coba lagi";
-    errorMessage.style.display = "block";
-  }
   } catch (error) {
     console.error("Error:", error);
     // Tampilkan pesan error jaringan/server di banner merah
@@ -88,6 +98,7 @@ if (response.ok) {
     btnLogin.disabled = false;
   }
 });
+
 const emailInput = document.getElementById("email");
 
 // Validasi untuk Input Email
@@ -106,7 +117,6 @@ emailInput.addEventListener("invalid", function () {
 emailInput.addEventListener("input", function () {
   this.setCustomValidity("");
 });
-
 
 // Validasi untuk Input Password
 passwordInput.addEventListener("invalid", function () {
