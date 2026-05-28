@@ -78,3 +78,94 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+document.addEventListener("DOMContentLoaded", function () {
+    // Ambil elemen-elemen berdasarkan class HTML yang kamu miliki
+    const monthYearLabel = document.querySelector(".cal-month-year");
+    const calendarGrid = document.querySelector(".calendar-grid");
+    const prevBtn = document.querySelectorAll(".cal-btn")[0]; // Tombol kiri
+    const nextBtn = document.querySelectorAll(".cal-btn")[1]; // Tombol kanan
+
+    // Simpan objek tanggal saat ini (Real Time)
+    let currentDate = new Date();
+
+    // Daftar nama bulan bahasa Indonesia
+    const monthsID = [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ];
+
+    function renderCalendar() {
+        const viewYear = currentDate.getFullYear();
+        const viewMonth = currentDate.getMonth();
+
+        // 1. Update Teks Header (Contoh: "Mei 2026")
+        if (monthYearLabel) {
+            monthYearLabel.innerText = `${monthsID[viewMonth]} ${viewYear}`;
+        }
+
+        if (!calendarGrid) return;
+        
+        // Bersihkan seluruh isi tanggal statis/dummy bawaan HTML sebelumnya
+        calendarGrid.innerHTML = ""; 
+
+        // Cari tahu hari pertama di bulan ini jatuh pada hari apa (0 = Minggu, 1 = Senin, dst)
+        const firstDayIndex = new Date(viewYear, viewMonth, 1).getDay();
+
+        // Cari tahu tanggal terakhir di bulan aktif ini
+        const lastDate = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+        // Cari tahu tanggal terakhir di bulan sebelumnya (untuk angka pudar di awal grid)
+        const prevLastDate = new Date(viewYear, viewMonth, 0).getDate();
+
+        // 2. RENDERING TANGGAL BULAN SEBELUMNYA (Class: empty-day)
+        for (let i = firstDayIndex; i > 0; i--) {
+            const span = document.createElement("span");
+            span.classList.add("empty-day");
+            span.innerText = prevLastDate - i + 1;
+            calendarGrid.appendChild(span);
+        }
+
+        // 3. RENDERING TANGGAL BULAN BERJALAN
+        for (let date = 1; date <= lastDate; date++) {
+            const span = document.createElement("span");
+            span.innerText = date;
+
+            // Hitung posisi kolom di grid. Jika kolom pertama (index kelipatan 7), maka itu hari Minggu
+            const currentGridCount = calendarGrid.children.length;
+            if (currentGridCount % 7 === 0) {
+                span.classList.add("holiday"); // Otomatis jadi hari Minggu sesuai css-mu
+            }
+
+            // Cek apakah tanggal, bulan, dan tahun ini cocok dengan HARI INI secara presisi
+            const realToday = new Date();
+            if (
+                date === realToday.getDate() &&
+                viewMonth === realToday.getMonth() &&
+                viewYear === realToday.getFullYear()
+            ) {
+                span.classList.add("today"); // Menyorot hari ini menggunakan class .today milikmu
+            }
+
+            calendarGrid.appendChild(span);
+        }
+    }
+
+    // Jalankan fungsi render kalender pertama kali saat halaman dimuat
+    renderCalendar();
+
+    // 4. LOGIKA NAVIGASI TOMBOL KIRI (BULAN SEBELUMNYA)
+    if (prevBtn) {
+        prevBtn.addEventListener("click", function () {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        });
+    }
+
+    // 5. LOGIKA NAVIGASI TOMBOL KANAN (BULAN BERIKUTNYA)
+    if (nextBtn) {
+        nextBtn.addEventListener("click", function () {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        });
+    }
+});
