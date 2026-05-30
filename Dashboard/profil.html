@@ -1,559 +1,631 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SIMPADU POLIBAN - Profil Saya</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="dashboard.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="dashboard.css" />
 
     <style>
-        :root {
-            --primary-blue: #1572e8;
-            --primary-hover: #1266d1;
-            --text-dark: #2d3748;
-            --text-muted: #718096;
-            --border-color: #e2e8f0;
-            --danger-color: #e53e3e;
-        }
+      :root {
+        --primary-blue: #1572e8;
+        --primary-hover: #1266d1;
+        --text-dark: #2d3748;
+        --text-muted: #718096;
+        --border-color: #e2e8f0;
+        --danger-color: #e53e3e;
+      }
 
-        /* --- HEADER PROFILE BANNER --- */
-        .profile-banner-card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            position: relative;
-            margin-bottom: 30px;
-            border: 1px solid var(--border-color);
-            padding-bottom: 25px;
-        }
+      /* --- HEADER PROFILE BANNER --- */
+      .profile-banner-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        position: relative;
+        margin-bottom: 30px;
+        border: 1px solid var(--border-color);
+        padding-bottom: 25px;
+      }
 
-        .banner-blue {
-            height: 130px;
-            background: linear-gradient(90deg, #1565c0 0%, #1e88e5 100%);
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-        }
+      .banner-blue {
+        height: 130px;
+        background: linear-gradient(90deg, #1565c0 0%, #1e88e5 100%);
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+      }
 
-        .banner-user-content {
-            padding: 0 30px;
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-            margin-top: -55px;
-        }
+      .banner-user-content {
+        padding: 0 30px;
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        margin-top: -55px;
+      }
 
-        .avatar-wrapper {
-            position: relative;
-            width: 110px;
-            height: 110px;
-            flex-shrink: 0;
-        }
+      .avatar-wrapper {
+        position: relative;
+        width: 110px;
+        height: 110px;
+        flex-shrink: 0;
+      }
 
-        .avatar-wrapper .big-avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 4px solid white;
-            object-fit: cover;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+      .avatar-wrapper .big-avatar {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 4px solid white;
+        object-fit: cover;
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
 
-        .camera-badge {
-            position: absolute;
-            bottom: 2px;
-            right: 2px;
-            background: white;
-            border: 1px solid #cbd5e1;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+      .camera-badge {
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        background: white;
+        border: 1px solid #cbd5e1;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
 
-        .camera-badge i {
-            font-size: 12px;
-            color: #475569;
-        }
+      .camera-badge i {
+        font-size: 12px;
+        color: #475569;
+      }
 
-        .user-details {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            padding-top: 65px;
-        }
+      .user-details {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding-top: 65px;
+      }
 
-        .user-details h2 {
-            font-size: 22px;
-            font-weight: 600;
-            color: #1a202c;
-            margin: 0;
-            line-height: 1.2;
-        }
+      .user-details h2 {
+        font-size: 22px;
+        font-weight: 600;
+        color: #1a202c;
+        margin: 0;
+        line-height: 1.2;
+      }
 
-        .user-details p {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin: 0;
-            line-height: 1.2;
-        }
+      .user-details p {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin: 0;
+        line-height: 1.2;
+      }
 
-        .role-badge {
-            align-self: flex-start;
-            background-color: #e0f2fe;
-            color: #0369a1;
-            font-size: 11px;
-            font-weight: 500;
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-top: 4px;
-        }
+      .role-badge {
+        align-self: flex-start;
+        background-color: #e0f2fe;
+        color: #0369a1;
+        font-size: 11px;
+        font-weight: 500;
+        padding: 4px 12px;
+        border-radius: 20px;
+        margin-top: 4px;
+      }
 
-        /* --- GRID TWO COLUMN CARD --- */
+      /* --- GRID TWO COLUMN CARD --- */
+      .profile-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        margin-bottom: 25px;
+      }
+
+      .profile-card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      }
+
+      .card-profile-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #1a202c;
+        border-bottom: 1px solid #f1f5f9;
+        padding-bottom: 12px;
+      }
+
+      .profile-form-group {
+        margin-bottom: 18px;
+        position: relative;
+      }
+
+      .profile-form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+      }
+
+      .profile-form-control {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 14px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        background-color: #fff;
+        outline: none;
+        box-sizing: border-box;
+        transition: border-color 0.2s;
+      }
+
+      .profile-form-control:focus {
+        border-color: var(--primary-blue);
+      }
+
+      .profile-form-control.locked {
+        background-color: #f8fafc;
+        color: var(--text-muted);
+        cursor: not-allowed;
+        padding-right: 40px;
+      }
+
+      .lock-icon-right {
+        position: absolute;
+        right: 15px;
+        top: 38px;
+        color: var(--text-muted);
+      }
+
+      .profile-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .profile-btn-primary {
+        background-color: var(--primary-blue);
+        color: white;
+      }
+
+      .profile-btn-primary:hover {
+        background-color: var(--primary-hover);
+      }
+
+      .profile-card-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+      }
+
+      /* --- ATURAN KATA SANDI --- */
+      .password-criteria {
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .criteria-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      .criteria-item i {
+        font-size: 14px;
+      }
+
+      .criteria-item.valid {
+        color: #0d9488;
+      }
+
+      /* --- CARD KELUAR AKUN --- */
+      .logout-danger-card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #fee2e2;
+        background-color: #fff5f5;
+      }
+
+      .logout-danger-info h3 {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--danger-color);
+        margin-bottom: 4px;
+      }
+
+      .logout-danger-info p {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .profile-btn-danger {
+        background-color: var(--danger-color);
+        color: white;
+      }
+
+      .profile-btn-danger:hover {
+        background-color: #c53030;
+      }
+
+      @media (max-width: 992px) {
         .profile-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 25px;
+          grid-template-columns: 1fr;
         }
-
-        .profile-card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        .card-profile-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #1a202c;
-            border-bottom: 1px solid #f1f5f9;
-            padding-bottom: 12px;
-        }
-
-        .profile-form-group {
-            margin-bottom: 18px;
-            position: relative;
-        }
-
-        .profile-form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-dark);
-            margin-bottom: 8px;
-        }
-
-        .profile-form-control {
-            width: 100%;
-            padding: 12px 16px;
-            font-size: 14px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            background-color: #fff;
-            outline: none;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-        }
-
-        .profile-form-control:focus {
-            border-color: var(--primary-blue);
-        }
-
-        .profile-form-control.locked {
-            background-color: #f8fafc;
-            color: var(--text-muted);
-            cursor: not-allowed;
-            padding-right: 40px;
-        }
-
-        .lock-icon-right {
-            position: absolute;
-            right: 15px;
-            top: 38px;
-            color: var(--text-muted);
-        }
-
-        .profile-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .profile-btn-primary {
-            background-color: var(--primary-blue);
-            color: white;
-        }
-
-        .profile-btn-primary:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .profile-card-footer {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 10px;
-        }
-
-        /* --- ATURAN KATA SANDI --- */
-        .password-criteria {
-            margin-top: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .criteria-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .criteria-item i {
-            font-size: 14px;
-        }
-
-        .criteria-item.valid {
-            color: #0d9488;
-        }
-
-        /* --- CARD KELUAR AKUN --- */
         .logout-danger-card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #fee2e2;
-            background-color: #fff5f5;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 15px;
         }
-
-        .logout-danger-info h3 {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--danger-color);
-            margin-bottom: 4px;
+        .logout-danger-card .profile-btn {
+          width: 100%;
         }
-
-        .logout-danger-info p {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .profile-btn-danger {
-            background-color: var(--danger-color);
-            color: white;
-        }
-
-        .profile-btn-danger:hover {
-            background-color: #c53030;
-        }
-
-        @media (max-width: 992px) {
-            .profile-grid {
-                grid-template-columns: 1fr;
-            }
-            .logout-danger-card {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            .logout-danger-card .profile-btn {
-                width: 100%;
-            }
-        }
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="container">
-        <aside class="sidebar">
-            <div class="logo-section">
-                <img src="../Asset/logopoliban.png" alt="Logo Poliban" class="logo-img">
-                <div class="logo-text">
-                    <h2>SIMPADU POLIBAN</h2>
-                    <p>Sistem Informasi Terpadu<br>Politeknik Negeri Banjarmasin</p>
-                </div>
+      <aside class="sidebar">
+        <div class="logo-section">
+          <img
+            src="../Asset/logopoliban.png"
+            alt="Logo Poliban"
+            class="logo-img"
+          />
+          <div class="logo-text">
+            <h2>SIMPADU POLIBAN</h2>
+            <p>Sistem Informasi Terpadu<br />Politeknik Negeri Banjarmasin</p>
+          </div>
+        </div>
+
+        <div class="user-profile-wrapper">
+          <div class="user-profile">
+            <img src="../Asset/ppSP.jpg" alt="User Avatar" class="avatar" />
+            <div class="user-info">
+              <h4 id="sidebarName">Memuat...</h4>
+              <p id="sidebarRole">Memuat...</p>
             </div>
+            <i class="fas fa-chevron-down dropdown-icon"></i>
+          </div>
 
-            <div class="user-profile-wrapper">
-                <div class="user-profile">
-                    <img src="../Asset/ppSP.jpg" alt="User Avatar" class="avatar">
-                    <div class="user-info">
-                        <h4 id="sidebarName">Memuat...</h4>
-                        <p id="sidebarRole">Memuat...</p>
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </div>
+          <div class="profile-dropdown" id="profileDropdown">
+            <a href="profil.html" class="dropdown-item">
+              <i class="fas fa-user-circle"></i> Profil
+            </a>
+            <button
+              type="button"
+              class="dropdown-item logout-btn"
+              id="logoutBtn"
+              onclick="
+                event.stopImmediatePropagation();
+                jalankanLogout(event);
+              "
+            >
+              <i class="fas fa-sign-out-alt"></i> Keluar Akun
+            </button>
+          </div>
+        </div>
 
-                <div class="profile-dropdown" id="profileDropdown">
-                    <a href="profil.html" class="dropdown-item">
-                        <i class="fas fa-user-circle"></i> Profil
-                    </a>
-                    <button type="button" class="dropdown-item logout-btn" id="logoutBtn" onclick="event.stopImmediatePropagation(); jalankanLogout(event);">
-                        <i class="fas fa-sign-out-alt"></i> Keluar Akun
-                    </button>
-                </div>
+        <div class="menu-label">Main Menu</div>
+        <nav class="nav-menu">
+          <a href="super_admin.html" class="nav-item">
+            <i class="fas fa-th-large"></i> Dashboard
+          </a>
+          <a href="akunrole.html" class="nav-item">
+            <i class="fas fa-users-cog"></i> Akun dan Role
+          </a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="header">
+          <div class="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+          </div>
+          <h1 class="page-title">Profil Saya</h1>
+        </header>
+
+        <div class="profile-banner-card">
+          <div class="banner-blue"></div>
+          <div class="banner-user-content">
+            <div class="avatar-wrapper">
+              <img
+                src="../Asset/ppSP.jpg"
+                alt="Avatar Besar"
+                class="big-avatar"
+              />
+              <div class="camera-badge">
+                <i class="fas fa-camera"></i>
+              </div>
             </div>
-
-            <div class="menu-label">Main Menu</div>
-            <nav class="nav-menu">
-                <a href="super_admin.html" class="nav-item">
-                    <i class="fas fa-th-large"></i> Dashboard
-                </a>
-                <a href="akunrole.html" class="nav-item">
-                    <i class="fas fa-users-cog"></i> Akun dan Role
-                </a>
-            </nav>
-        </aside>
-
-        <main class="main-content">
-            <header class="header">
-                <div class="toggle-sidebar">
-                    <i class="fas fa-bars"></i>
-                </div>
-                <h1 class="page-title">Profil Saya</h1>
-            </header>
-
-            <div class="profile-banner-card">
-                <div class="banner-blue"></div>
-                <div class="banner-user-content">
-                    <div class="avatar-wrapper">
-                        <img src="../Asset/ppSP.jpg" alt="Avatar Besar" class="big-avatar">
-                        <div class="camera-badge">
-                            <i class="fas fa-camera"></i>
-                        </div>
-                    </div>
-                    <div class="user-details">
-                        <h2 id="bannerName">Memuat...</h2>
-                        <p id="bannerEmail">Memuat...</p>
-                        <span class="role-badge" id="bannerBadge">Memuat...</span>
-                    </div>
-                </div>
+            <div class="user-details">
+              <h2 id="bannerName">Memuat...</h2>
+              <p id="bannerEmail">Memuat...</p>
+              <span class="role-badge" id="bannerBadge">Memuat...</span>
             </div>
+          </div>
+        </div>
 
-            <div class="profile-grid">
-                
-                <div class="profile-card">
-                    <div class="card-profile-title">Informasi Pribadi</div>
-                    <form>
-                        <div class="profile-form-group">
-                            <label>Nama Lengkap</label>
-                            <input type="text" id="formName" class="profile-form-control" value="">
-                        </div>
-                        
-                        <div class="profile-form-group">
-                            <label>Alamat Email</label>
-                            <input type="email" id="formEmail" class="profile-form-control" value="">
-                        </div>
-                        
-                        <div class="profile-form-group">
-                            <label>Hak Akses / Role Sistem</label>
-                            <input type="text" id="formRole" class="profile-form-control locked" value="" readonly>
-                            <i class="fas fa-lock lock-icon-right"></i>
-                        </div>
-                        
-                        <div class="profile-card-footer">
-                            <button type="button" class="profile-btn profile-btn-primary">Simpan Perubahan</button>
-                        </div>
-                    </form>
+        <div class="profile-grid">
+          <div class="profile-card">
+            <div class="card-profile-title">Informasi Pribadi</div>
+            <form>
+              <div class="profile-form-group">
+                <label>Nama Lengkap</label>
+                <input
+                  type="text"
+                  id="formName"
+                  class="profile-form-control"
+                  value=""
+                />
+              </div>
+
+              <div class="profile-form-group">
+                <label>Alamat Email</label>
+                <input
+                  type="email"
+                  id="formEmail"
+                  class="profile-form-control"
+                  value=""
+                />
+              </div>
+
+              <div class="profile-form-group">
+                <label>Hak Akses / Role Sistem</label>
+                <input
+                  type="text"
+                  id="formRole"
+                  class="profile-form-control locked"
+                  value=""
+                  readonly
+                />
+                <i class="fas fa-lock lock-icon-right"></i>
+              </div>
+
+              <div class="profile-card-footer">
+                <button type="button" class="profile-btn profile-btn-primary">
+                  Simpan Perubahan
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="profile-card">
+            <div class="card-profile-title">Ubah Kata Sandi</div>
+            <form>
+              <div class="profile-form-group">
+                <label>Kata Sandi Saat Ini</label>
+                <input
+                  type="password"
+                  class="profile-form-control"
+                  placeholder="Masukkan kata sandi saat ini"
+                />
+              </div>
+
+              <div class="profile-form-group">
+                <label>Kata Sandi Baru</label>
+                <input
+                  type="password"
+                  id="newPassInput"
+                  class="profile-form-control"
+                  placeholder="Masukkan kata sandi baru"
+                />
+              </div>
+
+              <div class="profile-form-group">
+                <label>Konfirmasi Kata Sandi Baru</label>
+                <input
+                  type="password"
+                  class="profile-form-control"
+                  placeholder="Ulangi kata sandi baru"
+                />
+              </div>
+
+              <div class="password-criteria">
+                <div class="criteria-item" id="lenCrit">
+                  <i class="fas fa-circle-check"></i> Min. 8 Karakter
                 </div>
-
-                <div class="profile-card">
-                    <div class="card-profile-title">Ubah Kata Sandi</div>
-                    <form>
-                        <div class="profile-form-group">
-                            <label>Kata Sandi Saat Ini</label>
-                            <input type="password" class="profile-form-control" placeholder="Masukkan kata sandi saat ini">
-                        </div>
-                        
-                        <div class="profile-form-group">
-                            <label>Kata Sandi Baru</label>
-                            <input type="password" id="newPassInput" class="profile-form-control" placeholder="Masukkan kata sandi baru">
-                        </div>
-                        
-                        <div class="profile-form-group">
-                            <label>Konfirmasi Kata Sandi Baru</label>
-                            <input type="password" class="profile-form-control" placeholder="Ulangi kata sandi baru">
-                        </div>
-
-                        <div class="password-criteria">
-                            <div class="criteria-item" id="lenCrit">
-                                <i class="fas fa-circle-check"></i> Min. 8 Karakter
-                            </div>
-                            <div class="criteria-item" id="caseCrit">
-                                <i class="fas fa-circle-check"></i> Huruf Besar & Kecil
-                            </div>
-                            <div class="criteria-item" id="symCrit">
-                                <i class="fas fa-circle-check"></i> Angka & Simbol Spesial (!@#$)
-                            </div>
-                        </div>
-                        
-                        <div class="profile-card-footer" style="margin-top: 25px;">
-                            <button type="button" class="profile-btn profile-btn-primary" style="background-color: #2d3748;">Perbarui Kata Sandi</button>
-                        </div>
-                    </form>
+                <div class="criteria-item" id="caseCrit">
+                  <i class="fas fa-circle-check"></i> Huruf Besar & Kecil
                 </div>
-
-            </div>
-
-            <div class="logout-danger-card">
-                <div class="logout-danger-info">
-                    <h3>Keluar Akun</h3>
-                    <p>Keluar dari sesi admin Anda pada perangkat komputer ini.</p>
+                <div class="criteria-item" id="symCrit">
+                  <i class="fas fa-circle-check"></i> Angka & Simbol Spesial
+                  (!@#$)
                 </div>
-               <button type="button" id="logoutBtnCard" class="profile-btn profile-btn-danger"><i class="fas fa-sign-out-alt"></i> &nbsp; Keluar Akun</button>
-            </div>
-        </main>
+              </div>
+
+              <div class="profile-card-footer" style="margin-top: 25px">
+                <button
+                  type="button"
+                  class="profile-btn profile-btn-primary"
+                  style="background-color: #2d3748"
+                >
+                  Perbarui Kata Sandi
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="logout-danger-card">
+          <div class="logout-danger-info">
+            <h3>Keluar Akun</h3>
+            <p>Keluar dari sesi admin Anda pada perangkat komputer ini.</p>
+          </div>
+          <button
+            type="button"
+            id="logoutBtnCard"
+            class="profile-btn profile-btn-danger"
+          >
+            <i class="fas fa-sign-out-alt"></i> &nbsp; Keluar Akun
+          </button>
+        </div>
+      </main>
     </div>
 
     <script src="dashboard.js"></script>
 
     <script>
-        // ========================================================
-        // 1. SCRIPT AMBIL DATA DARI DATABASE VIA API (FETCH)
-        // ========================================================
-        document.addEventListener("DOMContentLoaded", function () {
-            const token = localStorage.getItem('token');
-            const userSession = JSON.parse(localStorage.getItem('user'));
+      // ========================================================
+      // 1. SCRIPT AMBIL DATA DARI DATABASE VIA API (FETCH)
+      // ========================================================
+      document.addEventListener("DOMContentLoaded", function () {
+        const token = localStorage.getItem("token");
+        const userSession = JSON.parse(localStorage.getItem("user"));
 
-            // Proteksi Halaman: Jika token atau sesi tidak ada, kembalikan ke halaman login
-            if (!token || !userSession || !userSession.id) {
-                window.location.href = '../loginbaru/baru.html';
-                return;
-            }
-
-            // Mengambil detail user berdasarkan id dari database melalui Endpoint API #36
-            fetch(`http://localhost:8000/api/akademik/users/${userSession.id}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Gagal mengambil data dari API');
-                }
-                return response.json();
-            })
-            .then(user => {
-                // Formatting nama role agar rapi (contoh: super_admin menjadi Super Admin)
-                let namaRoleRaw = user.role ? user.role.nama_role : 'User';
-                let namaRoleClean = namaRoleRaw.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
-
-                // Tentukan deskripsi role lengkap berdasarkan role_id
-                let roleDescription = 'User';
-                if (user.role_id === 1) {
-                    roleDescription = 'Super Admin (Full Akses Manajemen)';
-                } else if (user.role_id === 2) {
-                    roleDescription = 'Admin Akademik';
-                } else if (user.role_id === 3) {
-                    roleDescription = 'Admin Pegawai';
-                } else if (user.role_id === 4) {
-                    roleDescription = 'Admin Mahasiswa';
-                } else if (user.role_id === 5) {
-                    roleDescription = 'Admin Keuangan';
-                }
-
-                // Masukkan data hasil API ke dalam elemen HTML
-                // A. Sisi Sidebar
-                document.getElementById('sidebarName').innerText = user.name;
-                document.getElementById('sidebarRole').innerText = namaRoleClean;
-
-                // B. Sisi Banner Profil (Sudah di-force menjadi Super Admin)
-                document.getElementById('bannerName').innerText = user.name;
-                document.getElementById('bannerEmail').innerText = `${user.email} • Politeknik Negeri Banjarmasin`;
-                
-                const bannerBadgeElement = document.getElementById('bannerBadge');
-                if (bannerBadgeElement) {
-                    // 1. Memaksa tulisan menjadi Super Admin
-                    bannerBadgeElement.innerText = "Super Admin"; 
-                    
-                    // 2. Memaksa style badge menjadi biru bulat estetik
-                    bannerBadgeElement.style.cssText = 'display: inline-block; padding: 4px 14px; font-size: 12px; font-weight: 600; color: #1E6091; background-color: #E8F1F5; border: 1px solid #B8D0EB; border-radius: 50px; margin-top: 8px; font-family: "Poppins", sans-serif;';
-                }
-
-                // C. Sisi Form Informasi Pribadi
-                document.getElementById('formName').value = user.name;
-                document.getElementById('formEmail').value = user.email;
-                document.getElementById('formRole').value = roleDescription;
-            })
-            .catch(error => {
-                console.error('Error Profile Fetching:', error);
-                alert('Sesi masuk telah berakhir. Silakan login kembali.');
-                localStorage.clear();
-                window.location.href = '../loginbaru/baru.html';
-            });
-        });
-
-        // ========================================================
-        // 2. SCRIPT VALIDASI KATA SANDI REALTIME
-        // ========================================================
-        const newPass = document.getElementById('newPassInput');
-        const lenCrit = document.getElementById('lenCrit');
-        const caseCrit = document.getElementById('caseCrit');
-        const symCrit = document.getElementById('symCrit');
-
-        if (newPass) {
-            newPass.addEventListener('input', function() {
-                const val = newPass.value;
-                if(val.length >= 8) lenCrit.classList.add('valid');
-                else lenCrit.classList.remove('valid');
-
-                if(/[a-z]/.test(val) && /[A-Z]/.test(val)) caseCrit.classList.add('valid');
-                else caseCrit.classList.remove('valid');
-
-                if(/[0-9]/.test(val) && /[^A-Za-z0-9]/.test(val)) symCrit.classList.add('valid');
-                else symCrit.classList.remove('valid');
-            });
+        // Proteksi Halaman: Jika token atau sesi tidak ada, kembalikan ke halaman login
+        if (!token || !userSession || !userSession.id) {
+          window.location.href = "../loginbaru/baru.html";
+          return;
         }
 
-        // ========================================================
-        // 3. SCRIPT KELUAR AKUN (MEMBERSIHKAN SESI TOKEN & REDIRECT)
-        // ========================================================
-        function jalankanLogout(event) {
-            if(event) {
-                event.stopImmediatePropagation();
-                event.preventDefault();
+        // Mengambil detail user berdasarkan id dari database melalui Endpoint API #36
+        fetch(
+          `https://admin4e06.vps-poliban.my.id/api/akademik/users/${userSession.id}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          },
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Gagal mengambil data dari API");
             }
-            // Hapus token login & data user agar aman dari local storage
+            return response.json();
+          })
+          .then((user) => {
+            // Formatting nama role agar rapi (contoh: super_admin menjadi Super Admin)
+            let namaRoleRaw = user.role ? user.role.nama_role : "User";
+            let namaRoleClean = namaRoleRaw
+              .replace("_", " ")
+              .replace(/\b\w/g, (l) => l.toUpperCase());
+
+            // Tentukan deskripsi role lengkap berdasarkan role_id
+            let roleDescription = "User";
+            if (user.role_id === 1) {
+              roleDescription = "Super Admin (Full Akses Manajemen)";
+            } else if (user.role_id === 2) {
+              roleDescription = "Admin Akademik";
+            } else if (user.role_id === 3) {
+              roleDescription = "Admin Pegawai";
+            } else if (user.role_id === 4) {
+              roleDescription = "Admin Mahasiswa";
+            } else if (user.role_id === 5) {
+              roleDescription = "Admin Keuangan";
+            }
+
+            // Masukkan data hasil API ke dalam elemen HTML
+            // A. Sisi Sidebar
+            document.getElementById("sidebarName").innerText = user.name;
+            document.getElementById("sidebarRole").innerText = namaRoleClean;
+
+            // B. Sisi Banner Profil (Sudah di-force menjadi Super Admin)
+            document.getElementById("bannerName").innerText = user.name;
+            document.getElementById("bannerEmail").innerText =
+              `${user.email} • Politeknik Negeri Banjarmasin`;
+
+            const bannerBadgeElement = document.getElementById("bannerBadge");
+            if (bannerBadgeElement) {
+              // 1. Memaksa tulisan menjadi Super Admin
+              bannerBadgeElement.innerText = "Super Admin";
+
+              // 2. Memaksa style badge menjadi biru bulat estetik
+              bannerBadgeElement.style.cssText =
+                'display: inline-block; padding: 4px 14px; font-size: 12px; font-weight: 600; color: #1E6091; background-color: #E8F1F5; border: 1px solid #B8D0EB; border-radius: 50px; margin-top: 8px; font-family: "Poppins", sans-serif;';
+            }
+
+            // C. Sisi Form Informasi Pribadi
+            document.getElementById("formName").value = user.name;
+            document.getElementById("formEmail").value = user.email;
+            document.getElementById("formRole").value = roleDescription;
+          })
+          .catch((error) => {
+            console.error("Error Profile Fetching:", error);
+            alert("Sesi masuk telah berakhir. Silakan login kembali.");
             localStorage.clear();
-            window.location.href = '../loginbaru/baru.html';
-        }
+            window.location.href = "../loginbaru/baru.html";
+          });
+      });
 
-        // Aksi Keluar Akun pada Card Merah Bawah
-        const logoutCard = document.getElementById('logoutBtnCard');
-        if (logoutCard) {
-            logoutCard.addEventListener('click', jalankanLogout);
-        }
+      // ========================================================
+      // 2. SCRIPT VALIDASI KATA SANDI REALTIME
+      // ========================================================
+      const newPass = document.getElementById("newPassInput");
+      const lenCrit = document.getElementById("lenCrit");
+      const caseCrit = document.getElementById("caseCrit");
+      const symCrit = document.getElementById("symCrit");
 
-        // Aksi Keluar Akun pada Dropdown Sidebar
-        const logoutSidebar = document.getElementById('logoutBtn');
-        if (logoutSidebar) {
-            logoutSidebar.addEventListener('click', jalankanLogout);
+      if (newPass) {
+        newPass.addEventListener("input", function () {
+          const val = newPass.value;
+          if (val.length >= 8) lenCrit.classList.add("valid");
+          else lenCrit.classList.remove("valid");
+
+          if (/[a-z]/.test(val) && /[A-Z]/.test(val))
+            caseCrit.classList.add("valid");
+          else caseCrit.classList.remove("valid");
+
+          if (/[0-9]/.test(val) && /[^A-Za-z0-9]/.test(val))
+            symCrit.classList.add("valid");
+          else symCrit.classList.remove("valid");
+        });
+      }
+
+      // ========================================================
+      // 3. SCRIPT KELUAR AKUN (MEMBERSIHKAN SESI TOKEN & REDIRECT)
+      // ========================================================
+      function jalankanLogout(event) {
+        if (event) {
+          event.stopImmediatePropagation();
+          event.preventDefault();
         }
+        // Hapus token login & data user agar aman dari local storage
+        localStorage.clear();
+        window.location.href = "../loginbaru/baru.html";
+      }
+
+      // Aksi Keluar Akun pada Card Merah Bawah
+      const logoutCard = document.getElementById("logoutBtnCard");
+      if (logoutCard) {
+        logoutCard.addEventListener("click", jalankanLogout);
+      }
+
+      // Aksi Keluar Akun pada Dropdown Sidebar
+      const logoutSidebar = document.getElementById("logoutBtn");
+      if (logoutSidebar) {
+        logoutSidebar.addEventListener("click", jalankanLogout);
+      }
     </script>
-</body>
+  </body>
 </html>

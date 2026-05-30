@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const userInfoSection = document.querySelector(".user-profile .user-info");
     if (!userInfoSection) return;
 
-    // 2. KUNCI PERBAIKAN: Hapus logik pembuat span badge (bubble) 
+    // 2. KUNCI PERBAIKAN: Hapus logik pembuat span badge (bubble)
     // Jika sudah terlanjur ada badge akibat script lama, kita hapus agar bersih
     const existingBadge = userInfoSection.querySelector(".badge-super-admin");
     if (existingBadge) {
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const roleText = userInfoSection.querySelector("p");
     if (roleText) {
       roleText.innerText = "Super Admin";
-      
+
       // Kembalikan ke style teks bawaan sidebar agar rapi (tanpa bentukan bubble)
       roleText.style.color = "#64748b"; // Warna abu-abu bawaan template
       roleText.style.fontWeight = "500";
@@ -37,9 +37,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Panggil fungsinya
   lockSuperAdminBanner();
-  
-  // TIPS: Jika text "User" masih muncul tipis-tipis karena delay API, 
-  // kamu bisa panggil fungsi lockSuperAdminBanner() ini tepat di dalam blok .then() 
+
+  // TIPS: Jika text "User" masih muncul tipis-tipis karena delay API,
+  // kamu bisa panggil fungsi lockSuperAdminBanner() ini tepat di dalam blok .then()
   // setelah fetch API selesai dimuat.
 });
 
@@ -84,7 +84,6 @@ document.addEventListener("DOMContentLoaded", function () {
     logoutBtn.addEventListener("click", function () {
       localStorage.removeItem("token");
       localStorage.removeItem("user_data");
-      alert("Anda telah berhasil keluar.");
       window.location.href = "login.html";
     });
   }
@@ -108,20 +107,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // 5. Interaksi Tombol Tambah Pegawai
-  const btnTambahPegawai = document.querySelector(".btn-primary");
-  if (btnTambahPegawai) {
-    btnTambahPegawai.addEventListener("click", function () {
-      alert("Form tambah pegawai akan muncul!");
-    });
-  }
+  // 5. Interaksi Tombol Tambah Pegawai (Dihapus - Modal handler dipindahkan ke bawah)
 
   // 6. Logika Fitur Ketik Kolom Pencarian
   const searchInput = document.querySelector(".search-input");
   if (searchInput) {
     searchInput.addEventListener("keyup", function (e) {
       if (e.key === "Enter") {
-        alert("Mencari data untuk pegawai: " + this.value);
+        console.log("Mencari: " + this.value);
       }
     });
   }
@@ -227,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Fetch data dari API seluruh User
-  fetch("http://localhost:8000/api/akademik/users", {
+  fetch("https://admin4e06.vps-poliban.my.id/api/akademik/users", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -386,10 +379,8 @@ function renderTablePegawai(users) {
       statusTeks = "Non-Aktif";
     }
 
-    // 4. Nomor Identitas (Gunakan username atau ID jika field nomor identitas belum ada di database)
-    let nomorIdentitas = user.username
-      ? user.username.toUpperCase()
-      : `PGW00${user.id}`;
+    // 4. Nomor Identitas (Ambil dari field nomor_identitas di database)
+    let nomorIdentitas = user.nomor_identitas || `PGW00${user.id}`;
 
     // Buat baris tabel baru menyontek struktur HTML asli kamu
     const tr = document.createElement("tr");
@@ -406,6 +397,40 @@ function renderTablePegawai(users) {
     tableBody.appendChild(tr);
   });
 }
+
+// ==========================================
+// MODAL TAMBAH PEGAWAI - BUKA & TUTUP
+// ==========================================
+document.addEventListener("DOMContentLoaded", function () {
+  const modal = document.getElementById("modal-tambah-pegawai");
+  const btnOpenModal = document.querySelector(".btn-primary");
+  const btnCloseX = document.getElementById("btn-close-modal");
+  const btnBatal = document.getElementById("btn-batal-modal");
+
+  if (btnOpenModal) {
+    btnOpenModal.addEventListener("click", function () {
+      modal.classList.add("show");
+    });
+  }
+
+  function closeModal() {
+    modal.classList.remove("show");
+  }
+
+  if (btnCloseX) {
+    btnCloseX.addEventListener("click", closeModal);
+  }
+
+  if (btnBatal) {
+    btnBatal.addEventListener("click", closeModal);
+  }
+
+  modal.addEventListener("click", function (e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+});
 // ==========================================
 // FUNGSI UPDATE ENGINE GRAFIK (CHART)
 // ==========================================
@@ -510,13 +535,11 @@ function renderAkunRolePage(users) {
       );
     }
 
-    // Ambil data NIP
-    let nipTeks = user.nip || user.username || "-";
+    // Ambil data NIP (Gunakan nomor_identitas)
+    let nipTeks = user.nomor_identitas || "-";
 
     // Nomor Identitas
-    let nomorIdentitas = user.username
-      ? user.username.toUpperCase()
-      : `PGW00${user.id}`;
+    let nomorIdentitas = user.nomor_identitas || `PGW00${user.id}`;
 
     // Status
     let statusClass = "aktif";
@@ -548,3 +571,37 @@ function renderAkunRolePage(users) {
     tableBody.appendChild(tr);
   });
 }
+
+// ==========================================
+// MODAL TAMBAH PEGAWAI - BUKA & TUTUP
+// ==========================================
+document.addEventListener("DOMContentLoaded", function () {
+  const modal = document.getElementById("modal-tambah-pegawai");
+  const btnOpenModal = document.querySelector(".btn-primary");
+  const btnCloseX = document.getElementById("btn-close-modal");
+  const btnBatal = document.getElementById("btn-batal-modal");
+
+  if (btnOpenModal) {
+    btnOpenModal.addEventListener("click", function () {
+      modal.classList.add("show");
+    });
+  }
+
+  function closeModal() {
+    modal.classList.remove("show");
+  }
+
+  if (btnCloseX) {
+    btnCloseX.addEventListener("click", closeModal);
+  }
+
+  if (btnBatal) {
+    btnBatal.addEventListener("click", closeModal);
+  }
+
+  modal.addEventListener("click", function (e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+});

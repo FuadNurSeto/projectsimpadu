@@ -28,17 +28,20 @@ loginForm.addEventListener("submit", async function (e) {
   btnLogin.disabled = true;
 
   try {
-    const response = await fetch("http://localhost:8000/api/akademik/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+    const response = await fetch(
+      "https://admin4e06.vps-poliban.my.id/api/akademik/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
       },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    });
+    );
 
     const result = await response.json();
 
@@ -48,24 +51,21 @@ loginForm.addEventListener("submit", async function (e) {
 
       // 2. Validasi: Cek apakah user memiliki role 1 atau 2
       if (roles.includes(1) || roles.includes(2)) {
-        
         // [PERBAIKAN UTAMA] Simpan data ke localStorage dengan format yang sinkron
         localStorage.setItem("token", result.token);
-        
+
         // Membuat bungkus objek 'user' yang dinantikan oleh profil.html
         const userObj = {
           id: result.id,
           name: result.name,
-          email: result.email
+          email: result.email,
         };
-        localStorage.setItem("user", JSON.stringify(userObj)); 
+        localStorage.setItem("user", JSON.stringify(userObj));
 
         // Tetap pertahankan key lama ini jika halaman dashboard/akunrole kamu membutuhkannya
         localStorage.setItem("user_id", result.id);
         localStorage.setItem("name", result.name);
         localStorage.setItem("role_ids", JSON.stringify(result.role_ids));
-
-        alert("Login Berhasil! Selamat Datang, " + result.name);
 
         // Pengalihan halaman berdasarkan role masing-masing
         if (roles.includes(1)) {
@@ -75,13 +75,12 @@ loginForm.addEventListener("submit", async function (e) {
           // Admin Academic (role_id: 2)
           window.location.href = "../Dashboard/admin_akademik.html";
         }
-
       } else {
         // Jika user berhasil login di API tapi BUKAN Super Admin / Admin Akademik
-        errorMessage.innerText = "Akses ditolak! Akun Anda tidak memiliki hak akses ke sistem ini.";
+        errorMessage.innerText =
+          "Akses ditolak! Akun Anda tidak memiliki hak akses ke sistem ini.";
         errorMessage.style.display = "block";
       }
-
     } else {
       // Jika email atau password salah secara global di API
       errorMessage.innerText = "Email atau Kata Sandi salah. Silakan coba lagi";
@@ -106,10 +105,12 @@ emailInput.addEventListener("invalid", function () {
   // Jika input kosong
   if (this.validity.valueMissing) {
     this.setCustomValidity("Email tidak boleh kosong!");
-  } 
+  }
   // Jika input diisi tapi formatnya bukan email (tidak ada @, dsb)
   else if (this.validity.typeMismatch) {
-    this.setCustomValidity("Format email tidak valid! Gunakan tanda '@' (Contoh: nama@domain.com)");
+    this.setCustomValidity(
+      "Format email tidak valid! Gunakan tanda '@' (Contoh: nama@domain.com)",
+    );
   }
 });
 

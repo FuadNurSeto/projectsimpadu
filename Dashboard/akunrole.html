@@ -164,6 +164,118 @@
         </main>
     </div>
 
+    <!-- MODAL TAMBAH PEGAWAI -->
+    <div id="modal-tambah-pegawai" class="modal-overlay">
+      <div class="modal-container">
+
+        <div class="modal-header">
+          <h2>Tambah Pegawai</h2>
+          <button type="button" class="close-btn" id="btn-close-modal">&times;</button>
+        </div>
+
+        <form id="form-tambah-pegawai">
+          <div class="form-grid">
+            <div class="form-group span-3">
+              <label>NIP <span class="required">*</span></label>
+              <input type="text" placeholder="Masukkan NIP" required>
+            </div>
+            <div class="form-group span-3 invisible-box"></div>
+            <div class="form-group span-3">
+              <label>Nama Lengkap <span class="required">*</span></label>
+              <input type="text" placeholder="Masukkan nama lengkap" required>
+            </div>
+            <div class="form-group span-3">
+              <label>Nama Pengguna <span class="required">*</span></label>
+              <input type="text" placeholder="Masukkan nama pengguna" required>
+            </div>
+
+            <div class="form-group span-2">
+              <label>Alamat Email <span class="required">*</span></label>
+              <input type="email" placeholder="Masukkan email" required>
+            </div>
+            <div class="form-group span-2">
+              <label>Status <span class="required">*</span></label>
+              <select required>
+                <option value="" disabled selected>Pilih Status</option>
+                <option value="Aktif">Aktif</option>
+                <option value="Non-Aktif">Non-Aktif</option>
+              </select>
+            </div>
+            <div class="form-group span-2">
+              <label>Jenis Hak Akses <span class="required">*</span></label>
+              <select required>
+                <option value="" disabled selected>Pilih Jenis Hak Akses</option>
+                <option value="Admin Akademik">Admin Akademik</option>
+                <option value="Admin Pegawai">Admin Pegawai</option>
+                <option value="Admin Mahasiswa">Admin Mahasiswa</option>
+                <option value="Admin Keuangan">Admin Keuangan</option>
+              </select>
+            </div>
+
+            <div class="form-group span-3">
+              <label>Kata Sandi <span class="required">*</span></label>
+              <input type="password" placeholder="Masukkan kata sandi" required>
+            </div>
+            <div class="form-group span-3">
+              <label>Konfirmasi Sandi <span class="required">*</span></label>
+              <input type="password" placeholder="Masukkan kembali kata sandi" required>
+            </div>
+          </div>
+
+          <div class="hak-akses-section">
+            <h3>Hak Akses</h3>
+            <table class="table-hak-akses">
+              <thead>
+                <tr>
+                  <th>Hak Akses</th>
+                  <th>Create</th>
+                  <th>Read</th>
+                  <th>Write</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Admin Akademik</td>
+                  <td><input type="checkbox" checked></td>
+                  <td><input type="checkbox" checked></td>
+                  <td><input type="checkbox" checked></td>
+                  <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                  <td>Admin Pegawai</td>
+                  <td><input type="checkbox" checked></td>
+                  <td><input type="checkbox" checked></td>
+                  <td><input type="checkbox" checked></td>
+                  <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                  <td>Admin Mahasiswa</td>
+                  <td><input type="checkbox" checked></td>
+                  <td><input type="checkbox" checked></td>
+                  <td><input type="checkbox" checked></td>
+                  <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                  <td>Admin Keuangan</td>
+                  <td><input type="checkbox" checked></td>
+                  <td><input type="checkbox" checked></td>
+                  <td><input type="checkbox" checked></td>
+                  <td><input type="checkbox"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-batal" id="btn-batal-modal">Batal</button>
+            <button type="submit" class="btn-tambah">Tambah</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
     <script src="dashboard.js"></script>
 </body>
 </html>
