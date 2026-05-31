@@ -20,25 +20,25 @@
                 </div>
             </div>
 
-    <div class="user-profile-wrapper">
-    <div class="user-profile">
-        <img src="../Asset/ppSP.jpg" alt="User Avatar" class="avatar">
-        <div class="user-info">
-            <h4>Kelompok 1</h4>
-            <p>Super Admin</p>
-        </div>
-        <i class="fas fa-chevron-down dropdown-icon"></i>
-    </div>
+            <div class="user-profile-wrapper">
+                <div class="user-profile">
+                    <img src="../Asset/ppSP.jpg" alt="User Avatar" class="avatar">
+                    <div class="user-info">
+                        <h4>Kelompok 1</h4>
+                        <p>Super Admin</p>
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </div>
 
-    <div class="profile-dropdown" id="profileDropdown">
-        <a href="profil.html" class="dropdown-item">
-            <i class="fas fa-user-circle"></i> Profil
-        </a>
-        <button type="button" class="dropdown-item logout-btn" id="logoutBtn" onclick="event.stopImmediatePropagation(); window.location.href='../loginbaru/baru.html';">
-        <i class="fas fa-sign-out-alt"></i> Keluar Akun
-        </button>
-    </div>
-</div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="profil.html" class="dropdown-item">
+                        <i class="fas fa-user-circle"></i> Profil
+                    </a>
+                    <button type="button" class="dropdown-item logout-btn" id="logoutBtn" onclick="event.stopImmediatePropagation(); window.location.href='../loginbaru/baru.html';">
+                        <i class="fas fa-sign-out-alt"></i> Keluar Akun
+                    </button>
+                </div>
+            </div>
 
             <div class="menu-label">Main Menu</div>
             <nav class="nav-menu">
@@ -142,8 +142,7 @@
 
                 <div class="empty-state" id="empty-state">
                      <img src="../Asset/Frame.png" alt="Data Kosong" class="empty-image">
-                    <p class="empty-text">Data Tidak Ditemukan</p>
-                    </div>
+                     <p class="empty-text">Data Tidak Ditemukan</p>
                 </div>
 
                 <div class="pagination">
@@ -164,10 +163,8 @@
         </main>
     </div>
 
-    <!-- MODAL TAMBAH PEGAWAI -->
     <div id="modal-tambah-pegawai" class="modal-overlay">
       <div class="modal-container">
-
         <div class="modal-header">
           <h2>Tambah Pegawai</h2>
           <button type="button" class="close-btn" id="btn-close-modal">&times;</button>
@@ -272,10 +269,62 @@
             <button type="submit" class="btn-tambah">Tambah</button>
           </div>
         </form>
-
       </div>
     </div>
 
+    <div class="modal fade" id="modalNonAktifkan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered status-modal-dialog">
+            <div class="modal-content status-modal-card">
+                <div class="modal-body p-0">
+                    <div class="status-modal-icon icon-warning">
+                        <img src="../Asset/nonaktifkan.png" alt="Warning" class="status-icon-img">
+                    </div>
+
+                    <h5 class="status-modal-title">Non-aktifkan Akun?</h5>
+
+                    <p class="status-modal-desc">
+                        Akun <strong id="text-nama-nonaktif" style="color: #1E293B; font-weight: 600;"></strong> akan dinonaktifkan. Pegawai ini tidak dapat login kembali.
+                    </p>
+
+                    <form id="form-nonaktifkan" method="POST">
+                        <input type="hidden" name="status" value="nonaktif">
+                        <div class="status-modal-actions">
+                            <button type="button" class="btn-status-batal" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn-status-submit btn-danger-dark">Non-aktifkan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAktifkan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered status-modal-dialog">
+            <div class="modal-content status-modal-card">
+                <div class="modal-body p-0">
+                    <div class="status-modal-icon icon-success">
+                        <img src="../Asset/aktifkan.png" alt="Success" class="status-icon-img">
+                    </div>
+
+                    <h5 class="status-modal-title">Aktifkan Akun?</h5>
+
+                    <p class="status-modal-desc">
+                        Akun <strong id="text-nama-aktif" style="color: #1E293B; font-weight: 600;"></strong> akan diaktifkan kembali. Pegawai dapat login ke sistem.
+                    </p>
+
+                    <form id="form-aktifkan" method="POST">
+                        <input type="hidden" name="status" value="aktif">
+                        <div class="status-modal-actions">
+                            <button type="button" class="btn-status-batal" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn-status-submit btn-primary-bright">Aktifkan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="dashboard.js"></script>
 </body>
 </html>

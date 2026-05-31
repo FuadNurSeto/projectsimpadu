@@ -4,29 +4,56 @@
 let globalUsersList = [];
 
 // ==========================================
-// PROTEKSI BANNER PROFILE - Mencegah Overwrite ke "User"
+// FUNGSI GLOBAL: MODAL TOGGLE STATUS (DIPANGGIL OLEH INLINE ONCLICK)
+// ==========================================
+function showToggleModal(userId, userName, newStatus) {
+  if (newStatus === "nonaktif") {
+    const textNama = document.getElementById("text-nama-nonaktif");
+    const formNonaktif = document.getElementById("form-nonaktifkan");
+
+    if (textNama) textNama.innerText = userName;
+    if (formNonaktif) formNonaktif.setAttribute("data-user-id", userId);
+
+    const modalEl = document.getElementById("modalNonAktifkan");
+    if (modalEl) {
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
+  } else {
+    const textNama = document.getElementById("text-nama-aktif");
+    const formAktif = document.getElementById("form-aktifkan");
+
+    if (textNama) textNama.innerText = userName;
+    if (formAktif) formAktif.setAttribute("data-user-id", userId);
+
+    const modalEl = document.getElementById("modalAktifkan");
+    if (modalEl) {
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
+  }
+}
+
+// ==========================================
+// SATU INDUK INITIALIZATION (DOM CONTENT LOADED)
 // ==========================================
 document.addEventListener("DOMContentLoaded", function () {
-  // Fungsi untuk mengunci profile banner tetap jadi "Super Admin"
+  // ------------------------------------------
+  // 1. PROTEKSI BANNER PROFILE
+  // ------------------------------------------
   function lockSuperAdminBanner() {
-    // 1. Target secara spesifik .user-info yang ada di dalam .user-profile (Sidebar)
     const userInfoSection = document.querySelector(".user-profile .user-info");
     if (!userInfoSection) return;
 
-    // 2. KUNCI PERBAIKAN: Hapus logik pembuat span badge (bubble)
-    // Jika sudah terlanjur ada badge akibat script lama, kita hapus agar bersih
     const existingBadge = userInfoSection.querySelector(".badge-super-admin");
     if (existingBadge) {
       existingBadge.remove();
     }
 
-    // 3. Cukup kunci teks di dalam tag <p> bawaan HTML agar tetap "Super Admin"
     const roleText = userInfoSection.querySelector("p");
     if (roleText) {
       roleText.innerText = "Super Admin";
-
-      // Kembalikan ke style teks bawaan sidebar agar rapi (tanpa bentukan bubble)
-      roleText.style.color = "#64748b"; // Warna abu-abu bawaan template
+      roleText.style.color = "#64748b";
       roleText.style.fontWeight = "500";
       roleText.style.background = "none";
       roleText.style.border = "none";
@@ -34,17 +61,11 @@ document.addEventListener("DOMContentLoaded", function () {
       roleText.style.marginTop = "0";
     }
   }
-
-  // Panggil fungsinya
   lockSuperAdminBanner();
 
-  // TIPS: Jika text "User" masih muncul tipis-tipis karena delay API,
-  // kamu bisa panggil fungsi lockSuperAdminBanner() ini tepat di dalam blok .then()
-  // setelah fetch API selesai dimuat.
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-  // 1. Sidebar Toggle Responsif
+  // ------------------------------------------
+  // 2. INTERAKSI LAYOUT & UI (Sidebar, Dropdown, Logout)
+  // ------------------------------------------
   const toggleBtn = document.querySelector(".toggle-sidebar");
   const sidebar = document.querySelector(".sidebar");
 
@@ -54,9 +75,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ==========================================
-  // 2. Logika Klik Dropdown Profil User
-  // ==========================================
   const userProfile = document.querySelector(".user-profile");
   const profileDropdown = document.getElementById("profileDropdown");
   const logoutBtn = document.getElementById("logoutBtn");
@@ -79,37 +97,28 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Logika ketika tombol keluar akun diklik
   if (logoutBtn) {
     logoutBtn.addEventListener("click", function () {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user_data");
-      window.location.href = "login.html";
+      localStorage.clear();
+      window.location.href = "../loginbaru/baru.html";
     });
   }
 
-  // 3. Navigasi Sidebar Menu Aktif
   const navItems = document.querySelectorAll(".nav-item");
   navItems.forEach((item) => {
-    item.addEventListener("click", function (e) {
+    item.addEventListener("click", function () {
       navItems.forEach((nav) => nav.classList.remove("active"));
       this.classList.add("active");
     });
   });
 
-  // 4. Deteksi Filter Tahun di Chart
   const yearSelect = document.querySelector(".year-select");
   if (yearSelect) {
     yearSelect.addEventListener("change", function (e) {
-      console.log("Memuat data grafik untuk tahun: " + e.target.value);
-      // Jalankan fungsi filter grafik secara real-time berdasarkan tahun terpilih
       filterDanUpdateGrafik(e.target.value);
     });
   }
 
-  // 5. Interaksi Tombol Tambah Pegawai (Dihapus - Modal handler dipindahkan ke bawah)
-
-  // 6. Logika Fitur Ketik Kolom Pencarian
   const searchInput = document.querySelector(".search-input");
   if (searchInput) {
     searchInput.addEventListener("keyup", function (e) {
@@ -118,41 +127,224 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
+
+  // ------------------------------------------
+  // 3. HANDLER CUSTOM OVERLAY (Modal Tambah Pegawai)
+  // ------------------------------------------
+  const modalTambah = document.getElementById("modal-tambah-pegawai");
+  const btnOpenTambah = document.querySelector(".btn-primary");
+  const btnCloseX = document.getElementById("btn-close-modal");
+  const btnBatalTambah = document.getElementById("btn-batal-modal");
+
+  if (btnOpenTambah && modalTambah) {
+    btnOpenTambah.addEventListener("click", function (e) {
+      e.preventDefault();
+      modalTambah.classList.add("show");
+    });
+  }
+
+  function closeCustomModal() {
+    if (modalTambah) modalTambah.classList.remove("show");
+  }
+
+  if (btnCloseX) btnCloseX.addEventListener("click", closeCustomModal);
+  if (btnBatalTambah)
+    btnBatalTambah.addEventListener("click", closeCustomModal);
+
+  if (modalTambah) {
+    modalTambah.addEventListener("click", function (e) {
+      if (e.target === modalTambah) {
+        closeCustomModal();
+      }
+    });
+  }
+
+  // ------------------------------------------
+  // 4. INTEGRASI API UTAMA
+  // ------------------------------------------
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "../loginbaru/baru.html";
+    return;
+  }
+
+  fetch("https://admin4e06.vps-poliban.my.id/api/akademik/users", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((users) => {
+      globalUsersList = users;
+
+      let totalAkademik = 0,
+        totalPegawai = 0,
+        totalMahasiswa = 0,
+        totalKeuangan = 0;
+
+      users.forEach((user) => {
+        if (user.role_id === 2) totalAkademik++;
+        if (user.role_id === 3) totalPegawai++;
+        if (user.role_id === 4) totalMahasiswa++;
+        if (user.role_id === 5) totalKeuangan++;
+      });
+
+      if (document.getElementById("count-akademik"))
+        document.getElementById("count-akademik").innerText = totalAkademik;
+      if (document.getElementById("count-pegawai"))
+        document.getElementById("count-pegawai").innerText = totalPegawai;
+      if (document.getElementById("count-mahasiswa"))
+        document.getElementById("count-mahasiswa").innerText = totalMahasiswa;
+      if (document.getElementById("count-keuangan"))
+        document.getElementById("count-keuangan").innerText = totalKeuangan;
+
+      if (yearSelect) {
+        filterDanUpdateGrafik(yearSelect.value);
+      } else {
+        filterDanUpdateGrafik("2026");
+      }
+
+      renderTablePegawai(users);
+      renderAkunRolePage(users);
+      lockSuperAdminBanner(); // Re-lock setelah API selesai render data profile
+    })
+    .catch((error) => console.error("Terjadi kesalahan API Dashboard:", error));
+
+  // ------------------------------------------
+  // 5. HANDLER API: ACTION HAPUS DATA (DELETE)
+  // ------------------------------------------
+  const tableBodyAkunRole = document.getElementById("table-akunrole-body");
+  if (tableBodyAkunRole) {
+    tableBodyAkunRole.addEventListener("click", function (e) {
+      const btnDelete = e.target.closest(".btn-delete");
+      if (btnDelete) {
+        const userId = btnDelete.getAttribute("data-id");
+        const userToken = localStorage.getItem("token");
+
+        if (!confirm("Yakin ingin menghapus data pegawai ini?")) return;
+
+        fetch(
+          `https://admin4e06.vps-poliban.my.id/api/akademik/users/${userId}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${userToken}`,
+              Accept: "application/json",
+            },
+          },
+        )
+          .then((response) => {
+            if (!response.ok) throw new Error("Gagal menghapus pegawai");
+            return response.json();
+          })
+          .then(() => {
+            location.reload(); // Langsung reload halaman dengan mulus setelah sukses hapus
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Terjadi kesalahan saat menghapus pegawai: " + error.message);
+          });
+      }
+    });
+  }
+
+  // ------------------------------------------
+  // 6. HANDLER API: PUT STATUS SUBMISSION
+  // ------------------------------------------
+  const formNonaktifkan = document.getElementById("form-nonaktifkan");
+  const formAktifkan = document.getElementById("form-aktifkan");
+
+  if (formNonaktifkan) {
+    formNonaktifkan.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const userId = this.getAttribute("data-user-id");
+      const userToken = localStorage.getItem("token");
+
+      fetch(
+        `https://admin4e06.vps-poliban.my.id/api/akademik/users/${userId}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ status: "nonaktif" }),
+        },
+      )
+        .then((response) => {
+          if (!response.ok) throw new Error("Gagal mengubah status");
+          return response.json();
+        })
+        .then(() => {
+          location.reload(); // Langsung reload instan tanpa pop-up mengganggu browser
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Terjadi kesalahan: " + error.message);
+        });
+    });
+  }
+
+  if (formAktifkan) {
+    formAktifkan.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const userId = this.getAttribute("data-user-id");
+      const userToken = localStorage.getItem("token");
+
+      fetch(
+        `https://admin4e06.vps-poliban.my.id/api/akademik/users/${userId}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ status: "aktif" }),
+        },
+      )
+        .then((response) => {
+          if (!response.ok) throw new Error("Gagal mengubah status");
+          return response.json();
+        })
+        .then(() => {
+          location.reload(); // Langsung reload instan tanpa pop-up mengganggu browser
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Terjadi kesalahan: " + error.message);
+        });
+    });
+  }
 });
 
 // ==========================================
-// KODE KALENDER (TETAP DIPERTAHANKAN)
+// ENGINE KALENDER (PERBAIKAN DINAMIS FIT)
 // ==========================================
 document.addEventListener("DOMContentLoaded", function () {
   const monthYearLabel = document.querySelector(".cal-month-year");
   const calendarGrid = document.querySelector(".calendar-grid");
-  const prevBtn = document.querySelectorAll(".cal-btn")[0];
-  const nextBtn = document.querySelectorAll(".cal-btn")[1];
+  
+  // Memilih tombol prev dan next khusus di dalam kotak kalender agar lebih aman
+  const prevBtn = document.querySelector(".calendar-container .cal-btn:first-child");
+  const nextBtn = document.querySelector(".calendar-container .cal-btn:last-child");
 
   let currentDate = new Date();
   const monthsID = [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember",
   ];
 
   function renderCalendar() {
     const viewYear = currentDate.getFullYear();
     const viewMonth = currentDate.getMonth();
 
-    if (monthYearLabel) {
+    if (monthYearLabel)
       monthYearLabel.innerText = `${monthsID[viewMonth]} ${viewYear}`;
-    }
-
     if (!calendarGrid) return;
     calendarGrid.innerHTML = "";
 
@@ -160,31 +352,43 @@ document.addEventListener("DOMContentLoaded", function () {
     const lastDate = new Date(viewYear, viewMonth + 1, 0).getDate();
     const prevLastDate = new Date(viewYear, viewMonth, 0).getDate();
 
+    // 1. Tanggal Bulan Sebelumnya (Samar)
     for (let i = firstDayIndex; i > 0; i--) {
       const span = document.createElement("span");
-      span.classList.add("empty-day");
+      span.classList.add("cal-date", "empty-day");
       span.innerText = prevLastDate - i + 1;
       calendarGrid.appendChild(span);
     }
 
+    // 2. Tanggal Bulan Berjalan
+    const realToday = new Date();
     for (let date = 1; date <= lastDate; date++) {
       const span = document.createElement("span");
+      span.classList.add("cal-date"); // Class dasar untuk styling kotak angka
       span.innerText = date;
 
       const currentGridCount = calendarGrid.children.length;
-      if (currentGridCount % 7 === 0) {
-        span.classList.add("holiday");
-      }
+      if (currentGridCount % 7 === 0) span.classList.add("holiday");
 
-      const realToday = new Date();
+      // VALIDASI HARI INI: Jika tanggal, bulan, & tahun komputer COCOK
       if (
         date === realToday.getDate() &&
         viewMonth === realToday.getMonth() &&
         viewYear === realToday.getFullYear()
       ) {
-        span.classList.add("today");
+        span.classList.add("today"); // Menambahkan penanda hari ini
       }
 
+      calendarGrid.appendChild(span);
+    }
+
+    // 3. Tanggal Bulan Berikutnya (Agar Grid Genap & Rapi)
+    const totalCells = calendarGrid.children.length;
+    const nextDaysNeeded = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+    for (let j = 1; j <= nextDaysNeeded; j++) {
+      const span = document.createElement("span");
+      span.classList.add("cal-date", "empty-day");
+      span.innerText = j;
       calendarGrid.appendChild(span);
     }
   }
@@ -207,84 +411,17 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // ==========================================
-// INTEGRASI API UTAMA (CARD, GRAFIK & TABEL PEGAWAI)
-// ==========================================
-document.addEventListener("DOMContentLoaded", function () {
-  const token = localStorage.getItem("token");
-  const yearSelect = document.querySelector(".year-select");
-
-  if (!token) {
-    alert("Sesi Anda berakhir, silakan login kembali.");
-    window.location.href = "login.html";
-    return;
-  }
-
-  // Fetch data dari API seluruh User
-  fetch("https://admin4e06.vps-poliban.my.id/api/akademik/users", {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => response.json())
-    .then((users) => {
-      // Simpan ke variabel global agar bisa dipakai berulang kali oleh filter tahun
-      globalUsersList = users;
-
-      // 1. Hitung Akumulasi untuk 4 Card Utama
-      let totalAkademik = 0;
-      let totalPegawai = 0;
-      let totalMahasiswa = 0;
-      let totalKeuangan = 0;
-
-      users.forEach((user) => {
-        if (user.role_id === 2) totalAkademik++; // Admin Akademik
-        if (user.role_id === 3) totalPegawai++; // Admin Pegawai
-        if (user.role_id === 4) totalMahasiswa++; // Admin Mahasiswa
-        if (user.role_id === 5) totalKeuangan++; // Admin Keuangan
-      });
-
-      // Tampilkan hasil hitungan ke HTML Card atas
-      if (document.getElementById("count-akademik"))
-        document.getElementById("count-akademik").innerText = totalAkademik;
-      if (document.getElementById("count-pegawai"))
-        document.getElementById("count-pegawai").innerText = totalPegawai;
-      if (document.getElementById("count-mahasiswa"))
-        document.getElementById("count-mahasiswa").innerText = totalMahasiswa;
-      if (document.getElementById("count-keuangan"))
-        document.getElementById("count-keuangan").innerText = totalKeuangan;
-
-      // 2. Render Grafik pertama kali sesuai tahun aktif di select dropdown
-      if (yearSelect) {
-        filterDanUpdateGrafik(yearSelect.value);
-      } else {
-        filterDanUpdateGrafik("2026");
-      }
-
-      // 3. Render Data ke Tabel Pegawai
-      renderTablePegawai(users);
-
-      // 4. Render halaman Akun dan Role jika sedang dibuka
-      renderAkunRolePage(users);
-    })
-    .catch((error) => console.error("Terjadi kesalahan API Dashboard:", error));
-});
-
-// ==========================================
-// FUNGSI UNTUK ME-FILTER & UPDATE GRAFIK
+// UTILITY FUNCTIONS (GRAFIK & RENDER TABEL)
 // ==========================================
 function filterDanUpdateGrafik(tahunYangDipilih) {
   let grafikAktifBulan = new Array(12).fill(0);
   let grafikNonAktifBulan = new Array(12).fill(0);
 
   globalUsersList.forEach((user) => {
-    // Hanya memproses golongan admin/pegawai (role_id 2 hingga 5)
     if ([2, 3, 4, 5].includes(user.role_id)) {
       const tanggalDaftar = user.created_at || user.tanggal_terdaftar;
       let cocokTahun = false;
-      let bulanIndex = new Date().getMonth(); // Default ke bulan saat ini
+      let bulanIndex = new Date().getMonth();
 
       if (tanggalDaftar) {
         const tanggalObjek = new Date(tanggalDaftar);
@@ -292,7 +429,6 @@ function filterDanUpdateGrafik(tahunYangDipilih) {
         bulanIndex = tanggalObjek.getMonth();
         if (tahunUser === tahunYangDipilih) cocokTahun = true;
       } else {
-        // Jika data tidak ada tanggal dari API, default pasangkan dengan tahun berjalan sistem saat ini
         const tahunSekarang = new Date().getFullYear().toString();
         if (tahunSekarang === tahunYangDipilih) cocokTahun = true;
       }
@@ -307,30 +443,21 @@ function filterDanUpdateGrafik(tahunYangDipilih) {
     }
   });
 
-  // Panggil fungsi pembawa grafik asli template
   updateDashboardChart(grafikAktifBulan, grafikNonAktifBulan);
 }
 
-// ==========================================
-// FUNGSI SUNTIK DATA KE TABEL PEGAWAI (SESUAI CSS ASLI KAMU)
-// ==========================================
 function renderTablePegawai(users) {
   const tableBody = document.getElementById("table-pegawai-body");
   const totalBadge = document.getElementById("total-pegawai-badge");
 
   if (!tableBody) return;
+  tableBody.innerHTML = "";
 
-  tableBody.innerHTML = ""; // Bersihkan data dummy bawaan HTML lama
-
-  // Filter data khusus pegawai (role_id 2 sampai 5)
   const pegawaiList = users.filter((user) =>
     [2, 3, 4, 5].includes(user.role_id),
   );
 
-  // Update jumlah total pegawai pada badge header tabel
-  if (totalBadge) {
-    totalBadge.innerText = pegawaiList.length;
-  }
+  if (totalBadge) totalBadge.innerText = pegawaiList.length;
 
   if (pegawaiList.length === 0) {
     tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: gray; padding: 20px;">Tidak ada data pegawai ditemukan.</td></tr>`;
@@ -338,9 +465,8 @@ function renderTablePegawai(users) {
   }
 
   pegawaiList.forEach((user) => {
-    // 1. Tentukan Nama Jabatan & Warna Class Badge CSS Kamu
-    let namaJabatan = "Pegawai";
-    let tagClass = "tag-blue"; // Default warna biru
+    let namaJabatan = "Pegawai",
+      tagClass = "tag-blue";
 
     if (user.role_id === 2) {
       namaJabatan = "Admin Akademik";
@@ -359,123 +485,66 @@ function renderTablePegawai(users) {
       tagClass = "tag-green";
     }
 
-    // 2. Format Tanggal Terdaftar ke Bahasa Indonesia
-    let tanggalTeks = "14 Januari 2020"; // Fallback default jika null
+    let tanggalTeks = "14 Januari 2020";
     const tanggalDaftar = user.created_at || user.tanggal_terdaftar;
     if (tanggalDaftar) {
-      const opsiTanggal = { day: "numeric", month: "long", year: "numeric" };
-      tanggalTeks = new Date(tanggalDaftar).toLocaleDateString(
-        "id-ID",
-        opsiTanggal,
-      );
+      tanggalTeks = new Date(tanggalDaftar).toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
     }
 
-    // 3. Tentukan Class Status Aktif / Non-Aktif sesuai CSS kamu
-    // Jika dari API bertuliskan "aktif", kelasnya "aktif". Jika "nonaktif", kelasnya "non-aktif"
-    let statusClass = "aktif";
-    let statusTeks = "Aktif";
+    let statusClass = "aktif",
+      statusTeks = "Aktif";
     if (user.status === "nonaktif" || user.status === "non-aktif") {
       statusClass = "non-aktif";
       statusTeks = "Non-Aktif";
     }
 
-    // 4. Nomor Identitas (Ambil dari field nomor_identitas di database)
     let nomorIdentitas = user.nomor_identitas || `PGW00${user.id}`;
 
-    // Buat baris tabel baru menyontek struktur HTML asli kamu
     const tr = document.createElement("tr");
     tr.innerHTML = `
-            <td>
-                <div class="emp-name">${user.name}</div>
-                <div class="emp-email">${user.email}</div>
-            </td>
-            <td><span class="role-badge ${tagClass}">${namaJabatan}</span></td>
-            <td>${tanggalTeks}</td>
-            <td>${nomorIdentitas}</td>
-            <td><span class="status-txt ${statusClass}">${statusTeks}</span></td>
-        `;
+        <td>
+            <div class="emp-name">${user.name}</div>
+            <div class="emp-email">${user.email}</div>
+        </td>
+        <td><span class="role-badge ${tagClass}">${namaJabatan}</span></td>
+        <td>${tanggalTeks}</td>
+        <td>${nomorIdentitas}</td>
+        <td><span class="status-txt ${statusClass}">${statusTeks}</span></td>
+    `;
     tableBody.appendChild(tr);
   });
 }
 
-// ==========================================
-// MODAL TAMBAH PEGAWAI - BUKA & TUTUP
-// ==========================================
-document.addEventListener("DOMContentLoaded", function () {
-  const modal = document.getElementById("modal-tambah-pegawai");
-  const btnOpenModal = document.querySelector(".btn-primary");
-  const btnCloseX = document.getElementById("btn-close-modal");
-  const btnBatal = document.getElementById("btn-batal-modal");
-
-  if (btnOpenModal) {
-    btnOpenModal.addEventListener("click", function () {
-      modal.classList.add("show");
-    });
-  }
-
-  function closeModal() {
-    modal.classList.remove("show");
-  }
-
-  if (btnCloseX) {
-    btnCloseX.addEventListener("click", closeModal);
-  }
-
-  if (btnBatal) {
-    btnBatal.addEventListener("click", closeModal);
-  }
-
-  modal.addEventListener("click", function (e) {
-    if (e.target === modal) {
-      closeModal();
-    }
-  });
-});
-// ==========================================
-// FUNGSI UPDATE ENGINE GRAFIK (CHART)
-// ==========================================
 function updateDashboardChart(dataAktif, dataNonAktif) {
-  // Pastikan 'window.pegawaiChart' sudah di-assign pada file inisialisasi grafik chart kamu
   if (window.pegawaiChart) {
-    // Deteksi Otomatis Jika Menggunakan ApexCharts
     if (typeof window.pegawaiChart.updateSeries === "function") {
       window.pegawaiChart.updateSeries([
         { name: "Aktif", data: dataAktif },
         { name: "Non-Aktif", data: dataNonAktif },
       ]);
-      console.log("Grafik ApexCharts berhasil diperbarui!");
-    }
-    // Deteksi Otomatis Jika Menggunakan Chart.js asli
-    else if (window.pegawaiChart.data && window.pegawaiChart.data.datasets) {
+    } else if (window.pegawaiChart.data && window.pegawaiChart.data.datasets) {
       window.pegawaiChart.data.datasets[0].data = dataAktif;
       window.pegawaiChart.data.datasets[1].data = dataNonAktif;
       window.pegawaiChart.update();
-      console.log("Grafik Chart.js berhasil diperbarui!");
     }
-  } else {
-    console.warn(
-      "Koneksi variabel 'window.pegawaiChart' belum terbaca oleh sistem API.",
-    );
   }
 }
 
-// ==========================================
-// FUNGSI KHUSUS UNTUK HALAMAN AKUN DAN ROLE (akunrole.html)
-// ==========================================
 function renderAkunRolePage(users) {
   const tableBody = document.getElementById("table-akunrole-body");
   const emptyStateElement = document.getElementById("empty-state");
 
-  // Penanda Card Statistik
   const statAkademik = document.getElementById("stat-akademik");
   const statPegawai = document.getElementById("stat-pegawai");
   const statMahasiswa = document.getElementById("stat-mahasiswa");
   const statKeuangan = document.getElementById("stat-keuangan");
 
-  // Jika elemen tabel tidak ditemukan di halaman ini, hentikan fungsi
   if (!tableBody) return;
 
-  // 1. Hitung total data berdasarkan role_id untuk Card Atas
   const akademikList = users.filter((user) => user.role_id === 2);
   const pegawaiList = users.filter((user) => user.role_id === 3);
   const mahasiswaList = users.filter((user) => user.role_id === 4);
@@ -486,12 +555,10 @@ function renderAkunRolePage(users) {
   if (statMahasiswa) statMahasiswa.innerText = mahasiswaList.length;
   if (statKeuangan) statKeuangan.innerText = keuanganList.length;
 
-  // Filter gabungan semua akun pegawai yang akan masuk tabel
   const allPegawai = users.filter((user) =>
     [2, 3, 4, 5].includes(user.role_id),
   );
 
-  // 2. Logika Sembunyikan/Tampilkan Ilustrasi Data Kosong
   if (allPegawai.length === 0) {
     tableBody.innerHTML = "";
     if (emptyStateElement) emptyStateElement.style.display = "flex";
@@ -502,10 +569,9 @@ function renderAkunRolePage(users) {
 
   tableBody.innerHTML = "";
 
-  // 3. Suntik baris data ke tabel akun dan role
   allPegawai.forEach((user) => {
-    let namaJabatan = "Pegawai";
-    let tagClass = "tag-blue";
+    let namaJabatan = "Pegawai",
+      tagClass = "tag-blue";
 
     if (user.role_id === 2) {
       namaJabatan = "Admin Akademik";
@@ -524,84 +590,55 @@ function renderAkunRolePage(users) {
       tagClass = "tag-green";
     }
 
-    // Format Tanggal Terdaftar
     let tanggalTeks = "-";
     const tanggalDaftar = user.created_at || user.tanggal_terdaftar;
     if (tanggalDaftar) {
-      const opsiTanggal = { day: "numeric", month: "long", year: "numeric" };
-      tanggalTeks = new Date(tanggalDaftar).toLocaleDateString(
-        "id-ID",
-        opsiTanggal,
-      );
+      tanggalTeks = new Date(tanggalDaftar).toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
     }
 
-    // Ambil data NIP (Gunakan nomor_identitas)
     let nipTeks = user.nomor_identitas || "-";
-
-    // Nomor Identitas
     let nomorIdentitas = user.nomor_identitas || `PGW00${user.id}`;
 
-    // Status
-    let statusClass = "aktif";
-    let statusTeks = "Aktif";
+    let statusClass = "aktif",
+      statusTeks = "Aktif";
     if (user.status === "nonaktif" || user.status === "non-aktif") {
       statusClass = "non-aktif";
       statusTeks = "Non-Aktif";
     }
 
-    // Buat baris tabel
+    const isUserActive = user.status === "aktif" || user.status === "active";
+    const toggleStatus = isUserActive ? "nonaktif" : "aktif";
+    const toggleTitle = isUserActive
+      ? "Nonaktifkan Pegawai"
+      : "Aktifkan Pegawai";
+    const toggleImage = isUserActive
+      ? "../Asset/Vector.png"
+      : "../Asset/Group 102.png";
+
     const tr = document.createElement("tr");
     tr.innerHTML = `
-            <td>
-                <div class="emp-name">${user.name}</div>
-                <div class="emp-email">${user.email}</div>
-            </td>
-            <td>${nipTeks}</td>
-            <td><span class="role-badge ${tagClass}">${namaJabatan}</span></td>
-            <td>${nomorIdentitas}</td>
-            <td>${tanggalTeks}</td>
-            <td><span class="status-txt ${statusClass}">${statusTeks}</span></td>
-            <td>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn-edit" data-id="${user.id}" style="background: none; border: none; cursor: pointer; color: #4CC9F0;"><i class="fas fa-edit"></i></button>
-                    <button class="btn-delete" data-id="${user.id}" style="background: none; border: none; cursor: pointer; color: #FF4D4D;"><i class="fas fa-trash"></i></button>
-                </div>
-            </td>
-        `;
+        <td>
+            <div class="emp-name">${user.name}</div>
+            <div class="emp-email">${user.email}</div>
+        </td>
+        <td>${nipTeks}</td>
+        <td><span class="role-badge ${tagClass}">${namaJabatan}</span></td>
+        <td>${nomorIdentitas}</td>
+        <td>${tanggalTeks}</td>
+        <td><span class="status-txt ${statusClass}">${statusTeks}</span></td>
+        <td>
+            <div style="display: flex; gap: 10px;">
+                <button type="button" class="btn-toggle-status" title="${toggleTitle}" style="background: none; border: none; cursor: pointer; padding: 0; color: #4CC9F0;" onclick="showToggleModal('${user.id}', '${user.name}', '${toggleStatus}')">
+                    <img src="${toggleImage}" alt="${toggleTitle}" width="20" height="20">
+                </button>
+                <button type="button" class="btn-delete" data-id="${user.id}" style="background: none; border: none; cursor: pointer; color: #FF4D4D;"><i class="fas fa-trash"></i></button>
+            </div>
+        </td>
+    `;
     tableBody.appendChild(tr);
   });
 }
-
-// ==========================================
-// MODAL TAMBAH PEGAWAI - BUKA & TUTUP
-// ==========================================
-document.addEventListener("DOMContentLoaded", function () {
-  const modal = document.getElementById("modal-tambah-pegawai");
-  const btnOpenModal = document.querySelector(".btn-primary");
-  const btnCloseX = document.getElementById("btn-close-modal");
-  const btnBatal = document.getElementById("btn-batal-modal");
-
-  if (btnOpenModal) {
-    btnOpenModal.addEventListener("click", function () {
-      modal.classList.add("show");
-    });
-  }
-
-  function closeModal() {
-    modal.classList.remove("show");
-  }
-
-  if (btnCloseX) {
-    btnCloseX.addEventListener("click", closeModal);
-  }
-
-  if (btnBatal) {
-    btnBatal.addEventListener("click", closeModal);
-  }
-
-  modal.addEventListener("click", function (e) {
-    if (e.target === modal) {
-      closeModal();
-    }
-  });
-});

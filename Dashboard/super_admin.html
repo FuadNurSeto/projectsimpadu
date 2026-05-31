@@ -21,24 +21,25 @@
             </div>
 
             <div class="user-profile-wrapper">
-    <div class="user-profile">
-        <img src="../Asset/ppSP.jpg" alt="User Avatar" class="avatar">
-        <div class="user-info">
-            <h4>Kelompok 1</h4>
-            <p>Super Admin</p>
-        </div>
-        <i class="fas fa-chevron-down dropdown-icon"></i>
-    </div>
+                <div class="user-profile">
+                    <img src="../Asset/ppSP.jpg" alt="User Avatar" class="avatar">
+                    <div class="user-info">
+                        <h4>Kelompok 1</h4>
+                        <p>Super Admin</p>
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </div>
 
-    <div class="profile-dropdown" id="profileDropdown">
-        <a href="profil.html" class="dropdown-item">
-            <i class="fas fa-user-circle"></i> Profil
-        </a>
-       <button type="button" class="dropdown-item logout-btn" id="logoutBtn" onclick="event.stopImmediatePropagation(); window.location.href='../loginbaru/baru.html';">
-            <i class="fas fa-sign-out-alt"></i> Keluar Akun
-        </button>
-    </div>
-</div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="profil.html" class="dropdown-item">
+                        <i class="fas fa-user-circle"></i> Profil
+                    </a>
+                    <button type="button" class="dropdown-item logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Keluar Akun
+                    </button>
+                </div>
+            </div>
+            
             <div class="menu-label">Main Menu</div>
             <nav class="nav-menu">
                 <a href="super_admin.html" class="nav-item active">
@@ -114,12 +115,10 @@
                             <i class="fas fa-ellipsis-v"></i>
                         </div>
                     </div>
-                    <div class="chart-placeholder">
-                        <div id="chart-pegawai" style="width: 100%; min-height: 210px;"></div>
-                    </div>
+                    <div id="chart-pegawai" style="width: 100%; height: 100%;"></div>
                 </div>
 
-               <div class="calendar-container">
+                <div class="calendar-container">
                     <div class="calendar-header">
                         <button class="cal-btn"><i class="fas fa-chevron-left"></i></button>
                         <span class="cal-month-year">Memuat...</span>
@@ -133,41 +132,39 @@
             </div>
 
             <section class="table-container">
-                    <div class="table-header">
-                        <h3>Daftar Pegawai <span class="badge" id="total-pegawai-badge">0</span></h3>
-                    </div>
-                    <div class="responsive-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Nama</th>
-                                    <th>Hak Akses</th>
-                                    <th>Tanggal Terdaftar</th>
-                                    <th>Nomor Identitas</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-pegawai-body">
-                                </tbody>
-                        </table>
-                    </div>
-                </section>
-
-                <div class="pagination">
-                    <div class="rows-per-page">
-                        Baris per halaman: 
-                        <select>
-                            <option>5</option>
-                            <option>10</option>
-                        </select>
-                    </div>
-                    <div class="page-info">1 dari 10</div>
-                    <div class="page-nav">
-                        <button disabled><i class="fas fa-chevron-left"></i></button>
-                        <button><i class="fas fa-chevron-right"></i></button>
-                    </div>
+                <div class="table-header">
+                    <h3>Daftar Pegawai <span class="badge" id="total-pegawai-badge">0</span></h3>
+                </div>
+                <div class="responsive-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Hak Akses</th>
+                                <th>Tanggal Terdaftar</th>
+                                <th>Nomor Identitas</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-pegawai-body"></tbody>
+                    </table>
                 </div>
             </section>
+
+            <div class="pagination">
+                <div class="rows-per-page">
+                    Baris per halaman: 
+                    <select>
+                        <option>5</option>
+                        <option>10</option>
+                    </select>
+                </div>
+                <div class="page-info">1 dari 10</div>
+                <div class="page-nav">
+                    <button disabled><i class="fas fa-chevron-left"></i></button>
+                    <button><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -188,7 +185,7 @@
         ],
         chart: {
           type: 'area',
-          height: 210,
+          height: '100%', // FIX: Diubah ke '100%' agar ditarik mengikuti tinggi flexbox CSS
           fontFamily: 'Poppins, sans-serif',
           toolbar: {
             show: false
