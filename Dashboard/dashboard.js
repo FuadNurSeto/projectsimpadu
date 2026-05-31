@@ -3,6 +3,47 @@
 // ==========================================
 let globalUsersList = [];
 
+// Map role_id ke nama role (Global agar bisa diakses form submit dan render)
+const roleMap = {
+  2: "Admin Akademik",
+  3: "Admin Pegawai",
+  4: "Admin Mahasiswa",
+  5: "Admin Keuangan",
+};
+
+// ==========================================
+// FUNGSI GLOBAL: MEMBUKA MODAL EDIT PEGAWAI
+// ==========================================
+function openEditModal(userId) {
+  const userRow = globalUsersList.find((u) => u.id == userId);
+  if (!userRow) {
+    console.error("Gagal: Data user tidak ditemukan di globalUsersList!");
+    return;
+  }
+
+  // Isi field input modal edit
+  if (document.getElementById("edit-user-id"))
+    document.getElementById("edit-user-id").value = userRow.id;
+  if (document.getElementById("edit-nip"))
+    document.getElementById("edit-nip").value = userRow.nomor_identitas || "-";
+  if (document.getElementById("edit-nama"))
+    document.getElementById("edit-nama").value = userRow.name || "";
+  if (document.getElementById("edit-username"))
+    document.getElementById("edit-username").value = userRow.username || "";
+  if (document.getElementById("edit-email"))
+    document.getElementById("edit-email").value = userRow.email || "";
+  if (document.getElementById("edit-role"))
+    document.getElementById("edit-role").value = userRow.role_id; // Langsung gunakan role_id numerik
+  if (document.getElementById("edit-status"))
+    document.getElementById("edit-status").value =
+      userRow.status === "non-aktif" || userRow.status === "nonaktif"
+        ? "Non-Aktif"
+        : "Aktif";
+
+  const modalEdit = document.getElementById("modal-edit-pegawai");
+  if (modalEdit) modalEdit.classList.add("show");
+}
+
 // ==========================================
 // FUNGSI GLOBAL: MODAL TOGGLE STATUS (DIPANGGIL OLEH INLINE ONCLICK)
 // ==========================================
@@ -129,36 +170,206 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // ------------------------------------------
-  // 3. HANDLER CUSTOM OVERLAY (Modal Tambah Pegawai)
+  // 3. HANDLER CUSTOM OVERLAY (Modal Tambah & Edit Pegawai)
   // ------------------------------------------
+
+  // Modal Tambah Pegawai
+  const btnTambahPegawai = document.getElementById("btn-tambah-pegawai");
   const modalTambah = document.getElementById("modal-tambah-pegawai");
-  const btnOpenTambah = document.querySelector(".btn-primary");
-  const btnCloseX = document.getElementById("btn-close-modal");
+  const btnCloseTambah = document.getElementById("btn-close-modal");
   const btnBatalTambah = document.getElementById("btn-batal-modal");
 
-  if (btnOpenTambah && modalTambah) {
-    btnOpenTambah.addEventListener("click", function (e) {
-      e.preventDefault();
-      modalTambah.classList.add("show");
-    });
+  // Modal Edit Pegawai
+  const modalEdit = document.getElementById("modal-edit-pegawai");
+  const btnCloseEdit = document.getElementById("btn-close-edit-modal");
+  const btnBatalEdit = document.getElementById("btn-batal-edit-modal");
+
+  // Event Handler Modal Tambah
+  if (btnTambahPegawai) {
+    btnTambahPegawai.addEventListener("click", () =>
+      modalTambah.classList.add("show"),
+    );
   }
+  [btnCloseTambah, btnBatalTambah].forEach((btn) => {
+    if (btn)
+      btn.addEventListener("click", () => modalTambah.classList.remove("show"));
+  });
 
-  function closeCustomModal() {
-    if (modalTambah) modalTambah.classList.remove("show");
-  }
+  // Event Handler Modal Edit
+  [btnCloseEdit, btnBatalEdit].forEach((btn) => {
+    if (btn)
+      btn.addEventListener("click", () => modalEdit.classList.remove("show"));
+  });
 
-  if (btnCloseX) btnCloseX.addEventListener("click", closeCustomModal);
-  if (btnBatalTambah)
-    btnBatalTambah.addEventListener("click", closeCustomModal);
-
-  if (modalTambah) {
-    modalTambah.addEventListener("click", function (e) {
-      if (e.target === modalTambah) {
-        closeCustomModal();
+  // Logika Fitur Show / Hide Password (Mata diklik)
+  document.querySelectorAll(".toggle-password").forEach((icon) => {
+    icon.addEventListener("click", function () {
+      // Ensure the inputPassword is the direct previous sibling
+      const inputPassword = this.previousElementSibling;
+      if (inputPassword && inputPassword.type === "password") {
+        inputPassword.type = "text";
+        this.classList.remove("fa-eye-slash");
+        this.classList.add("fa-eye");
+      } else if (inputPassword) {
+        inputPassword.type = "password";
+        this.classList.remove("fa-eye");
+        this.classList.add("fa-eye-slash");
       }
     });
+  });
+
+  // Close modal when clicking outside the modal-container
+  [modalTambah, modalEdit].forEach((modalOverlay) => {
+    if (modalOverlay) {
+      modalOverlay.addEventListener("click", function (e) {
+        // Check if the click occurred directly on the overlay, not its children
+        if (e.target === modalOverlay) {
+          modalOverlay.classList.remove("show");
+        }
+      });
+    }
+  });
+
+  // ------------------------------------------
+  // HANDLER FORM TAMBAH PEGAWAI (POST - CREATE)
+  // ------------------------------------------
+  const formTambahPegawai = document.getElementById("form-tambah-pegawai");
+  if (formTambahPegawai) {
+    formTambahPegawai.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const token = localStorage.getItem("token");
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+
+      const payload = {
+        nomor_identitas: document.getElementById("tambah-nip").value,
+        name: document.getElementById("tambah-nama").value,
+        username: document.getElementById("tambah-username").value,
+        email: document.getElementById("tambah-email").value,
+        status:
+          document.getElementById("tambah-status").value === "Aktif"
+            ? "aktif"
+            : "nonaktif",
+        role_id: parseInt(document.getElementById("tambah-role").value),
+        password: document.getElementById("tambah-password").value,
+      };
+
+      const confirmPassword = document.getElementById(
+        "tambah-confirm-password",
+      ).value;
+
+      if (payload.password !== confirmPassword) {
+        alert("Kata sandi tidak cocok!");
+        return;
+      }
+
+      if (payload.password.length < 8) {
+        alert("Kata sandi minimal 8 karakter!");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML =
+        '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+
+      fetch("https://admin4e06.vps-poliban.my.id/api/akademik/register", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      })
+        .then(async (response) => {
+          if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.message || "Gagal menambahkan pegawai");
+          }
+          return response.json();
+        })
+        .then(() => {
+          alert("Pegawai berhasil ditambahkan!");
+          location.reload();
+        })
+        .catch((error) => {
+          alert("Error: " + error.message);
+        })
+        .finally(() => {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        });
+    });
   }
 
+  // ------------------------------------------
+  // HANDLER FORM EDIT PEGAWAI (PUT - UPDATE)
+  // ------------------------------------------
+  const formEditPegawai = document.getElementById("form-edit-pegawai");
+  if (formEditPegawai) {
+    formEditPegawai.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const token = localStorage.getItem("token");
+      const userId = document.getElementById("edit-user-id").value;
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+
+      const payload = {
+        nomor_identitas: document.getElementById("edit-nip").value,
+        name: document.getElementById("edit-nama").value,
+        username: document.getElementById("edit-username").value,
+        email: document.getElementById("edit-email").value,
+        status:
+          document.getElementById("edit-status").value === "Aktif"
+            ? "aktif"
+            : "nonaktif",
+        role_id: parseInt(document.getElementById("edit-role").value), // Langsung gunakan role_id numerik
+      };
+
+      // Email simple regex validation
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+        alert("Format email tidak valid!");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML =
+        '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+
+      fetch(
+        `https://admin4e06.vps-poliban.my.id/api/akademik/users/${userId}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(payload),
+        },
+      )
+        .then(async (response) => {
+          if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.message || "Gagal memperbarui data");
+          }
+          return response.json();
+        })
+        .then(() => {
+          alert("Data pegawai berhasil diperbarui!");
+          location.reload();
+        })
+        .catch((error) => {
+          alert("Error: " + error.message);
+        })
+        .finally(() => {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        });
+    });
+  }
   // ------------------------------------------
   // 4. INTEGRASI API UTAMA
   // ------------------------------------------
@@ -179,6 +390,75 @@ document.addEventListener("DOMContentLoaded", function () {
     .then((response) => response.json())
     .then((users) => {
       globalUsersList = users;
+
+      // --- CHART INITIALIZATION ---
+      // Pastikan ada elemen <canvas id="chartStatusPegawai"></canvas> di HTML Anda
+      const ctx = document.getElementById('chartStatusPegawai');
+      if (ctx) {
+        window.pegawaiChart = new Chart(ctx.getContext('2d'), {
+          type: 'line', // Tipe chart yang digunakan (misal: 'line', 'bar', dll.)
+          data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+            datasets: [
+              // Dataset awal, akan diisi dan diperbarui oleh fungsi updateDashboardChart
+              {
+                label: 'Aktif',
+                data: [], // Data akan diisi nanti
+                borderColor: '#28a745', // Contoh warna hijau
+                backgroundColor: 'rgba(40, 167, 69, 0.2)', // Contoh warna hijau transparan
+                fill: true,
+                tension: 0.4 // Untuk garis yang lebih halus
+              },
+              {
+                label: 'Non-Aktif',
+                data: [], // Data akan diisi nanti
+                borderColor: '#6c757d', // Contoh warna abu-abu
+                backgroundColor: 'rgba(108, 117, 125, 0.2)', // Contoh warna abu-abu transparan
+                fill: true,
+                tension: 0.4
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                min: 0,
+                ticks: {
+                  stepSize: 1,  // Kunci kelipatan angka bulat 1
+                  precision: 0, // Kunci anti desimal pecahan saat di-zoom
+                  callback: function(value) {
+                    if (value % 1 === 0) return value;
+                  }
+                },
+                grid: {
+                  display: false // ❌ Menghilangkan garis kotak horizontal di latar belakang
+                }
+              },
+              x: {
+                offset: false,      // Membuat garis grafik melebar penuh ke kanan-kiri
+                boundaryGap: false,
+                grid: {
+                  display: false // ❌ Menghilangkan garis kotak vertikal di latar belakang
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: false // ❌ Menghilangkan legend kotak bawaan yang menumpuk double
+              },
+              tooltip: {
+                enabled: true,       // Menghidupkan kembali Pop-up saat kursor diarahkan ke chart
+                mode: 'index',       // Menampilkan info Aktif & Non-Aktif sekaligus
+                intersect: false     // Tetap muncul meski kursor tidak pas di titik bulat
+              }
+            }
+          }
+        });
+      }
+      // --- END CHART INITIALIZATION ---
 
       let totalAkademik = 0,
         totalPegawai = 0,
@@ -208,17 +488,27 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       renderTablePegawai(users);
-      renderAkunRolePage(users);
-      lockSuperAdminBanner(); // Re-lock setelah API selesai render data profile
+      renderAkunRolePage(users); // This function is called here to populate the table on akunrole.html
     })
     .catch((error) => console.error("Terjadi kesalahan API Dashboard:", error));
 
-  // ------------------------------------------
-  // 5. HANDLER API: ACTION HAPUS DATA (DELETE)
-  // ------------------------------------------
+  // ==========================================
+  // 5. HANDLER API: ACTION DI DALAM TABEL (EDIT & DELETE)
+  // ==========================================
   const tableBodyAkunRole = document.getElementById("table-akunrole-body");
+
   if (tableBodyAkunRole) {
     tableBodyAkunRole.addEventListener("click", function (e) {
+      // ----------- LOGIKA TOMBOL EDIT -----------
+      const btnEdit = e.target.closest(".btn-edit-pegawai");
+      if (btnEdit) {
+        console.log("=== TOMBOL EDIT DIKLIK ===");
+        const userId = btnEdit.getAttribute("data-id");
+        openEditModal(userId); // Panggil fungsi global openEditModal
+        return;
+      }
+
+      // ----------- LOGIKA TOMBOL DELETE -----------
       const btnDelete = e.target.closest(".btn-delete");
       if (btnDelete) {
         const userId = btnDelete.getAttribute("data-id");
@@ -241,7 +531,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return response.json();
           })
           .then(() => {
-            location.reload(); // Langsung reload halaman dengan mulus setelah sukses hapus
+            location.reload();
           })
           .catch((error) => {
             console.error("Error:", error);
@@ -252,7 +542,34 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // ------------------------------------------
-  // 6. HANDLER API: PUT STATUS SUBMISSION
+  // 5.5 HANDLER: ROLE CHANGE DI MODAL EDIT (UPDATE CHECKBOX OTOMATIS)
+  // ------------------------------------------
+  const selectRoleEdit = document.getElementById("edit-role");
+  if (selectRoleEdit) {
+    selectRoleEdit.addEventListener("change", (e) => {
+      const selectedRole = e.target.value;
+
+      // Looping semua baris tabel hak akses di modal edit
+      document.querySelectorAll(".table-hak-akses tbody tr").forEach((row) => {
+        const rowRole = row.getAttribute("data-role-row");
+        const checkboxes = row.querySelectorAll('input[type="checkbox"]');
+
+        if (rowRole === selectedRole) {
+          // Jika baris cocok dengan role yang dipilih, centang default
+          checkboxes[0].checked = true; // Create
+          checkboxes[1].checked = true; // Read
+          checkboxes[2].checked = true; // Write
+          checkboxes[3].checked = false; // Delete
+        } else {
+          // Jika tidak cocok, kosongkan semua centang
+          checkboxes.forEach((cb) => (cb.checked = false));
+        }
+      });
+    });
+  }
+
+  // ------------------------------------------
+  // 8. HANDLER API: PUT STATUS SUBMISSION
   // ------------------------------------------
   const formNonaktifkan = document.getElementById("form-nonaktifkan");
   const formAktifkan = document.getElementById("form-aktifkan");
@@ -328,15 +645,29 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
   const monthYearLabel = document.querySelector(".cal-month-year");
   const calendarGrid = document.querySelector(".calendar-grid");
-  
+
   // Memilih tombol prev dan next khusus di dalam kotak kalender agar lebih aman
-  const prevBtn = document.querySelector(".calendar-container .cal-btn:first-child");
-  const nextBtn = document.querySelector(".calendar-container .cal-btn:last-child");
+  const prevBtn = document.querySelector(
+    ".calendar-container .cal-btn:first-child",
+  );
+  const nextBtn = document.querySelector(
+    ".calendar-container .cal-btn:last-child",
+  );
 
   let currentDate = new Date();
   const monthsID = [
-    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-    "Juli", "Agustus", "September", "Oktober", "November", "Desember",
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
   ];
 
   function renderCalendar() {
@@ -635,7 +966,9 @@ function renderAkunRolePage(users) {
                 <button type="button" class="btn-toggle-status" title="${toggleTitle}" style="background: none; border: none; cursor: pointer; padding: 0; color: #4CC9F0;" onclick="showToggleModal('${user.id}', '${user.name}', '${toggleStatus}')">
                     <img src="${toggleImage}" alt="${toggleTitle}" width="20" height="20">
                 </button>
-                <button type="button" class="btn-delete" data-id="${user.id}" style="background: none; border: none; cursor: pointer; color: #FF4D4D;"><i class="fas fa-trash"></i></button>
+                <button type="button" class="btn-edit-pegawai" data-id="${user.id}" style="background: none; border: none; cursor: pointer; padding: 0;" title="Edit Pegawai">
+                    <img src="../Asset/Edit.png" alt="Edit" width="20" height="20">
+                </button>
             </div>
         </td>
     `;

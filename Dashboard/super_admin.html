@@ -1,229 +1,206 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SIMPADU POLIBAN - Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="dashboard.css">
-</head>
-<body>
-
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
     <div class="container">
-        <aside class="sidebar">
-            <div class="logo-section">
-                <img src="../Asset/logopoliban.png" alt="Logo Poliban" class="logo-img">
-                <div class="logo-text">
-                    <h2>SIMPADU POLIBAN</h2>
-                    <p>Sistem Informasi Terpadu<br>Politeknik Negeri Banjarmasin</p>
-                </div>
+      <aside class="sidebar">
+        <div class="logo-section">
+          <img
+            src="../Asset/logopoliban.png"
+            alt="Logo Poliban"
+            class="logo-img"
+          />
+          <div class="logo-text">
+            <h2>SIMPADU POLIBAN</h2>
+            <p>Sistem Informasi Terpadu<br />Politeknik Negeri Banjarmasin</p>
+          </div>
+        </div>
+
+        <div class="user-profile-wrapper">
+          <div class="user-profile">
+            <img src="../Asset/ppSP.jpg" alt="User Avatar" class="avatar" />
+            <div class="user-info">
+              <h4>Kelompok 1</h4>
+              <p>Super Admin</p>
             </div>
+            <i class="fas fa-chevron-down dropdown-icon"></i>
+          </div>
 
-            <div class="user-profile-wrapper">
-                <div class="user-profile">
-                    <img src="../Asset/ppSP.jpg" alt="User Avatar" class="avatar">
-                    <div class="user-info">
-                        <h4>Kelompok 1</h4>
-                        <p>Super Admin</p>
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </div>
+          <div class="profile-dropdown" id="profileDropdown">
+            <a href="profil.html" class="dropdown-item">
+              <i class="fas fa-user-circle"></i> Profil
+            </a>
+            <button
+              type="button"
+              class="dropdown-item logout-btn"
+              id="logoutBtn"
+            >
+              <i class="fas fa-sign-out-alt"></i> Keluar Akun
+            </button>
+          </div>
+        </div>
 
-                <div class="profile-dropdown" id="profileDropdown">
-                    <a href="profil.html" class="dropdown-item">
-                        <i class="fas fa-user-circle"></i> Profil
-                    </a>
-                    <button type="button" class="dropdown-item logout-btn" id="logoutBtn">
-                        <i class="fas fa-sign-out-alt"></i> Keluar Akun
-                    </button>
-                </div>
+        <div class="menu-label">Main Menu</div>
+        <nav class="nav-menu">
+          <a href="super_admin.html" class="nav-item active">
+            <i class="fas fa-th-large"></i> Dashboard
+          </a>
+          <a href="akunrole.html" class="nav-item">
+            <i class="fas fa-users-cog"></i> Akun dan Role
+          </a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="header">
+          <div class="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+          </div>
+          <h1 class="page-title">Dashboard</h1>
+        </header>
+
+        <section class="stats-grid">
+          <div class="stat-card blue">
+            <div class="card-body">
+              <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
+              <div class="card-info">
+                <h3 id="count-akademik">0</h3>
+                <p>Admin Akademik</p>
+              </div>
             </div>
-            
-            <div class="menu-label">Main Menu</div>
-            <nav class="nav-menu">
-                <a href="super_admin.html" class="nav-item active">
-                    <i class="fas fa-th-large"></i> Dashboard
-                </a>
-                <a href="akunrole.html" class="nav-item">
-                    <i class="fas fa-users-cog"></i> Akun dan Role
-                </a>
-            </nav>
-        </aside>
+            <div class="card-wave-blue"></div>
+          </div>
 
-        <main class="main-content">
-            <header class="header">
-                <div class="toggle-sidebar">
-                    <i class="fas fa-bars"></i>
-                </div>
-                <h1 class="page-title">Dashboard</h1>
-            </header>
-
-            <section class="stats-grid">
-                <div class="stat-card blue">
-                    <div class="card-body">
-                        <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
-                        <div class="card-info">
-                            <h3 id="count-akademik">0</h3> <p>Admin Akademik</p>
-                        </div>
-                    </div>
-                    <div class="card-wave-blue"></div>
-                </div>
-
-                <div class="stat-card purple">
-                    <div class="card-body">
-                        <div class="card-icon"><i class="fas fa-user-tie"></i></div>
-                        <div class="card-info">
-                            <h3 id="count-pegawai">0</h3> <p>Admin Pegawai</p>
-                        </div>
-                    </div>
-                    <div class="card-wave-purple"></div>
-                </div>
-
-                <div class="stat-card red">
-                    <div class="card-body">
-                        <div class="card-icon"><i class="fas fa-users"></i></div>
-                        <div class="card-info">
-                            <h3 id="count-mahasiswa">0</h3> <p>Admin Mahasiswa</p>
-                        </div>
-                    </div>
-                    <div class="card-wave-red"></div>
-                </div>
-
-                <div class="stat-card green">
-                    <div class="card-body">
-                        <div class="card-icon"><i class="fas fa-wallet"></i></div>
-                        <div class="card-info">
-                            <h3 id="count-keuangan">0</h3> <p>Admin Keuangan</p>
-                        </div>
-                    </div>
-                    <div class="card-wave-green"></div>
-                </div>
-            </section>
-
-            <div class="middle-grid">
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <h3>Status Akun Pegawai</h3>
-                        <div class="chart-controls">
-                            <span class="legend"><span class="dot active-dot"></span> Aktif</span>
-                            <span class="legend"><span class="dot inactive-dot"></span> Non-Aktif</span>
-                            <select class="year-select">
-                                <option>2026</option>
-                                <option>2025</option>
-                            </select>
-                            <i class="fas fa-ellipsis-v"></i>
-                        </div>
-                    </div>
-                    <div id="chart-pegawai" style="width: 100%; height: 100%;"></div>
-                </div>
-
-                <div class="calendar-container">
-                    <div class="calendar-header">
-                        <button class="cal-btn"><i class="fas fa-chevron-left"></i></button>
-                        <span class="cal-month-year">Memuat...</span>
-                        <button class="cal-btn"><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                    <div class="calendar-days-labels">
-                        <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-                    </div>
-                    <div class="calendar-grid"></div>
-                </div>
+          <div class="stat-card purple">
+            <div class="card-body">
+              <div class="card-icon"><i class="fas fa-user-tie"></i></div>
+              <div class="card-info">
+                <h3 id="count-pegawai">0</h3>
+                <p>Admin Pegawai</p>
+              </div>
             </div>
+            <div class="card-wave-purple"></div>
+          </div>
 
-            <section class="table-container">
-                <div class="table-header">
-                    <h3>Daftar Pegawai <span class="badge" id="total-pegawai-badge">0</span></h3>
-                </div>
-                <div class="responsive-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nama</th>
-                                <th>Hak Akses</th>
-                                <th>Tanggal Terdaftar</th>
-                                <th>Nomor Identitas</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-pegawai-body"></tbody>
-                    </table>
-                </div>
-            </section>
-
-            <div class="pagination">
-                <div class="rows-per-page">
-                    Baris per halaman: 
-                    <select>
-                        <option>5</option>
-                        <option>10</option>
-                    </select>
-                </div>
-                <div class="page-info">1 dari 10</div>
-                <div class="page-nav">
-                    <button disabled><i class="fas fa-chevron-left"></i></button>
-                    <button><i class="fas fa-chevron-right"></i></button>
-                </div>
+          <div class="stat-card red">
+            <div class="card-body">
+              <div class="card-icon"><i class="fas fa-users"></i></div>
+              <div class="card-info">
+                <h3 id="count-mahasiswa">0</h3>
+                <p>Admin Mahasiswa</p>
+              </div>
             </div>
-        </main>
+            <div class="card-wave-red"></div>
+          </div>
+
+          <div class="stat-card green">
+            <div class="card-body">
+              <div class="card-icon"><i class="fas fa-wallet"></i></div>
+              <div class="card-info">
+                <h3 id="count-keuangan">0</h3>
+                <p>Admin Keuangan</p>
+              </div>
+            </div>
+            <div class="card-wave-green"></div>
+          </div>
+        </section>
+
+        <div class="middle-grid">
+          <div class="chart-container">
+            <div class="chart-header">
+              <h3>Status Akun Pegawai</h3>
+              <div class="chart-controls">
+                <span class="legend"
+                  ><span class="dot active-dot"></span> Aktif</span
+                >
+                <span class="legend"
+                  ><span class="dot inactive-dot"></span> Non-Aktif</span
+                >
+                <select class="year-select">
+                  <option>2026</option>
+                  <option>2025</option>
+                </select>
+                <i class="fas fa-ellipsis-v"></i>
+              </div>
+            </div>
+            <div style="width: 100%; height: 100%">
+              <canvas id="chartStatusPegawai"></canvas>
+            </div>
+          </div>
+
+          <div class="calendar-container">
+            <div class="calendar-header">
+              <button class="cal-btn">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <span class="cal-month-year">Memuat...</span>
+              <button class="cal-btn">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+            <div class="calendar-days-labels">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span
+              ><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div class="calendar-grid"></div>
+          </div>
+        </div>
+
+        <section class="table-container">
+          <div class="table-header">
+            <h3>
+              Daftar Pegawai
+              <span class="badge" id="total-pegawai-badge">0</span>
+            </h3>
+          </div>
+          <div class="responsive-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Hak Akses</th>
+                  <th>Tanggal Terdaftar</th>
+                  <th>Nomor Identitas</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="table-pegawai-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <div class="pagination">
+          <div class="rows-per-page">
+            Baris per halaman:
+            <select>
+              <option>5</option>
+              <option>10</option>
+            </select>
+          </div>
+          <div class="page-info">1 dari 10</div>
+          <div class="page-nav">
+            <button disabled><i class="fas fa-chevron-left"></i></button>
+            <button><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+      </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
-    <script>
-      // Konfigurasi tampilan grafik ApexCharts
-      var options = {
-        series: [
-          {
-            name: 'Aktif',
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-          },
-          {
-            name: 'Non-Aktif',
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-          }
-        ],
-        chart: {
-          type: 'area',
-          height: '100%', // FIX: Diubah ke '100%' agar ditarik mengikuti tinggi flexbox CSS
-          fontFamily: 'Poppins, sans-serif',
-          toolbar: {
-            show: false
-          }
-        },
-        legend: {
-          show: false
-        },
-        colors: ['#28a745', '#6c757d'],
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'smooth',
-          width: 2
-        },
-        fill: {
-          type: 'gradient',
-          gradient: {
-            shadeIntensity: 1,
-            opacityFrom: 0.45,
-            opacityTo: 0.05,
-            stops: [20, 100, 100, 100]
-          }
-        },
-        xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']
-        },
-        grid: {
-          borderColor: '#f1f1f1',
-          strokeDashArray: 4
-        }
-      };
-
-      window.pegawaiChart = new ApexCharts(document.querySelector("#chart-pegawai"), options);
-      window.pegawaiChart.render();
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script src="dashboard.js"></script>
-</body>
+  </body>
 </html>

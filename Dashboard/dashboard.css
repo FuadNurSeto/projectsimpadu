@@ -614,7 +614,7 @@ td {
   background-color: #fef2f2 !important;
 }
 
-/* MODAL OVERLAY (TAMBAH PEGAWAI) */
+/* ===== MODAL OVERLAY BASE ===== */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -628,63 +628,336 @@ td {
   align-items: center;
   z-index: 9999;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   transition: all 0.3s ease-in-out;
 }
 
 .modal-overlay.show {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 
+/* ===== MODAL CONTAINER ===== */
 .modal-container {
-  background: #fff;
+  background: #ffffff;
   width: 90%;
-  max-width: 900px;
+  max-width: 600px;
   border-radius: 16px;
-  padding: 25px;
+  padding: 30px;
   max-height: 85vh;
   overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.3s ease-out;
 }
 
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== MODAL HEADER ===== */
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
   border-bottom: 1px solid #e2e8f0;
-  padding-bottom: 10px;
 }
 
+.modal-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+/* ===== FORM GRID ===== */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
+.span-6 { grid-column: span 6; }
+.span-3 { grid-column: span 3; }
+.span-2 { grid-column: span 2; }
+
+/* ===== FORM GROUP BASE ===== */
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 }
 
 .form-group label {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 500;
   color: #475569;
+  margin: 0;
 }
 
 .form-group input,
 .form-group select {
-  padding: 8px 12px;
+  padding: 11px 14px;
   border: 1px solid #cbd5e1;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #1e293b;
+  background-color: #ffffff;
+  outline: none;
+  transition: all 0.2s;
+  font-family: "Poppins", sans-serif;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-group input::placeholder {
+  color: #cbd5e1;
+}
+
+/* ===== PASSWORD INPUT WRAPPER ===== */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.password-input-wrapper .toggle-password {
+  position: absolute;
+  right: 14px;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.2s;
+  user-select: none;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.password-input-wrapper .toggle-password:hover {
+  color: #475569;
+}
+
+/* ===== SELECT WRAPPER DENGAN CUSTOM ARROW ===== */
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper::after {
+  content: '\f078';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
   font-size: 12px;
 }
 
-.span-3 { grid-column: span 3; }
-.span-2 { grid-column: span 2; }
+.select-wrapper select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 36px;
+  width: 100%;
+}
+
+/* ===== REQUIRED ASTERISK ===== */
+.required {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* ===== MODAL FOOTER ===== */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* ===== BUTTON STYLES ===== */
+.btn-batal {
+  padding: 11px 24px;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  color: #64748b;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: "Poppins", sans-serif;
+}
+
+.btn-batal:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.btn-batal:active {
+  background-color: #e2e8f0;
+}
+
+.btn-tambah {
+  padding: 11px 24px;
+  background-color: #1e67d5;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: "Poppins", sans-serif;
+}
+
+.btn-tambah:hover {
+  background-color: #1d5cc4;
+  box-shadow: 0 4px 12px rgba(30, 103, 213, 0.3);
+}
+
+.btn-tambah:active {
+  background-color: #1a4fa0;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .modal-container {
+    width: 95%;
+    padding: 20px;
+    max-height: 90vh;
+  }
+
+  .modal-header {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+  }
+
+  .modal-header h2 {
+    font-size: 18px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .span-6,
+  .span-3,
+  .span-2 {
+    grid-column: span 1 !important;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .modal-footer {
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+  }
+
+  .btn-batal,
+  .btn-tambah {
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-container {
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    max-height: calc(100vh - 20px);
+  }
+
+  .modal-overlay {
+    align-items: flex-end;
+  }
+
+  .form-grid {
+    gap: 10px;
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .btn-batal,
+  .btn-tambah {
+    width: 100%;
+  }
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+.modal-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-container::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.modal-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.modal-container::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
 
 .table-hak-akses {
   width: 100%;
