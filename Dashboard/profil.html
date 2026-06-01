@@ -456,7 +456,10 @@
                     class="profile-form-control"
                     placeholder="Masukkan kata sandi saat ini"
                   />
-                  <i class="far fa-eye toggle-password-icon" id="toggle-current-password"></i>
+                  <i
+                    class="far fa-eye toggle-password-icon"
+                    id="toggle-current-password"
+                  ></i>
                 </div>
               </div>
 
@@ -469,7 +472,10 @@
                     class="profile-form-control"
                     placeholder="Masukkan kata sandi baru"
                   />
-                  <i class="far fa-eye toggle-password-icon" id="toggle-new-password"></i>
+                  <i
+                    class="far fa-eye toggle-password-icon"
+                    id="toggle-new-password"
+                  ></i>
                 </div>
               </div>
 
@@ -482,7 +488,10 @@
                     class="profile-form-control"
                     placeholder="Ulangi kata sandi baru"
                   />
-                  <i class="far fa-eye toggle-password-icon" id="toggle-confirm-password"></i>
+                  <i
+                    class="far fa-eye toggle-password-icon"
+                    id="toggle-confirm-password"
+                  ></i>
                 </div>
               </div>
 
@@ -780,8 +789,12 @@
 
         if (toggleIcon && passwordInput) {
           toggleIcon.addEventListener("click", function () {
-            const isPassword = passwordInput.getAttribute("type") === "password";
-            passwordInput.setAttribute("type", isPassword ? "text" : "password");
+            const isPassword =
+              passwordInput.getAttribute("type") === "password";
+            passwordInput.setAttribute(
+              "type",
+              isPassword ? "text" : "password",
+            );
             this.classList.toggle("fa-eye");
             this.classList.toggle("fa-eye-slash");
           });
