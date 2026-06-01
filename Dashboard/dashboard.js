@@ -399,31 +399,44 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // --- CHART INITIALIZATION ---
       // Pastikan ada elemen <canvas id="chartStatusPegawai"></canvas> di HTML Anda
-      const ctx = document.getElementById('chartStatusPegawai');
+      const ctx = document.getElementById("chartStatusPegawai");
       if (ctx) {
-        window.pegawaiChart = new Chart(ctx.getContext('2d'), {
-          type: 'line', // Tipe chart yang digunakan (misal: 'line', 'bar', dll.)
+        window.pegawaiChart = new Chart(ctx.getContext("2d"), {
+          type: "line", // Tipe chart yang digunakan (misal: 'line', 'bar', dll.)
           data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+            labels: [
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "Mei",
+              "Jun",
+              "Jul",
+              "Agu",
+              "Sep",
+              "Okt",
+              "Nov",
+              "Des",
+            ],
             datasets: [
               // Dataset awal, akan diisi dan diperbarui oleh fungsi updateDashboardChart
               {
-                label: 'Aktif',
+                label: "Aktif",
                 data: [], // Data akan diisi nanti
-                borderColor: '#28a745', // Contoh warna hijau
-                backgroundColor: 'rgba(40, 167, 69, 0.2)', // Contoh warna hijau transparan
+                borderColor: "#28a745", // Contoh warna hijau
+                backgroundColor: "rgba(40, 167, 69, 0.2)", // Contoh warna hijau transparan
                 fill: true,
-                tension: 0.4 // Untuk garis yang lebih halus
+                tension: 0.4, // Untuk garis yang lebih halus
               },
               {
-                label: 'Non-Aktif',
+                label: "Non-Aktif",
                 data: [], // Data akan diisi nanti
-                borderColor: '#6c757d', // Contoh warna abu-abu
-                backgroundColor: 'rgba(108, 117, 125, 0.2)', // Contoh warna abu-abu transparan
+                borderColor: "#6c757d", // Contoh warna abu-abu
+                backgroundColor: "rgba(108, 117, 125, 0.2)", // Contoh warna abu-abu transparan
                 fill: true,
-                tension: 0.4
-              }
-            ]
+                tension: 0.4,
+              },
+            ],
           },
           options: {
             responsive: true,
@@ -433,35 +446,35 @@ document.addEventListener("DOMContentLoaded", function () {
                 beginAtZero: true,
                 min: 0,
                 ticks: {
-                  stepSize: 1,  // Kunci kelipatan angka bulat 1
+                  stepSize: 1, // Kunci kelipatan angka bulat 1
                   precision: 0, // Kunci anti desimal pecahan saat di-zoom
-                  callback: function(value) {
+                  callback: function (value) {
                     if (value % 1 === 0) return value;
-                  }
+                  },
                 },
                 grid: {
-                  display: false // ❌ Menghilangkan garis kotak horizontal di latar belakang
-                }
+                  display: false, // ❌ Menghilangkan garis kotak horizontal di latar belakang
+                },
               },
               x: {
-                offset: false,      // Membuat garis grafik melebar penuh ke kanan-kiri
+                offset: false, // Membuat garis grafik melebar penuh ke kanan-kiri
                 boundaryGap: false,
                 grid: {
-                  display: false // ❌ Menghilangkan garis kotak vertikal di latar belakang
-                }
-              }
+                  display: false, // ❌ Menghilangkan garis kotak vertikal di latar belakang
+                },
+              },
             },
             plugins: {
               legend: {
-                display: false // ❌ Menghilangkan legend kotak bawaan yang menumpuk double
+                display: false, // ❌ Menghilangkan legend kotak bawaan yang menumpuk double
               },
               tooltip: {
-                enabled: true,       // Menghidupkan kembali Pop-up saat kursor diarahkan ke chart
-                mode: 'index',       // Menampilkan info Aktif & Non-Aktif sekaligus
-                intersect: false     // Tetap muncul meski kursor tidak pas di titik bulat
-              }
-            }
-          }
+                enabled: true, // Menghidupkan kembali Pop-up saat kursor diarahkan ke chart
+                mode: "index", // Menampilkan info Aktif & Non-Aktif sekaligus
+                intersect: false, // Tetap muncul meski kursor tidak pas di titik bulat
+              },
+            },
+          },
         });
       }
       // --- END CHART INITIALIZATION ---
@@ -981,3 +994,13 @@ function renderAkunRolePage(users) {
     tableBody.appendChild(tr);
   });
 }
+
+// ========================================================
+// FIX ZOOM ISSUE: Paksa redraw chart saat browser di-zoom
+// ========================================================
+window.addEventListener("resize", function () {
+  // Jika Chart.js instances ada, paksa resize
+  if (window.pegawaiChart) {
+    window.pegawaiChart.resize();
+  }
+});

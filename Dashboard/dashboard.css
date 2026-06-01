@@ -254,9 +254,13 @@ body {
   background: #ffffff;
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.02),
+    0 2px 4px -1px rgba(0, 0, 0, 0.02);
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .table-container {
@@ -288,6 +292,14 @@ body {
   color: #64748b;
 }
 
+/* Canvas wrapper untuk fix zoom issue */
+.chart-canvas-wrapper {
+  position: relative;
+  height: 300px;
+  width: 100%;
+  min-width: 0;
+}
+
 .more-btn {
   background: none;
   border: none;
@@ -306,8 +318,12 @@ body {
   height: 8px;
   border-radius: 50%;
 }
-.active-dot { background-color: #28a745; }
-.inactive-dot { background-color: #6c757d; }
+.active-dot {
+  background-color: #28a745;
+}
+.inactive-dot {
+  background-color: #6c757d;
+}
 .year-select {
   padding: 2px 6px;
   border: 1px solid #cbd5e1;
@@ -709,9 +725,15 @@ td {
   margin-bottom: 24px;
 }
 
-.span-6 { grid-column: span 6; }
-.span-3 { grid-column: span 3; }
-.span-2 { grid-column: span 2; }
+.span-6 {
+  grid-column: span 6;
+}
+.span-3 {
+  grid-column: span 3;
+}
+.span-2 {
+  grid-column: span 2;
+}
 
 /* ===== FORM GROUP BASE ===== */
 .form-group {
@@ -785,8 +807,8 @@ td {
 }
 
 .select-wrapper::after {
-  content: '\f078';
-  font-family: 'Font Awesome 5 Free';
+  content: "\f078";
+  font-family: "Font Awesome 5 Free";
   font-weight: 900;
   position: absolute;
   right: 14px;
@@ -1028,11 +1050,11 @@ td {
 }
 
 .status-modal-icon.icon-warning {
-  background-color: #FFF9E6 !important;
+  background-color: #fff9e6 !important;
 }
 
 .status-modal-icon.icon-success {
-  background-color: #E0E7FF !important;
+  background-color: #e0e7ff !important;
 }
 
 .status-icon-img {
@@ -1044,13 +1066,13 @@ td {
 .status-modal-title {
   font-size: 19px !important;
   font-weight: 700 !important;
-  color: #1E293B !important;
+  color: #1e293b !important;
   margin-bottom: 10px !important;
 }
 
 .status-modal-desc {
   font-size: 14px !important;
-  color: #64748B !important;
+  color: #64748b !important;
   line-height: 1.6 !important;
   margin-bottom: 28px !important;
 }
@@ -1062,7 +1084,7 @@ td {
   width: 100%;
 }
 
-.btn-status-batal, 
+.btn-status-batal,
 .btn-status-submit {
   flex: 1;
   padding: 12px 20px;
@@ -1075,25 +1097,25 @@ td {
 }
 
 .btn-status-batal {
-  background-color: #F1F5F9;
+  background-color: #f1f5f9;
   color: #64748b;
 }
 .btn-status-batal:hover {
-  background-color: #E2E8F0;
+  background-color: #e2e8f0;
 }
 
 .btn-danger-dark {
   background-color: #475569;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 .btn-danger-dark:hover {
   background-color: #334155;
 }
 
 .btn-primary-bright {
-  background-color: #3B82F6;
-  color: #FFFFFF;
+  background-color: #3b82f6;
+  color: #ffffff;
 }
 .btn-primary-bright:hover {
-  background-color: #2563EB;
+  background-color: #2563eb;
 }
