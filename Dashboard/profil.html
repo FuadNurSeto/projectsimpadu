@@ -275,6 +275,28 @@
         background-color: #c53030;
       }
 
+      /* --- TOGGLE PASSWORD ICON STYLING --- */
+      .input-password-wrapper {
+        position: relative;
+        width: 100%;
+      }
+
+      .toggle-password-icon {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #94a3b8;
+        transition: color 0.2s;
+        z-index: 10;
+        font-size: 14px;
+      }
+
+      .toggle-password-icon:hover {
+        color: #1572e8;
+      }
+
       @media (max-width: 992px) {
         .profile-grid {
           grid-template-columns: 1fr;
@@ -427,32 +449,41 @@
             <form>
               <div class="profile-form-group">
                 <label>Kata Sandi Saat Ini</label>
-                <input
-                  id="currentPass"
-                  type="password"
-                  class="profile-form-control"
-                  placeholder="Masukkan kata sandi saat ini"
-                />
+                <div class="input-password-wrapper">
+                  <input
+                    id="currentPass"
+                    type="password"
+                    class="profile-form-control"
+                    placeholder="Masukkan kata sandi saat ini"
+                  />
+                  <i class="far fa-eye toggle-password-icon" id="toggle-current-password"></i>
+                </div>
               </div>
 
               <div class="profile-form-group">
                 <label>Kata Sandi Baru</label>
-                <input
-                  type="password"
-                  id="newPassInput"
-                  class="profile-form-control"
-                  placeholder="Masukkan kata sandi baru"
-                />
+                <div class="input-password-wrapper">
+                  <input
+                    type="password"
+                    id="newPassInput"
+                    class="profile-form-control"
+                    placeholder="Masukkan kata sandi baru"
+                  />
+                  <i class="far fa-eye toggle-password-icon" id="toggle-new-password"></i>
+                </div>
               </div>
 
               <div class="profile-form-group">
                 <label>Konfirmasi Kata Sandi Baru</label>
-                <input
-                  id="confirmPass"
-                  type="password"
-                  class="profile-form-control"
-                  placeholder="Ulangi kata sandi baru"
-                />
+                <div class="input-password-wrapper">
+                  <input
+                    id="confirmPass"
+                    type="password"
+                    class="profile-form-control"
+                    placeholder="Ulangi kata sandi baru"
+                  />
+                  <i class="far fa-eye toggle-password-icon" id="toggle-confirm-password"></i>
+                </div>
               </div>
 
               <div class="password-criteria">
@@ -739,6 +770,27 @@
           else symCrit.classList.remove("valid");
         });
       }
+
+      // ========================================================
+      // 2.5 SCRIPT TOGGLE PASSWORD (IKON MATA)
+      // ========================================================
+      function setupPasswordToggle(iconId, inputId) {
+        const toggleIcon = document.getElementById(iconId);
+        const passwordInput = document.getElementById(inputId);
+
+        if (toggleIcon && passwordInput) {
+          toggleIcon.addEventListener("click", function () {
+            const isPassword = passwordInput.getAttribute("type") === "password";
+            passwordInput.setAttribute("type", isPassword ? "text" : "password");
+            this.classList.toggle("fa-eye");
+            this.classList.toggle("fa-eye-slash");
+          });
+        }
+      }
+
+      setupPasswordToggle("toggle-current-password", "currentPass");
+      setupPasswordToggle("toggle-new-password", "newPassInput");
+      setupPasswordToggle("toggle-confirm-password", "confirmPass");
 
       // ========================================================
       // 3. SCRIPT KELUAR AKUN (MEMBERSIHKAN SESI TOKEN & REDIRECT)
