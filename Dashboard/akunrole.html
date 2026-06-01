@@ -1,194 +1,260 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SIMPADU POLIBAN - Akun dan Role</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="dashboard.css">
-</head>
-<body>
-
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
     <div class="container">
-        <aside class="sidebar">
-            <div class="logo-section">
-                <img src="../Asset/logopoliban.png" alt="Logo Poliban" class="logo-img">
-                <div class="logo-text">
-                    <h2>SIMPADU POLIBAN</h2>
-                    <p>Sistem Informasi Terpadu<br>Politeknik Negeri Banjarmasin</p>
-                </div>
+      <aside class="sidebar">
+        <div class="logo-section">
+          <img
+            src="../Asset/logopoliban.png"
+            alt="Logo Poliban"
+            class="logo-img"
+          />
+          <div class="logo-text">
+            <h2>SIMPADU POLIBAN</h2>
+            <p>Sistem Informasi Terpadu<br />Politeknik Negeri Banjarmasin</p>
+          </div>
+        </div>
+
+        <div class="user-profile-wrapper">
+          <div class="user-profile">
+            <img src="../Asset/ppSP.jpg" alt="User Avatar" class="avatar" />
+            <div class="user-info">
+              <h4>Kelompok 1</h4>
+              <p>Super Admin</p>
             </div>
+            <i class="fas fa-chevron-down dropdown-icon"></i>
+          </div>
 
-            <div class="user-profile-wrapper">
-                <div class="user-profile">
-                    <img src="../Asset/ppSP.jpg" alt="User Avatar" class="avatar">
-                    <div class="user-info">
-                        <h4>Kelompok 1</h4>
-                        <p>Super Admin</p>
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </div>
+          <div class="profile-dropdown" id="profileDropdown">
+            <a href="profil.html" class="dropdown-item">
+              <i class="fas fa-user-circle"></i> Profil
+            </a>
+            <button
+              type="button"
+              class="dropdown-item logout-btn"
+              id="logoutBtn"
+            >
+              <i class="fas fa-sign-out-alt"></i> Keluar Akun
+            </button>
+          </div>
+        </div>
 
-                <div class="profile-dropdown" id="profileDropdown">
-                    <a href="profil.html" class="dropdown-item">
-                        <i class="fas fa-user-circle"></i> Profil
-                    </a>
-                    <button type="button" class="dropdown-item logout-btn" id="logoutBtn">
-                        <i class="fas fa-sign-out-alt"></i> Keluar Akun
-                    </button>
-                </div>
+        <div class="menu-label">Main Menu</div>
+        <nav class="nav-menu">
+          <a href="super_admin.html" class="nav-item">
+            <i class="fas fa-th-large"></i> Dashboard
+          </a>
+          <a href="akunrole.html" class="nav-item active">
+            <i class="fas fa-users-cog"></i> Akun dan Role
+          </a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="header">
+          <div class="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+          </div>
+          <h1 class="page-title">Akun dan Role</h1>
+        </header>
+
+        <section class="action-bar">
+          <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input
+              type="text"
+              id="search-pegawai"
+              placeholder="Cari Pegawai..."
+              class="search-input"
+            />
+          </div>
+          <div class="action-buttons">
+            <button class="btn btn-primary" id="btn-tambah-pegawai">
+              <i class="fas fa-plus"></i> Tambah Pegawai
+            </button>
+            <select
+              id="sort-pegawai"
+              class="btn btn-outline"
+              style="
+                padding: 10px 15px;
+                font-size: 14px;
+                border: none;
+                background: white;
+                cursor: pointer;
+              "
+            >
+              <option value="default">Urutkan</option>
+              <option value="nama-asc">Nama (A - Z)</option>
+              <option value="nama-desc">Nama (Z - A)</option>
+              <option value="nip-asc">NIP (Terkecil)</option>
+              <option value="tanggal-terbaru">Tanggal (Terbaru)</option>
+            </select>
+            <button class="btn btn-outline">
+              Tersimpan <i class="fas fa-chevron-down"></i>
+            </button>
+            <button class="btn btn-icon">
+              <i class="fas fa-sliders-h"></i>
+            </button>
+          </div>
+        </section>
+
+        <section class="stats-grid">
+          <div class="stat-card blue">
+            <div class="card-body">
+              <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
+              <div class="card-info">
+                <h3 id="stat-akademik">0</h3>
+                <p>Admin Akademik</p>
+              </div>
             </div>
+            <div class="card-wave-blue"></div>
+          </div>
 
-            <div class="menu-label">Main Menu</div>
-            <nav class="nav-menu">
-                <a href="super_admin.html" class="nav-item">
-                    <i class="fas fa-th-large"></i> Dashboard
-                </a>
-                <a href="akunrole.html" class="nav-item active">
-                    <i class="fas fa-users-cog"></i> Akun dan Role
-                </a>
-            </nav>
-        </aside>
+          <div class="stat-card purple">
+            <div class="card-body">
+              <div class="card-icon"><i class="fas fa-user-tie"></i></div>
+              <div class="card-info">
+                <h3 id="stat-pegawai">0</h3>
+                <p>Admin Pegawai</p>
+              </div>
+            </div>
+            <div class="card-wave-purple"></div>
+          </div>
 
-        <main class="main-content">
-            <header class="header">
-                <div class="toggle-sidebar">
-                    <i class="fas fa-bars"></i>
-                </div>
-                <h1 class="page-title">Akun dan Role</h1>
-            </header>
+          <div class="stat-card red">
+            <div class="card-body">
+              <div class="card-icon"><i class="fas fa-users"></i></div>
+              <div class="card-info">
+                <h3 id="stat-mahasiswa">0</h3>
+                <p>Admin Mahasiswa</p>
+              </div>
+            </div>
+            <div class="card-wave-red"></div>
+          </div>
 
-            <section class="action-bar">
-                <div class="search-wrapper">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" placeholder="Cari Pegawai..." class="search-input">
-                </div>
-                <div class="action-buttons">
-                    <button class="btn btn-primary" id="btn-tambah-pegawai"><i class="fas fa-plus"></i> Tambah Pegawai</button>
-                    <button class="btn btn-outline">Urutkan <i class="fas fa-chevron-down"></i></button>
-                    <button class="btn btn-outline">Tersimpan <i class="fas fa-chevron-down"></i></button>
-                    <button class="btn btn-icon"><i class="fas fa-sliders-h"></i></button>
-                </div>
-            </section>
+          <div class="stat-card green">
+            <div class="card-body">
+              <div class="card-icon"><i class="fas fa-wallet"></i></div>
+              <div class="card-info">
+                <h3 id="stat-keuangan">0</h3>
+                <p>Admin Keuangan</p>
+              </div>
+            </div>
+            <div class="card-wave-green"></div>
+          </div>
+        </section>
 
-            <section class="stats-grid">
-                <div class="stat-card blue">
-                    <div class="card-body">
-                        <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
-                        <div class="card-info">
-                            <h3 id="stat-akademik">0</h3>
-                            <p>Admin Akademik</p>
-                        </div>
-                    </div>
-                    <div class="card-wave-blue"></div>
-                </div>
+        <section class="table-container">
+          <div class="table-header">
+            <h3>Daftar Pegawai</h3>
+          </div>
 
-                <div class="stat-card purple">
-                    <div class="card-body">
-                        <div class="card-icon"><i class="fas fa-user-tie"></i></div>
-                        <div class="card-info">
-                            <h3 id="stat-pegawai">0</h3>
-                            <p>Admin Pegawai</p>
-                        </div>
-                    </div>
-                    <div class="card-wave-purple"></div>
-                </div>
+          <div class="responsive-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>NIP</th>
+                  <th>Hak Akses</th>
+                  <th>Nomor Identitas</th>
+                  <th>Tanggal Terdaftar</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="table-akunrole-body"></tbody>
+            </table>
+          </div>
 
-                <div class="stat-card red">
-                    <div class="card-body">
-                        <div class="card-icon"><i class="fas fa-users"></i></div>
-                        <div class="card-info">
-                            <h3 id="stat-mahasiswa">0</h3>
-                            <p>Admin Mahasiswa</p>
-                        </div>
-                    </div>
-                    <div class="card-wave-red"></div>
-                </div>
+          <div class="empty-state" id="empty-state">
+            <img
+              src="../Asset/Frame.png"
+              alt="Data Kosong"
+              class="empty-image"
+            />
+            <p class="empty-text">Data Tidak Ditemukan</p>
+          </div>
 
-                <div class="stat-card green">
-                    <div class="card-body">
-                        <div class="card-icon"><i class="fas fa-wallet"></i></div>
-                        <div class="card-info">
-                            <h3 id="stat-keuangan">0</h3>
-                            <p>Admin Keuangan</p>
-                        </div>
-                    </div>
-                    <div class="card-wave-green"></div>
-                </div>
-            </section>
-
-            <section class="table-container">
-                <div class="table-header">
-                    <h3>Daftar Pegawai</h3>
-                </div>
-                
-                <div class="responsive-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nama</th>
-                                <th>NIP</th>
-                                <th>Hak Akses</th>
-                                <th>Nomor Identitas</th>
-                                <th>Tanggal Terdaftar</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-akunrole-body"></tbody>
-                    </table>
-                </div>
-
-                <div class="empty-state" id="empty-state">
-                     <img src="../Asset/Frame.png" alt="Data Kosong" class="empty-image">
-                     <p class="empty-text">Data Tidak Ditemukan</p>
-                </div>
-
-                <div class="pagination">
-                    <div class="rows-per-page">
-                        Baris per halaman: 
-                        <select>
-                            <option>5</option>
-                            <option>10</option>
-                        </select>
-                    </div>
-                    <div class="page-info">1 dari 10</div>
-                    <div class="page-nav">
-                        <button disabled><i class="fas fa-chevron-left"></i></button>
-                        <button disabled><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                </div>
-            </section>
-        </main>
+          <div class="pagination">
+            <div class="rows-per-page">
+              Baris per halaman:
+              <select>
+                <option>5</option>
+                <option>10</option>
+              </select>
+            </div>
+            <div class="page-info">1 dari 10</div>
+            <div class="page-nav">
+              <button disabled><i class="fas fa-chevron-left"></i></button>
+              <button disabled><i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
 
     <div id="modal-tambah-pegawai" class="modal-overlay">
       <div class="modal-container">
         <div class="modal-header">
           <h2>Tambah Pegawai</h2>
-          <button type="button" class="close-btn" id="btn-close-modal">&times;</button>
+          <button type="button" class="close-btn" id="btn-close-modal">
+            &times;
+          </button>
         </div>
 
         <form id="form-tambah-pegawai">
           <div class="form-grid">
             <div class="form-group span-6">
               <label>NIP <span class="required">*</span></label>
-              <input type="text" id="tambah-nip" placeholder="Masukkan NIP pegawai" required>
-            </div> 
+              <input
+                type="text"
+                id="tambah-nip"
+                placeholder="Masukkan NIP pegawai"
+                required
+              />
+            </div>
 
             <div class="form-group span-3">
               <label>Nama Lengkap <span class="required">*</span></label>
-              <input type="text" id="tambah-nama" placeholder="Masukkan nama lengkap" required>
+              <input
+                type="text"
+                id="tambah-nama"
+                placeholder="Masukkan nama lengkap"
+                required
+              />
             </div>
             <div class="form-group span-3">
               <label>Nama Pengguna <span class="required">*</span></label>
-              <input type="text" id="tambah-username" placeholder="Masukkan nama pengguna" required>
+              <input
+                type="text"
+                id="tambah-username"
+                placeholder="Masukkan nama pengguna"
+                required
+              />
             </div>
 
             <div class="form-group span-2">
               <label>Alamat Email <span class="required">*</span></label>
-              <input type="email" id="tambah-email" placeholder="Masukkan email pegawai" required>
+              <input
+                type="email"
+                id="tambah-email"
+                placeholder="Masukkan email pegawai"
+                required
+              />
             </div>
             <div class="form-group span-2">
               <label>Status</label>
@@ -216,107 +282,183 @@
             <div class="form-group span-3">
               <label>Kata Sandi <span class="required">*</span></label>
               <div class="password-input-wrapper">
-                <input type="password" id="tambah-password" placeholder="Masukkan kata sandi" required>
+                <input
+                  type="password"
+                  id="tambah-password"
+                  placeholder="Masukkan kata sandi"
+                  required
+                />
                 <i class="fas fa-eye-slash toggle-password"></i>
               </div>
             </div>
             <div class="form-group span-3">
               <label>Konfirmasi Sandi <span class="required">*</span></label>
               <div class="password-input-wrapper">
-                <input type="password" id="tambah-confirm-password" placeholder="Masukkan kata sandi" required>
+                <input
+                  type="password"
+                  id="tambah-confirm-password"
+                  placeholder="Masukkan kata sandi"
+                  required
+                />
                 <i class="fas fa-eye-slash toggle-password"></i>
               </div>
             </div>
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn-batal" id="btn-batal-modal">Batal</button>
+            <button type="button" class="btn-batal" id="btn-batal-modal">
+              Batal
+            </button>
             <button type="submit" class="btn-tambah">Tambah</button>
           </div>
         </form>
       </div>
     </div>
 
-    <div class="modal fade" id="modalNonAktifkan" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered status-modal-dialog">
-            <div class="modal-content status-modal-card">
-                <div class="modal-body p-0">
-                    <div class="status-modal-icon icon-warning">
-                        <img src="../Asset/nonaktifkan.png" alt="Warning" class="status-icon-img">
-                    </div>
-
-                    <h5 class="status-modal-title">Non-aktifkan Akun?</h5>
-
-                    <p class="status-modal-desc">
-                        Akun <strong id="text-nama-nonaktif" style="color: #1E293B; font-weight: 600;"></strong> akan dinonaktifkan. Pegawai ini tidak dapat login kembali.
-                    </p>
-
-                    <form id="form-nonaktifkan" method="POST">
-                        <input type="hidden" name="status" value="nonaktif">
-                        <div class="status-modal-actions">
-                            <button type="button" class="btn-status-batal" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn-status-submit btn-danger-dark">Non-aktifkan</button>
-                        </div>
-                    </form>
-                </div>
+    <div
+      class="modal fade"
+      id="modalNonAktifkan"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered status-modal-dialog">
+        <div class="modal-content status-modal-card">
+          <div class="modal-body p-0">
+            <div class="status-modal-icon icon-warning">
+              <img
+                src="../Asset/nonaktifkan.png"
+                alt="Warning"
+                class="status-icon-img"
+              />
             </div>
+
+            <h5 class="status-modal-title">Non-aktifkan Akun?</h5>
+
+            <p class="status-modal-desc">
+              Akun
+              <strong
+                id="text-nama-nonaktif"
+                style="color: #1e293b; font-weight: 600"
+              ></strong>
+              akan dinonaktifkan. Pegawai ini tidak dapat login kembali.
+            </p>
+
+            <form id="form-nonaktifkan" method="POST">
+              <input type="hidden" name="status" value="nonaktif" />
+              <div class="status-modal-actions">
+                <button
+                  type="button"
+                  class="btn-status-batal"
+                  data-bs-dismiss="modal"
+                >
+                  Batal
+                </button>
+                <button type="submit" class="btn-status-submit btn-danger-dark">
+                  Non-aktifkan
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
 
     <div class="modal fade" id="modalAktifkan" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered status-modal-dialog">
-            <div class="modal-content status-modal-card">
-                <div class="modal-body p-0">
-                    <div class="status-modal-icon icon-success">
-                        <img src="../Asset/aktifkan.png" alt="Success" class="status-icon-img">
-                    </div>
-
-                    <h5 class="status-modal-title">Aktifkan Akun?</h5>
-
-                    <p class="status-modal-desc">
-                        Akun <strong id="text-nama-aktif" style="color: #1E293B; font-weight: 600;"></strong> akan diaktifkan kembali. Pegawai dapat login ke sistem.
-                    </p>
-
-                    <form id="form-aktifkan" method="POST">
-                        <input type="hidden" name="status" value="aktif">
-                        <div class="status-modal-actions">
-                            <button type="button" class="btn-status-batal" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn-status-submit btn-primary-bright">Aktifkan</button>
-                        </div>
-                    </form>
-                </div>
+      <div class="modal-dialog modal-dialog-centered status-modal-dialog">
+        <div class="modal-content status-modal-card">
+          <div class="modal-body p-0">
+            <div class="status-modal-icon icon-success">
+              <img
+                src="../Asset/aktifkan.png"
+                alt="Success"
+                class="status-icon-img"
+              />
             </div>
+
+            <h5 class="status-modal-title">Aktifkan Akun?</h5>
+
+            <p class="status-modal-desc">
+              Akun
+              <strong
+                id="text-nama-aktif"
+                style="color: #1e293b; font-weight: 600"
+              ></strong>
+              akan diaktifkan kembali. Pegawai dapat login ke sistem.
+            </p>
+
+            <form id="form-aktifkan" method="POST">
+              <input type="hidden" name="status" value="aktif" />
+              <div class="status-modal-actions">
+                <button
+                  type="button"
+                  class="btn-status-batal"
+                  data-bs-dismiss="modal"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  class="btn-status-submit btn-primary-bright"
+                >
+                  Aktifkan
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
 
     <div id="modal-edit-pegawai" class="modal-overlay">
       <div class="modal-container">
         <div class="modal-header">
           <h2>Edit Pegawai</h2>
-          <button type="button" class="close-btn" id="btn-close-edit-modal">&times;</button>
+          <button type="button" class="close-btn" id="btn-close-edit-modal">
+            &times;
+          </button>
         </div>
 
         <form id="form-edit-pegawai">
-          <input type="hidden" id="edit-user-id">
+          <input type="hidden" id="edit-user-id" />
 
           <div class="form-grid">
             <div class="form-group span-6">
               <label>NIP <span class="required">*</span></label>
-              <input type="text" id="edit-nip" placeholder="Masukkan NIP pegawai" required>
+              <input
+                type="text"
+                id="edit-nip"
+                placeholder="Masukkan NIP pegawai"
+                required
+              />
             </div>
 
             <div class="form-group span-3">
               <label>Nama Lengkap <span class="required">*</span></label>
-              <input type="text" id="edit-nama" placeholder="Masukkan nama lengkap" required>
+              <input
+                type="text"
+                id="edit-nama"
+                placeholder="Masukkan nama lengkap"
+                required
+              />
             </div>
             <div class="form-group span-3">
               <label>Nama Pengguna <span class="required">*</span></label>
-              <input type="text" id="edit-username" placeholder="Masukkan nama pengguna" required>
+              <input
+                type="text"
+                id="edit-username"
+                placeholder="Masukkan nama pengguna"
+                required
+              />
             </div>
 
             <div class="form-group span-2">
               <label>Alamat Email <span class="required">*</span></label>
-              <input type="email" id="edit-email" placeholder="Masukkan email pegawai" required>
+              <input
+                type="email"
+                id="edit-email"
+                placeholder="Masukkan email pegawai"
+                required
+              />
             </div>
             <div class="form-group span-2">
               <label>Status</label>
@@ -341,15 +483,18 @@
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn-batal" id="btn-batal-edit-modal">Batal</button>
-            <button type="submit" class="btn-tambah" id="btn-simpan-edit">Simpan</button>
+            <button type="button" class="btn-batal" id="btn-batal-edit-modal">
+              Batal
+            </button>
+            <button type="submit" class="btn-tambah" id="btn-simpan-edit">
+              Simpan
+            </button>
           </div>
         </form>
       </div>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="dashboard.js"></script>
-</body>
+  </body>
 </html>

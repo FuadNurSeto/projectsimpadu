@@ -11,6 +11,53 @@ const roleMap = {
   5: "Admin Keuangan",
 };
 
+// Tempat menyimpan data asli dari API (untuk client-side filtering & sorting)
+let semuaPegawai = [];
+
+// ==========================================
+// FUNGSI FILTER & SORT: Client-side pencarian dan pengurutan
+// ==========================================
+function prosesFilterDanSort() {
+  const kataKunci = (document.getElementById("search-pegawai")?.value || "").toLowerCase();
+  const aturanUrut = document.getElementById("sort-pegawai")?.value || "default";
+
+  // --- PROSES A: FILTER (PENCARIAN) ---
+  let hasilProses = semuaPegawai.filter((pegawai) => {
+    const nama = (pegawai.name || "").toLowerCase();
+    const email = (pegawai.email || "").toLowerCase();
+    const nip = (pegawai.nomor_identitas || "").toLowerCase();
+    const username = (pegawai.username || "").toLowerCase();
+
+    return (
+      nama.includes(kataKunci) ||
+      email.includes(kataKunci) ||
+      nip.includes(kataKunci) ||
+      username.includes(kataKunci)
+    );
+  });
+
+  // --- PROSES B: SORT (PENGURUTAN) ---
+  if (aturanUrut === "nama-asc") {
+    hasilProses.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+  } else if (aturanUrut === "nama-desc") {
+    hasilProses.sort((a, b) => (b.name || "").localeCompare(a.name || ""));
+  } else if (aturanUrut === "nip-asc") {
+    hasilProses.sort((a, b) =>
+      (a.nomor_identitas || "").localeCompare(b.nomor_identitas || "")
+    );
+  } else if (aturanUrut === "tanggal-terbaru") {
+    hasilProses.sort((a, b) => {
+      const dateA = new Date(a.created_at || a.tanggal_terdaftar || 0);
+      const dateB = new Date(b.created_at || b.tanggal_terdaftar || 0);
+      return dateB - dateA;
+    });
+  }
+
+  // Tampilkan hasil akhir ke dalam tabel HTML
+  renderAkunRolePage(hasilProses);
+}
+
+
 // ==========================================
 // FUNGSI UNIVERSAL: Penanganan Error dari Server
 // ==========================================
@@ -216,8 +263,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Event listeners untuk Search & Sort pada Halaman Akun/Role
+  const searchPegawai = document.getElementById("search-pegawai");
+  const sortPegawai = document.getElementById("sort-pegawai");
+
+  if (searchPegawai) {
+    searchPegawai.addEventListener("input", prosesFilterDanSort);
+  }
+
+  if (sortPegawai) {
+    sortPegawai.addEventListener("change", prosesFilterDanSort);
+  }
+
   const searchInput = document.querySelector(".search-input");
-  if (searchInput) {
+  if (searchInput && !searchPegawai) {
     searchInput.addEventListener("keyup", function (e) {
       if (e.key === "Enter") {
         console.log("Mencari: " + this.value);
@@ -557,7 +616,14 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       renderTablePegawai(users);
-      renderAkunRolePage(users); // This function is called here to populate the table on akunrole.html
+
+      // Simpan semua data pegawai untuk client-side filtering & sorting
+      semuaPegawai = users.filter((user) =>
+        [2, 3, 4, 5].includes(user.role_id),
+      );
+
+      // Render awal dengan data terfilter (sebelum search/sort)
+      prosesFilterDanSort();
     })
     .catch((error) => console.error("Terjadi kesalahan API Dashboard:", error));
 
