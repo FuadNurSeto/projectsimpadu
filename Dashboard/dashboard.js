@@ -12,6 +12,56 @@ const roleMap = {
 };
 
 // ==========================================
+// FUNGSI UNIVERSAL: Penanganan Error dari Server
+// ==========================================
+async function bacaPesanError(response) {
+  let pesanKelemahan = "Terjadi kesalahan tak terduga pada server.";
+
+  try {
+    const data = await response.json();
+    if (data.message) {
+      pesanKelemahan = data.message;
+    }
+  } catch (e) {
+    if (response.status === 500) {
+      return "Error 500: Terjadi gangguan internal pada server VPS Poliban.";
+    }
+  }
+
+  // Terjemahkan berdasarkan status HTTP
+  if (response.status === 401) {
+    return "Sesi Anda telah habis. Silakan keluar dan login kembali.";
+  }
+  if (response.status === 403) {
+    return "Akses ditolak! Anda tidak memiliki izin untuk mengubah data ini.";
+  }
+  if (response.status === 404) {
+    return "Data atau halaman yang Anda cari tidak ditemukan di server.";
+  }
+
+  // Penanganan khusus Error Validasi Form (Status 422)
+  if (response.status === 422) {
+    let teksCek = pesanKelemahan.toLowerCase();
+    if (teksCek.includes("email has already been taken") || teksCek.includes("email sudah")) {
+      return "Gagal menyimpan: Alamat email ini sudah terdaftar digunakan akun lain!";
+    }
+    if (teksCek.includes("username has already been taken") || teksCek.includes("username sudah")) {
+      return "Gagal menyimpan: Nama Pengguna (Username) sudah dipakai!";
+    }
+    if (teksCek.includes("nomor identitas has already been taken") || teksCek.includes("nomor identitas sudah")) {
+      return "Gagal menyimpan: NIP / Nomor Identitas ini sudah terdaftar di database!";
+    }
+    if (teksCek.includes("password must be at least 8")) {
+      return "Gagal: Kata sandi baru minimal harus terdiri dari 8 karakter!";
+    }
+    return "Gagal Validasi: " + pesanKelemahan;
+  }
+
+  return `Gagal (${response.status}): ${pesanKelemahan}`;
+}
+
+
+// ==========================================
 // FUNGSI GLOBAL: MEMBUKA MODAL EDIT PEGAWAI
 // ==========================================
 function openEditModal(userId) {
@@ -290,17 +340,17 @@ document.addEventListener("DOMContentLoaded", function () {
       })
         .then(async (response) => {
           if (!response.ok) {
-            const err = await response.json();
-            throw new Error(err.message || "Gagal menambahkan pegawai");
+            const alasanGagal = await bacaPesanError(response);
+            throw new Error(alasanGagal);
           }
           return response.json();
         })
         .then(() => {
-          alert("Pegawai berhasil ditambahkan!");
+          alert("Berhasil! Data pegawai baru telah sukses didaftarkan ke sistem.");
           location.reload();
         })
         .catch((error) => {
-          alert("Error: " + error.message);
+          alert(error.message);
         })
         .finally(() => {
           submitBtn.disabled = false;
@@ -358,17 +408,17 @@ document.addEventListener("DOMContentLoaded", function () {
       )
         .then(async (response) => {
           if (!response.ok) {
-            const err = await response.json();
-            throw new Error(err.message || "Gagal memperbarui data");
+            const alasanGagal = await bacaPesanError(response);
+            throw new Error(alasanGagal);
           }
           return response.json();
         })
         .then(() => {
-          alert("Data pegawai berhasil diperbarui!");
+          alert("Berhasil! Data pegawai telah diperbarui.");
           location.reload();
         })
         .catch((error) => {
-          alert("Error: " + error.message);
+          alert(error.message);
         })
         .finally(() => {
           submitBtn.disabled = false;

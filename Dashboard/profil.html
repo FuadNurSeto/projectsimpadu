@@ -677,7 +677,7 @@
             fetch(
               `https://admin4e06.vps-poliban.my.id/api/akademik/users/${idUser}`,
               {
-                method: "POST", // Ubah ke POST
+                method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: `Bearer ${token}`,
@@ -685,23 +685,26 @@
                 },
                 body: JSON.stringify({
                   name: namaBaru,
-                  email: emailBaru, // Tambahkan spoofing method
+                  email: emailBaru,
                 }),
               },
             )
-              .then((response) => response.json())
-              .then((data) => {
-                if (data.error || data.message === "Unauthenticated.") {
-                  throw new Error(data.message || "Gagal memperbarui profil");
+              .then(async (response) => {
+                if (!response.ok) {
+                  const alasanGagal = await bacaPesanError(response);
+                  throw new Error(alasanGagal);
                 }
-                alert("Informasi pribadi berhasil diperbarui!");
-                localStorage.setItem("user_id", idUser); // Pastikan user_id juga tersimpan
-                // Sinkronkan localStorage jika nama berubah
+                return response.json();
+              })
+              .then((data) => {
+                alert("Berhasil! Perubahan informasi pribadi Anda telah disimpan.");
+                localStorage.setItem("user_id", idUser);
                 localStorage.setItem("name", namaBaru);
+                localStorage.setItem("email", emailBaru);
                 location.reload();
               })
               .catch((err) => {
-                alert("Gagal memperbarui: " + err.message);
+                alert(err.message);
               })
               .finally(() => {
                 btnSimpan.innerText = "Simpan Perubahan";
@@ -743,15 +746,20 @@
                 body: JSON.stringify({ password: sandiBaru }),
               },
             )
-              .then((res) => res.json())
+              .then(async (res) => {
+                if (!res.ok) {
+                  const alasanGagal = await bacaPesanError(res);
+                  throw new Error(alasanGagal);
+                }
+                return res.json();
+              })
               .then((data) => {
-                alert("Kata sandi berhasil diperbarui!");
-                // Bersihkan form
+                alert("Berhasil! Kata sandi akun Anda telah diperbarui.");
                 document.getElementById("currentPass").value = "";
                 document.getElementById("newPassInput").value = "";
                 document.getElementById("confirmPass").value = "";
               })
-              .catch((err) => alert("Gagal memperbarui sandi: " + err.message));
+              .catch((err) => alert(err.message));
           });
         }
       });
