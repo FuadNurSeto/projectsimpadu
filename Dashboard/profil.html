@@ -309,8 +309,9 @@
           <div class="user-profile">
             <img src="../Asset/ppSP.jpg" alt="User Avatar" class="avatar" />
             <div class="user-info">
-              <h4 id="sidebarName">Memuat...</h4>
-              <p id="sidebarRole">Memuat...</p>
+              <!-- Menggunakan h3 dan ID baru agar sinkron dengan JS -->
+              <h4 id="sidebar-user-name">Kelompok 1</h4>
+              <p id="sidebar-user-role">Super Admin</p>
             </div>
             <i class="fas fa-chevron-down dropdown-icon"></i>
           </div>
@@ -410,7 +411,11 @@
               </div>
 
               <div class="profile-card-footer">
-                <button type="button" class="profile-btn profile-btn-primary">
+                <button
+                  type="button"
+                  id="btnSimpanPerubahan"
+                  class="profile-btn profile-btn-primary"
+                >
                   Simpan Perubahan
                 </button>
               </div>
@@ -423,6 +428,7 @@
               <div class="profile-form-group">
                 <label>Kata Sandi Saat Ini</label>
                 <input
+                  id="currentPass"
                   type="password"
                   class="profile-form-control"
                   placeholder="Masukkan kata sandi saat ini"
@@ -442,6 +448,7 @@
               <div class="profile-form-group">
                 <label>Konfirmasi Kata Sandi Baru</label>
                 <input
+                  id="confirmPass"
                   type="password"
                   class="profile-form-control"
                   placeholder="Ulangi kata sandi baru"
@@ -464,6 +471,7 @@
               <div class="profile-card-footer" style="margin-top: 25px">
                 <button
                   type="button"
+                  id="btnPerbaruiSandi"
                   class="profile-btn profile-btn-primary"
                   style="background-color: #2d3748"
                 >
@@ -499,12 +507,42 @@
       document.addEventListener("DOMContentLoaded", function () {
         const token = localStorage.getItem("token");
         const userSession = JSON.parse(localStorage.getItem("user"));
+        const storedName = localStorage.getItem("name") || "Kelompok 1";
+        const storedEmail =
+          localStorage.getItem("email") || "superadmin@simpadu.ac.id"; // Ambil email dari localStorage
+
+        // 1. Ambil elemen sidebar profile berdasarkan ID baru
+        const sidebarName = document.getElementById("sidebar-user-name");
+        const sidebarRole = document.getElementById("sidebar-user-role");
+        const formEmailInput = document.getElementById("formEmail"); // Ambil elemen form email
+
+        // 2. Terapkan data awal dari localStorage agar langsung muncul tanpa menunggu API
+        if (sidebarName) sidebarName.innerText = storedName;
+
+        // 2.5 Terapkan ke input form Informasi Pribadi agar bernilai Kelompok 1
+        const formNameInput = document.getElementById("formName");
+        if (formNameInput) formNameInput.value = storedName;
+        if (formEmailInput) formEmailInput.value = storedEmail; // Terapkan email dari localStorage
 
         // Proteksi Halaman: Jika token atau sesi tidak ada, kembalikan ke halaman login
         if (!token || !userSession || !userSession.id) {
           window.location.href = "../loginbaru/baru.html";
           return;
         }
+
+        // 3. Fungsi untuk menjaga proteksi text "Super Admin" tetap konsisten
+        function lockProfilePageSidebar() {
+          if (sidebarRole) {
+            sidebarRole.innerText = "Super Admin";
+            sidebarRole.style.color = "#64748b";
+            sidebarRole.style.fontWeight = "500";
+            sidebarRole.style.background = "none";
+            sidebarRole.style.border = "none";
+            sidebarRole.style.padding = "0";
+            sidebarRole.style.marginTop = "0";
+          }
+        }
+        lockProfilePageSidebar();
 
         // Mengambil detail user berdasarkan id dari database melalui Endpoint API #36
         fetch(
@@ -547,13 +585,15 @@
 
             // Masukkan data hasil API ke dalam elemen HTML
             // A. Sisi Sidebar
-            document.getElementById("sidebarName").innerText = user.name;
-            document.getElementById("sidebarRole").innerText = namaRoleClean;
+            if (sidebarName) sidebarName.innerText = storedName;
+
+            // Tetap jalankan lock agar tidak berubah kembali ke default API jika diperlukan
+            lockProfilePageSidebar();
 
             // B. Sisi Banner Profil (Sudah di-force menjadi Super Admin)
-            document.getElementById("bannerName").innerText = user.name;
+            document.getElementById("bannerName").innerText = storedName; // Gunakan storedName
             document.getElementById("bannerEmail").innerText =
-              `${user.email} • Politeknik Negeri Banjarmasin`;
+              `${storedEmail} • Politeknik Negeri Banjarmasin`; // Gunakan storedEmail
 
             const bannerBadgeElement = document.getElementById("bannerBadge");
             if (bannerBadgeElement) {
@@ -566,16 +606,114 @@
             }
 
             // C. Sisi Form Informasi Pribadi
-            document.getElementById("formName").value = user.name;
-            document.getElementById("formEmail").value = user.email;
+            document.getElementById("formName").value = storedName;
+            document.getElementById("formEmail").value = storedEmail; // Gunakan storedEmail
             document.getElementById("formRole").value = roleDescription;
           })
           .catch((error) => {
             console.error("Error Profile Fetching:", error);
-            alert("Sesi masuk telah berakhir. Silakan login kembali.");
-            localStorage.clear();
-            window.location.href = "../loginbaru/baru.html";
+            if (error.message.includes("API")) {
+              alert("Sesi masuk telah berakhir. Silakan login kembali.");
+              localStorage.clear();
+              window.location.href = "../loginbaru/baru.html";
+            }
           });
+
+        // ========================================================
+        // 4. LOGIKA TOMBOL SIMPAN PERUBAHAN (PUT API #3)
+        // ========================================================
+        const btnSimpan = document.getElementById("btnSimpanPerubahan");
+        if (btnSimpan) {
+          btnSimpan.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            const idUser = userSession.id;
+            const namaBaru = formNameInput.value; // Ambil dari input formName
+            const emailBaru = formEmailInput.value; // Ambil dari input formEmail
+
+            btnSimpan.innerText = "Memproses...";
+            btnSimpan.disabled = true;
+
+            fetch(
+              `https://admin4e06.vps-poliban.my.id/api/akademik/users/${idUser}`,
+              {
+                method: "POST", // Ubah ke POST
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                  Accept: "application/json",
+                },
+                body: JSON.stringify({
+                  name: namaBaru,
+                  email: emailBaru, // Tambahkan spoofing method
+                }),
+              },
+            )
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.error || data.message === "Unauthenticated.") {
+                  throw new Error(data.message || "Gagal memperbarui profil");
+                }
+                alert("Informasi pribadi berhasil diperbarui!");
+                localStorage.setItem("user_id", idUser); // Pastikan user_id juga tersimpan
+                // Sinkronkan localStorage jika nama berubah
+                localStorage.setItem("name", namaBaru);
+                location.reload();
+              })
+              .catch((err) => {
+                alert("Gagal memperbarui: " + err.message);
+              })
+              .finally(() => {
+                btnSimpan.innerText = "Simpan Perubahan";
+                btnSimpan.disabled = false;
+              });
+          });
+        }
+
+        // ========================================================
+        // 5. LOGIKA TOMBOL PERBARUI KATA SANDI (POST API #37)
+        // ========================================================
+        const btnSandi = document.getElementById("btnPerbaruiSandi");
+        if (btnSandi) {
+          btnSandi.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            const sandiBaru = document.getElementById("newPassInput").value;
+            const konfirmasiSandi =
+              document.getElementById("confirmPass").value;
+
+            if (sandiBaru !== konfirmasiSandi) {
+              alert("Konfirmasi kata sandi baru tidak cocok!");
+              return;
+            }
+            if (sandiBaru.length < 8) {
+              alert("Kata sandi minimal harus 8 karakter!");
+              return;
+            }
+
+            fetch(
+              `https://admin4e06.vps-poliban.my.id/api/akademik/users/${userSession.id}/reset-password`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                  Accept: "application/json",
+                },
+                body: JSON.stringify({ password: sandiBaru }),
+              },
+            )
+              .then((res) => res.json())
+              .then((data) => {
+                alert("Kata sandi berhasil diperbarui!");
+                // Bersihkan form
+                document.getElementById("currentPass").value = "";
+                document.getElementById("newPassInput").value = "";
+                document.getElementById("confirmPass").value = "";
+              })
+              .catch((err) => alert("Gagal memperbarui sandi: " + err.message));
+          });
+        }
       });
 
       // ========================================================

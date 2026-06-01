@@ -83,12 +83,18 @@ document.addEventListener("DOMContentLoaded", function () {
   // 1. PROTEKSI BANNER PROFILE
   // ------------------------------------------
   function lockSuperAdminBanner() {
+    const storedName = localStorage.getItem("name") || "Kelompok 1";
     const userInfoSection = document.querySelector(".user-profile .user-info");
     if (!userInfoSection) return;
 
     const existingBadge = userInfoSection.querySelector(".badge-super-admin");
     if (existingBadge) {
       existingBadge.remove();
+    }
+
+    const nameText = userInfoSection.querySelector("h4, h3");
+    if (nameText) {
+      nameText.innerText = storedName;
     }
 
     const roleText = userInfoSection.querySelector("p");
