@@ -14,49 +14,82 @@ const roleMap = {
 // Tempat menyimpan data asli dari API (untuk client-side filtering & sorting)
 let semuaPegawai = [];
 
+// Variabel penyimpan state filter aktif dari pop-up
+let pilihanStatus = ""; // Default value
+let pilihanRole = [];
+let pilihanSort = "nama-asc"; // Default value for sort
+
+// Inisialisasi list filter tersimpan dari localStorage
+let listFilterTersimpan =
+  JSON.parse(localStorage.getItem("data_saved_filters")) || [];
+
 // ==========================================
 // FUNGSI FILTER & SORT: Client-side pencarian dan pengurutan
 // ==========================================
 function prosesFilterDanSort() {
-  const kataKunci = (document.getElementById("search-pegawai")?.value || "").toLowerCase();
-  const aturanUrut = document.getElementById("sort-pegawai")?.value || "default";
+  const searchEl = document.getElementById("search-pegawai");
+  const kataKunci = (searchEl ? searchEl.value : "").toLowerCase();
+  const aturanUrut = pilihanSort; // Menggunakan variabel global pilihanSort
 
-  // --- PROSES A: FILTER (PENCARIAN) ---
+  // --- PROSES A: FILTER (PENCARIAN, STATUS, ROLE) ---
   let hasilProses = semuaPegawai.filter((pegawai) => {
     const nama = (pegawai.name || "").toLowerCase();
     const email = (pegawai.email || "").toLowerCase();
     const nip = (pegawai.nomor_identitas || "").toLowerCase();
     const username = (pegawai.username || "").toLowerCase();
 
-    return (
+    const lolosSearch =
       nama.includes(kataKunci) ||
       email.includes(kataKunci) ||
       nip.includes(kataKunci) ||
-      username.includes(kataKunci)
-    );
+      username.includes(kataKunci);
+
+    // Filter berdasarkan Status Akun (dari pop-up)
+    let lolosStatus = true;
+    if (pilihanStatus) {
+      const pgwStatus = (pegawai.status || "").toLowerCase();
+      if (pilihanStatus === "nonaktif") {
+        lolosStatus = pgwStatus === "nonaktif" || pgwStatus === "non-aktif";
+      } else {
+        lolosStatus = pgwStatus === pilihanStatus;
+      }
+    }
+
+    // Filter berdasarkan Hak Akses / Role (dari pop-up)
+    let lolosRole = true;
+    if (pilihanRole.length > 0) {
+      lolosRole = pilihanRole.includes(Number(pegawai.role_id));
+    }
+
+    return lolosSearch && lolosStatus && lolosRole;
   });
 
-  // --- PROSES B: SORT (PENGURUTAN) ---
+  // --- PROSES B: SORT (PENGURUTAN SESUAI DROPDOWN) ---
   if (aturanUrut === "nama-asc") {
+    // Nama A ke Z
     hasilProses.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
   } else if (aturanUrut === "nama-desc") {
+    // Nama Z ke A
     hasilProses.sort((a, b) => (b.name || "").localeCompare(a.name || ""));
-  } else if (aturanUrut === "nip-asc") {
-    hasilProses.sort((a, b) =>
-      (a.nomor_identitas || "").localeCompare(b.nomor_identitas || "")
-    );
   } else if (aturanUrut === "tanggal-terbaru") {
+    // Tanggal Terdaftar (Terbaru): data terbaru/terbesar ditaruh di paling atas (Descending)
     hasilProses.sort((a, b) => {
-      const dateA = new Date(a.created_at || a.tanggal_terdaftar || 0);
-      const dateB = new Date(b.created_at || b.tanggal_terdaftar || 0);
-      return dateB - dateA;
+      const waktuA = new Date(a.created_at || 0);
+      const waktuB = new Date(b.created_at || 0);
+      return waktuB - waktuA;
+    });
+  } else if (aturanUrut === "tanggal-terlama") {
+    // Tanggal Terdaftar (Terlama): data lama/terkecil ditaruh di paling atas (Ascending)
+    hasilProses.sort((a, b) => {
+      const waktuA = new Date(a.created_at || 0);
+      const waktuB = new Date(b.created_at || 0);
+      return waktuA - waktuB;
     });
   }
 
   // Tampilkan hasil akhir ke dalam tabel HTML
   renderAkunRolePage(hasilProses);
 }
-
 
 // ==========================================
 // FUNGSI UNIVERSAL: Penanganan Error dari Server
@@ -89,13 +122,22 @@ async function bacaPesanError(response) {
   // Penanganan khusus Error Validasi Form (Status 422)
   if (response.status === 422) {
     let teksCek = pesanKelemahan.toLowerCase();
-    if (teksCek.includes("email has already been taken") || teksCek.includes("email sudah")) {
+    if (
+      teksCek.includes("email has already been taken") ||
+      teksCek.includes("email sudah")
+    ) {
       return "Gagal menyimpan: Alamat email ini sudah terdaftar digunakan akun lain!";
     }
-    if (teksCek.includes("username has already been taken") || teksCek.includes("username sudah")) {
+    if (
+      teksCek.includes("username has already been taken") ||
+      teksCek.includes("username sudah")
+    ) {
       return "Gagal menyimpan: Nama Pengguna (Username) sudah dipakai!";
     }
-    if (teksCek.includes("nomor identitas has already been taken") || teksCek.includes("nomor identitas sudah")) {
+    if (
+      teksCek.includes("nomor identitas has already been taken") ||
+      teksCek.includes("nomor identitas sudah")
+    ) {
       return "Gagal menyimpan: NIP / Nomor Identitas ini sudah terdaftar di database!";
     }
     if (teksCek.includes("password must be at least 8")) {
@@ -106,7 +148,6 @@ async function bacaPesanError(response) {
 
   return `Gagal (${response.status}): ${pesanKelemahan}`;
 }
-
 
 // ==========================================
 // FUNGSI GLOBAL: MEMBUKA MODAL EDIT PEGAWAI
@@ -248,6 +289,191 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // ------------------------------------------
+  // 2.5 LOGIKA POP-UP FILTER
+  // ------------------------------------------
+  const toggleFilterBtn = document.getElementById("btn-filter-toggle");
+  const filterDropdown = document.getElementById("filter-dropdown-content");
+  const btnApplyFilter = document.getElementById("btn-apply-filter");
+  const btnResetFilter = document.getElementById("btn-reset-filter");
+
+  if (toggleFilterBtn && filterDropdown) {
+    // Buka/Tutup Pop-up
+    toggleFilterBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      filterDropdown.classList.toggle("hidden");
+    });
+
+    // Tutup jika klik di luar kotak filter
+    document.addEventListener("click", function (e) {
+      if (!filterDropdown.contains(e.target) && e.target !== toggleFilterBtn) {
+        filterDropdown.classList.add("hidden");
+      }
+    });
+  }
+
+  // Event Handler Tombol Terapkan
+  if (btnApplyFilter) {
+    btnApplyFilter.addEventListener("click", function () {
+      const statusTerpilih = document.querySelector(
+        'input[name="filter-status"]:checked',
+      );
+      pilihanStatus = statusTerpilih ? statusTerpilih.value : "";
+
+      const checkboxRoleTerpilih = document.querySelectorAll(
+        'input[name="filter-role"]:checked',
+      );
+      pilihanRole = Array.from(checkboxRoleTerpilih).map((cb) =>
+        parseInt(cb.value),
+      );
+
+      prosesFilterDanSort();
+      if (filterDropdown) filterDropdown.classList.add("hidden");
+    });
+  }
+
+  // Event Handler Tombol Atur Ulang
+  if (btnResetFilter) {
+    btnResetFilter.addEventListener("click", function () {
+      document
+        .querySelectorAll('input[name="filter-status"]')
+        .forEach((el) => (el.checked = false));
+      document
+        .querySelectorAll('input[name="filter-role"]')
+        .forEach((el) => (el.checked = false));
+
+      pilihanStatus = "";
+      pilihanRole = [];
+
+      // Kembalikan teks tombol utama ke default saat filter direset
+      const teksUrutkanUtama = document.getElementById("text-urutkan-utama");
+      if (teksUrutkanUtama) teksUrutkanUtama.textContent = "Urutkan";
+
+      // Kembalikan teks tombol tersimpan ke default
+      const textSavedUtama = document.getElementById("text-saved-utama");
+      if (textSavedUtama) textSavedUtama.textContent = "Tersimpan";
+
+      prosesFilterDanSort();
+      if (filterDropdown) filterDropdown.classList.add("hidden");
+    });
+  }
+
+  // ------------------------------------------
+  // 2.6 LOGIKA POP-UP SORT
+  // ------------------------------------------
+  const toggleSortBtn = document.getElementById("btn-sort-toggle");
+  const sortDropdown = document.getElementById("sort-dropdown-content");
+  const sortRadioButtons = document.querySelectorAll(
+    'input[name="sort-select"]',
+  );
+  const teksUrutkanUtama = document.getElementById("text-urutkan-utama");
+
+  if (toggleSortBtn && sortDropdown) {
+    // Buka/Tutup Pop-up
+    toggleSortBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      sortDropdown.classList.toggle("hidden");
+    });
+
+    // Tutup jika klik di luar kotak sort
+    document.addEventListener("click", function (e) {
+      if (!sortDropdown.contains(e.target) && e.target !== toggleSortBtn) {
+        sortDropdown.classList.add("hidden");
+      }
+    });
+
+    // Event Listener untuk Radio Buttons Sort
+    sortRadioButtons.forEach((radio) => {
+      radio.addEventListener("change", function () {
+        if (this.checked) {
+          pilihanSort = this.value; // Update global sort choice
+          // Ubah tulisan pada tombol utama sesuai pilihan yang dicentang
+          if (teksUrutkanUtama) {
+            teksUrutkanUtama.textContent = this.nextElementSibling.textContent;
+          }
+        }
+        prosesFilterDanSort(); // Re-filter and re-sort
+        sortDropdown.classList.add("hidden"); // Close pop-up after selection
+      });
+    });
+  }
+
+  // ------------------------------------------
+  // 2.7 LOGIKA POP-UP SAVED VIEWS
+  // ------------------------------------------
+  const btnSavedTrigger = document.getElementById("btn-saved-trigger");
+  const savedDropdownContent = document.getElementById(
+    "saved-dropdown-content",
+  );
+  const btnSaveCurrentView = document.getElementById("btn-save-current-view");
+
+  if (btnSavedTrigger && savedDropdownContent) {
+    renderListFilterTersimpan();
+
+    btnSavedTrigger.addEventListener("click", function (e) {
+      e.stopPropagation();
+      savedDropdownContent.classList.toggle("hidden");
+    });
+
+    document.addEventListener("click", function (e) {
+      if (
+        savedDropdownContent &&
+        !savedDropdownContent.contains(e.target) &&
+        e.target !== btnSavedTrigger
+      ) {
+        savedDropdownContent.classList.add("hidden");
+      }
+    });
+  }
+
+  if (btnSaveCurrentView) {
+    btnSaveCurrentView.addEventListener("click", function () {
+      let namaFilter = prompt(
+        "Masukkan nama untuk menyimpan kombinasi filter ini:",
+      );
+
+      if (!namaFilter || namaFilter.trim() === "") {
+        if (namaFilter !== null) alert("Nama filter tidak boleh kosong!");
+        return;
+      }
+
+      const statusTerpilih = document.querySelector(
+        'input[name="filter-status"]:checked',
+      );
+      const currentStatus = statusTerpilih ? statusTerpilih.value : "";
+
+      const checkboxRoleTerpilih = document.querySelectorAll(
+        'input[name="filter-role"]:checked',
+      );
+      const currentRoles = Array.from(checkboxRoleTerpilih).map(
+        (cb) => cb.value,
+      );
+
+      const sortTerpilih = document.querySelector(
+        'input[name="sort-select"]:checked',
+      );
+      const currentSort = sortTerpilih ? sortTerpilih.value : "";
+
+      let objekFilterBaru = {
+        id: Date.now(),
+        nama: namaFilter.trim(),
+        status: currentStatus,
+        roles: currentRoles,
+        sort: currentSort,
+      };
+
+      listFilterTersimpan.push(objekFilterBaru);
+      localStorage.setItem(
+        "data_saved_filters",
+        JSON.stringify(listFilterTersimpan),
+      );
+
+      renderListFilterTersimpan();
+      if (savedDropdownContent) savedDropdownContent.classList.add("hidden");
+      alert(`Filter "${namaFilter}" berhasil disimpan!`);
+    });
+  }
+
   const navItems = document.querySelectorAll(".nav-item");
   navItems.forEach((item) => {
     item.addEventListener("click", function () {
@@ -265,15 +491,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Event listeners untuk Search & Sort pada Halaman Akun/Role
   const searchPegawai = document.getElementById("search-pegawai");
-  const sortPegawai = document.getElementById("sort-pegawai");
+  // const sortPegawai = document.getElementById("sort-pegawai"); // Dihapus karena diganti pop-up
 
   if (searchPegawai) {
     searchPegawai.addEventListener("input", prosesFilterDanSort);
   }
 
-  if (sortPegawai) {
-    sortPegawai.addEventListener("change", prosesFilterDanSort);
-  }
+  // Event listener untuk sort sekarang ditangani oleh radio buttons di pop-up
 
   const searchInput = document.querySelector(".search-input");
   if (searchInput && !searchPegawai) {
@@ -405,7 +629,9 @@ document.addEventListener("DOMContentLoaded", function () {
           return response.json();
         })
         .then(() => {
-          alert("Berhasil! Data pegawai baru telah sukses didaftarkan ke sistem.");
+          alert(
+            "Berhasil! Data pegawai baru telah sukses didaftarkan ke sistem.",
+          );
           location.reload();
         })
         .catch((error) => {
@@ -1120,3 +1346,83 @@ window.addEventListener("resize", function () {
     window.pegawaiChart.resize();
   }
 });
+
+// ==========================================
+// FUNGSI: MANAJEMEN FILTER TERSIMPAN
+// ==========================================
+function renderListFilterTersimpan() {
+  const containerList = document.getElementById("saved-filters-list");
+  if (!containerList) return;
+
+  containerList.innerHTML = "";
+
+  if (listFilterTersimpan.length === 0) {
+    containerList.innerHTML = `<li class="saved-empty-state">Belum ada filter yang disimpan</li>`;
+    return;
+  }
+
+  listFilterTersimpan.forEach((item) => {
+    const li = document.createElement("li");
+    li.className = "saved-item";
+    li.innerHTML = `
+      <span class="saved-item-text">${item.nama}</span>
+      <button type="button" class="btn-delete-saved" data-id="${item.id}">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+    `;
+
+    li.addEventListener("click", function (e) {
+      if (e.target.closest(".btn-delete-saved")) return;
+      terapkanPresetFilter(item);
+      const dropdown = document.getElementById("saved-dropdown-content");
+      if (dropdown) dropdown.classList.add("hidden");
+    });
+
+    li.querySelector(".btn-delete-saved").addEventListener(
+      "click",
+      function (e) {
+        e.stopPropagation();
+        let idHapus = parseInt(this.getAttribute("data-id"));
+        listFilterTersimpan = listFilterTersimpan.filter(
+          (f) => f.id !== idHapus,
+        );
+        localStorage.setItem(
+          "data_saved_filters",
+          JSON.stringify(listFilterTersimpan),
+        );
+        renderListFilterTersimpan();
+      },
+    );
+
+    containerList.appendChild(li);
+  });
+}
+
+function terapkanPresetFilter(preset) {
+  document.querySelectorAll('input[name="filter-status"]').forEach((radio) => {
+    radio.checked = radio.value === preset.status;
+  });
+  pilihanStatus = preset.status;
+
+  document.querySelectorAll('input[name="filter-role"]').forEach((cb) => {
+    cb.checked = preset.roles.includes(cb.value);
+  });
+  pilihanRole = preset.roles.map((r) => parseInt(r));
+
+  if (preset.sort) {
+    pilihanSort = preset.sort;
+    document.querySelectorAll('input[name="sort-select"]').forEach((radio) => {
+      radio.checked = radio.value === preset.sort;
+    });
+    const radioAktif = document.querySelector(
+      'input[name="sort-select"]:checked',
+    );
+    const textSortUtama = document.getElementById("text-urutkan-utama");
+    if (radioAktif && textSortUtama)
+      textSortUtama.textContent = radioAktif.nextElementSibling.textContent;
+  }
+
+  prosesFilterDanSort();
+  const textSavedUtama = document.getElementById("text-saved-utama");
+  if (textSavedUtama) textSavedUtama.textContent = preset.nama;
+}

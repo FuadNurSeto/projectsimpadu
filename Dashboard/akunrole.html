@@ -13,6 +13,356 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <link rel="stylesheet" href="dashboard.css" />
+    <style>
+      /* CSS tambahan untuk Pop-up Filter agar melayang dan rapi */
+      .filter-wrapper {
+        position: relative;
+        display: inline-block;
+      }
+
+      /* 1. Container Utama Card Melayang */
+      .filter-popup-card {
+        position: absolute;
+        top: 52px; /* Jarak pas di bawah tombol pemicu */
+        right: 0;
+        width: 280px; /* Lebar proporsional tidak terlalu sempit */
+        background-color: #ffffff !important;
+        border: 1px solid #e2e8f0 !important; /* Border abu-abu tipis bersih */
+        border-radius: 12px !important; /* Sudut melengkung halus */
+        box-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.08),
+          0 8px 10px -6px rgba(0, 0, 0, 0.05) !important; /* Efek shadow kedalaman */
+        padding: 16px !important;
+        z-index: 999;
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        box-sizing: border-box;
+      }
+
+      /* Reset CSS liar dari template lama */
+      .filter-popup-card,
+      .filter-popup-card * {
+        box-sizing: border-box;
+        list-style: none !important;
+        list-style-type: none !important;
+        margin: 0;
+        padding: 0;
+      }
+
+      .filter-popup-card.hidden {
+        display: none !important;
+      }
+
+      /* Jarak per kelompok filter */
+      .filter-group-section {
+        margin-bottom: 16px !important;
+        text-align: left !important;
+      }
+
+      /* Container khusus pilihan berjejer ke samping (Horizontal) */
+      .filter-options-row {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 24px !important; /* Memberi jarak horizontal yang longgar antar opsi */
+        align-items: center !important;
+      }
+
+      /* Judul Kelompok (Status Akun & Hak Akses) */
+      .filter-section-title {
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        color: #94a3b8 !important; /* Warna abu-abu muted text */
+        letter-spacing: 0.5px !important;
+        text-transform: uppercase !important; /* Kapital semua */
+        margin-bottom: 12px !important;
+        display: block !important;
+      }
+
+      /* Container list ke bawah */
+      .filter-options-list {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important; /* Jarak vertikal antar item pilihan */
+      }
+
+      /* Baris Pilihan Item */
+      .filter-option-item {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important; /* Jarak antara lingkaran/kotak dengan teks */
+        cursor: pointer !important;
+        user-select: none;
+        width: fit-content;
+      }
+
+      /* Mewarnai Radio & Checkbox saat dicentang */
+      .filter-radio,
+      .filter-checkbox {
+        accent-color: #3b82f6 !important; /* Mengubah warna default menjadi biru */
+        width: 15px !important;
+        height: 15px !important;
+        cursor: pointer !important;
+      }
+
+      /* Gaya Teks Label Pilihan */
+      .custom-label-text {
+        font-size: 13px !important;
+        color: #475569 !important; /* Warna abu-abu Slate soft */
+        font-weight: 400 !important;
+      }
+
+      .filter-option-item:hover .custom-label-text {
+        color: #1e293b !important; /* Menggelap saat kursor di atas teks */
+      }
+
+      /* Judul Utama Pop-up Filter (Paling Atas) */
+      .filter-main-title {
+        font-size: 15px !important;
+        font-weight: 700 !important; /* Bold tebal sesuai desain */
+        color: #1e293b !important; /* Warna abu-abu gelap tegas */
+        margin-bottom: 16px !important; /* Jarak ke bawah sebelum teks STATUS AKUN */
+        text-align: left !important;
+        display: block !important;
+      }
+
+      /* ==========================================================================
+         KOMPONEN POP-UP SORT CUSTOM
+         ========================================================================== */
+      /* 1. Container Utama Card Melayang */
+      .sort-popup-card {
+        position: absolute;
+        top: 52px; /* Jarak pas di bawah tombol pemicu */
+        right: 0;
+        width: 200px; /* Lebar proporsional */
+        background-color: #ffffff !important;
+        border: 1px solid #e2e8f0 !important; /* Border abu-abu tipis bersih */
+        border-radius: 12px !important; /* Sudut melengkung halus */
+        box-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.08),
+          0 8px 10px -6px rgba(0, 0, 0, 0.05) !important; /* Efek shadow kedalaman */
+        padding: 16px !important;
+        z-index: 998; /* Sedikit di bawah filter agar tidak menumpuk */
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        box-sizing: border-box;
+      }
+
+      /* Reset CSS liar dari template lama */
+      .sort-popup-card,
+      .sort-popup-card * {
+        box-sizing: border-box;
+        list-style: none !important;
+        list-style-type: none !important;
+        margin: 0;
+        padding: 0;
+      }
+
+      .sort-popup-card.hidden {
+        display: none !important;
+      }
+
+      /* ==========================================================================
+         KOMPONEN POP-UP SORT CUSTOM
+         ========================================================================== */
+      /* 1. Container Utama Card Melayang */
+      .sort-popup-card {
+        position: absolute;
+        top: 52px; /* Jarak pas di bawah tombol pemicu */
+        right: 0;
+        width: 200px; /* Lebar proporsional */
+        background-color: #ffffff !important;
+        border: 1px solid #e2e8f0 !important; /* Border abu-abu tipis bersih */
+        border-radius: 12px !important; /* Sudut melengkung halus */
+        box-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.08),
+          0 8px 10px -6px rgba(0, 0, 0, 0.05) !important; /* Efek shadow kedalaman */
+        padding: 16px !important;
+        z-index: 998; /* Sedikit di bawah filter agar tidak menumpuk */
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        box-sizing: border-box;
+      }
+
+      /* Reset CSS liar dari template lama */
+      .sort-popup-card,
+      .sort-popup-card * {
+        box-sizing: border-box;
+        list-style: none !important;
+        list-style-type: none !important;
+        margin: 0;
+        padding: 0;
+      }
+
+      .sort-popup-card.hidden {
+        display: none !important;
+      }
+
+      /* Judul Utama Pop-up Urutan (Paling Atas) */
+      .sort-main-title {
+        font-size: 15px !important;
+        font-weight: 700 !important; /* Bold tebal sesuai gambar acuan */
+        color: #1e293b !important; /* Warna abu-abu gelap tegas */
+        margin-bottom: 16px !important; /* Jarak renggang sebelum masuk ke list pilihan */
+        text-align: left !important;
+        display: block !important;
+        font-family: "Inter", sans-serif;
+      }
+
+      /* Memastikan susunan list opsi sort kamu rapi ke bawah */
+      .sort-options-list {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        text-align: left !important;
+      }
+
+      .sort-option-item {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        cursor: pointer !important;
+      }
+
+      .sort-radio {
+        accent-color: #3b82f6 !important;
+        width: 15px !important;
+        height: 15px !important;
+      }
+
+      .sort-option-item .custom-label-text {
+        font-size: 13px !important;
+        color: #475569 !important; /* Warna abu-abu Slate soft */
+        font-weight: 400 !important;
+      }
+
+      .sort-option-item:hover .custom-label-text {
+        color: #1e293b !important; /* Menggelap saat kursor di atas teks */
+      }
+
+      /* 4. Garis Pembatas Tipis (Divider) & Footer Container */
+      .filter-footer-actions {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 12px !important;
+        margin-top: 20px !important;
+        border-top: 1px solid #f1f5f9 !important; /* Garis horizontal tipis */
+        padding-top: 14px !important;
+      }
+
+      /* 5. Tombol Kiri: Atur Ulang (Outline Style) */
+      .btn-action-outline {
+        flex: 1 !important; /* Bagi ruang sama rata (Simetris) */
+        height: 36px;
+        background-color: #ffffff !important;
+        border: 1px solid #cbd5e1 !important; /* Border abu-abu tipis luar */
+        color: #64748b !important; /* Teks abu-abu gelap */
+        border-radius: 8px !important;
+        font-size: 12.5px !important;
+        font-weight: 500 !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: all 0.2s ease;
+      }
+
+      .btn-action-outline:hover {
+        background-color: #f8fafc !important;
+        border-color: #94a3b8 !important;
+      }
+
+      /* 6. Tombol Kanan: Terapkan (Solid Blue Style) */
+      .btn-action-solid {
+        flex: 1 !important; /* Bagi ruang sama rata (Simetris) */
+        height: 36px;
+        background-color: #3b82f6 !important; /* Warna Biru Cerah Utama */
+        border: none !important;
+        color: #ffffff !important; /* Teks Putih Bersih */
+        border-radius: 8px !important;
+        font-size: 12.5px !important;
+        font-weight: 500 !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: background-color 0.2s ease;
+      }
+
+      .btn-action-solid:hover {
+        background-color: #2563eb !important; /* Efek biru gelap saat disorot */
+      }
+
+      /* Container Utama Pop-up Tersimpan */
+      .saved-popup-card {
+        position: absolute;
+        top: 52px;
+        right: 0;
+        width: 260px;
+        background-color: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+        padding: 16px !important;
+        z-index: 999;
+        font-family: 'Inter', sans-serif;
+        box-sizing: border-box;
+      }
+
+      .saved-popup-card.hidden {
+        display: none !important;
+      }
+
+      .saved-main-title {
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        color: #1e293b !important;
+        margin-bottom: 14px !important;
+        text-align: left !important;
+        display: block !important;
+      }
+
+      .saved-options-list {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+        max-height: 180px;
+        overflow-y: auto;
+        margin: 0;
+        padding: 0;
+        list-style: none !important;
+      }
+
+      .saved-item {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 8px 10px !important;
+        border-radius: 6px !important;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .saved-item:hover { background-color: #f1f5f9 !important; }
+      .saved-item-text { font-size: 13px !important; color: #334155 !important; font-weight: 500 !important; }
+      .btn-delete-saved { background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px; font-size: 12px; transition: color 0.2s; }
+      .btn-delete-saved:hover { color: #ef4444; }
+      .saved-empty-state { font-size: 12.5px !important; color: #94a3b8 !important; text-align: center !important; padding: 12px 0 !important; font-style: italic; }
+      .saved-divider { height: 1px; background-color: #f1f5f9; margin: 12px 0 !important; }
+
+      .btn-save-current {
+        width: 100%;
+        background: none;
+        border: none;
+        color: #3b82f6 !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        text-align: left !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        padding: 4px 0 !important;
+      }
+      .btn-save-current:hover { color: #2563eb !important; text-decoration: underline; }
+    </style>
   </head>
   <body>
     <div class="container">
@@ -86,29 +436,152 @@
             <button class="btn btn-primary" id="btn-tambah-pegawai">
               <i class="fas fa-plus"></i> Tambah Pegawai
             </button>
-            <select
-              id="sort-pegawai"
-              class="btn btn-outline"
-              style="
-                padding: 10px 15px;
-                font-size: 14px;
-                border: none;
-                background: white;
-                cursor: pointer;
-              "
-            >
-              <option value="default">Urutkan</option>
-              <option value="nama-asc">Nama (A - Z)</option>
-              <option value="nama-desc">Nama (Z - A)</option>
-              <option value="nip-asc">NIP (Terkecil)</option>
-              <option value="tanggal-terbaru">Tanggal (Terbaru)</option>
-            </select>
-            <button class="btn btn-outline">
-              Tersimpan <i class="fas fa-chevron-down"></i>
-            </button>
-            <button class="btn btn-icon">
-              <i class="fas fa-sliders-h"></i>
-            </button>
+            <div class="sort-wrapper" style="position: relative; display: inline-block;">
+              <button class="btn btn-outline" id="btn-sort-toggle">
+                <span id="text-urutkan-utama">Urutkan</span> <i class="fas fa-chevron-down"></i>
+              </button>
+
+              <div id="sort-dropdown-content" class="sort-popup-card hidden">
+                <div class="sort-group-section">
+                  <div class="sort-options-list">
+                    <label class="sort-option-item">
+                      <input type="radio" name="sort-select" value="nama-asc" class="sort-radio" checked>
+                      <span class="custom-label-text">Nama (A-Z)</span>
+                    </label>
+                    <label class="sort-option-item">
+                      <input type="radio" name="sort-select" value="nama-desc" class="sort-radio">
+                      <span class="custom-label-text">Nama (Z-A)</span>
+                    </label>
+                    <label class="sort-option-item">
+                      <input type="radio" name="sort-select" value="tanggal-terbaru" class="sort-radio">
+                      <span class="custom-label-text">Tanggal Terdaftar (Terbaru)</span>
+                    </label>
+                    <label class="sort-option-item">
+                      <input type="radio" name="sort-select" value="tanggal-terlama" class="sort-radio">
+                      <span class="custom-label-text">Tanggal Terdaftar (Terlama)</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="saved-wrapper" style="position: relative; display: inline-block;">
+              <button type="button" id="btn-saved-trigger" class="btn btn-outline">
+                <i class="far fa-bookmark"></i>
+                <span id="text-saved-utama">Tersimpan</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+
+              <div id="saved-dropdown-content" class="saved-popup-card hidden">
+                <h3 class="saved-main-title">Filter Tersimpan</h3>
+                <button type="button" id="btn-save-current-view" class="btn-save-current">
+                  <i class="fas fa-plus"></i> Simpan tampilan saat ini
+                </button>
+                <div class="saved-divider"></div>
+                <ul id="saved-filters-list" class="saved-options-list">
+                  <li class="saved-empty-state">Belum ada filter yang disimpan</li>
+                </ul>
+              </div>
+            </div>
+            <div class="filter-wrapper">
+              <button
+                class="btn btn-icon"
+                id="btn-filter-toggle"
+                title="Filter Data"
+              >
+                <i class="fas fa-sliders-h"></i>
+              </button>
+
+              <!-- Pop-up Filter Dropdown -->
+              <div
+                id="filter-dropdown-content"
+                class="filter-popup-card hidden"
+              >
+                <h3 class="filter-main-title">Filter Pegawai</h3>
+
+                <div class="filter-group-section">
+                  <h4 class="filter-section-title">STATUS AKUN</h4>
+                  <div class="filter-options-row">
+                    <label class="filter-option-item">
+                      <input
+                        type="radio"
+                        name="filter-status"
+                        value="aktif"
+                        class="filter-radio"
+                      />
+                      <span class="custom-label-text">Aktif</span>
+                    </label>
+                    <label class="filter-option-item">
+                      <input
+                        type="radio"
+                        name="filter-status"
+                        value="nonaktif"
+                        class="filter-radio"
+                      />
+                      <span class="custom-label-text">Non-Aktif</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="filter-group-section">
+                  <h4 class="filter-section-title">HAK AKSES / ROLE</h4>
+                  <div class="filter-options-list">
+                    <label class="filter-option-item">
+                      <input
+                        type="checkbox"
+                        name="filter-role"
+                        value="2"
+                        class="filter-checkbox"
+                      />
+                      <span class="custom-label-text">Admin Akademik</span>
+                    </label>
+                    <label class="filter-option-item">
+                      <input
+                        type="checkbox"
+                        name="filter-role"
+                        value="3"
+                        class="filter-checkbox"
+                      />
+                      <span class="custom-label-text">Admin Pegawai</span>
+                    </label>
+                    <label class="filter-option-item">
+                      <input
+                        type="checkbox"
+                        name="filter-role"
+                        value="4"
+                        class="filter-checkbox"
+                      />
+                      <span class="custom-label-text">Admin Mahasiswa</span>
+                    </label>
+                    <label class="filter-option-item">
+                      <input
+                        type="checkbox"
+                        name="filter-role"
+                        value="5"
+                        class="filter-checkbox"
+                      />
+                      <span class="custom-label-text">Admin Keuangan</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="filter-footer-actions">
+                  <button
+                    type="button"
+                    id="btn-reset-filter"
+                    class="btn-action-outline"
+                  >
+                    Atur Ulang
+                  </button>
+                  <button
+                    type="button"
+                    id="btn-apply-filter"
+                    class="btn-action-solid"
+                  >
+                    Terapkan
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
