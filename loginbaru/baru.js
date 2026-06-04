@@ -73,7 +73,7 @@ loginForm.addEventListener("submit", async function (e) {
           window.location.href = "../Dashboard/super_admin.html";
         } else if (roles.includes(2)) {
           // Admin Academic (role_id: 2)
-          window.location.href = "../Dashboard/admin_akademik.html";
+          window.location.href = "../Dashboard/admin_akademik/index.html";
         }
       } else {
         // Jika user berhasil login di API tapi BUKAN Super Admin / Admin Akademik

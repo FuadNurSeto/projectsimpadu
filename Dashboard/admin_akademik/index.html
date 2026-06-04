@@ -1,0 +1,400 @@
+﻿<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Admin Akademik - SIMPADU POLIBAN</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="akademik.css" />
+  </head>
+  <body>
+    <div class="dashboard-wrapper">
+      <aside class="sidebar-container">
+        <div class="sidebar-brand">
+          <img
+            src="../../Asset/logopoliban.png"
+            alt="Logo Poliban"
+            class="brand-logo"
+            onerror="this.style.display = 'none'"
+          />
+          <div class="brand-text">
+            <h2>SIMPADU POLIBAN</h2>
+            <p>Sistem Informasi Terpadu</p>
+          </div>
+        </div>
+
+        <div class="sidebar-menu-group">
+          <span class="menu-caption">MENU UTAMA</span>
+          <ul class="sidebar-menu-list">
+            <li class="menu-item active">
+              <a href="index.html"><i class="fas fa-home"></i> Dashboard</a>
+            </li>
+            <li class="menu-item">
+              <a href="tahun_akademik.html"
+                ><i class="far fa-calendar-check"></i> Tahun Akademik</a
+              >
+            </li>
+            <li class="menu-item">
+              <a href="jurusan_prodi.html"
+                ><i class="fas fa-graduation-cap"></i> Jurusan dan Prodi</a
+              >
+            </li>
+            <li class="menu-item">
+              <a href="kelas.html"><i class="fas fa-chalkboard"></i> Kelas</a>
+            </li>
+            <li class="menu-item">
+              <a href="dosen.html"><i class="fas fa-user-tie"></i> Dosen</a>
+            </li>
+            <li class="menu-item">
+              <a href="presensi.html"
+                ><i class="fas fa-user-check"></i> Presensi</a
+              >
+            </li>
+            <li class="menu-item">
+              <a href="mata_kuliah.html"
+                ><i class="fas fa-book"></i> Mata Kuliah</a
+              >
+            </li>
+            <li class="menu-item">
+              <a href="nilai.html"
+                ><i class="fas fa-file-signature"></i> Nilai</a
+              >
+            </li>
+            <li class="menu-item">
+              <a href="khs.html"
+                ><i class="fas fa-file-alt"></i> Kartu Hasil Studi</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-menu-group">
+          <span class="menu-caption">AKUN</span>
+          <ul class="sidebar-menu-list">
+            <li class="menu-item">
+              <a href="../profil.html"
+                ><i class="far fa-user-circle"></i> Profil</a
+              >
+            </li>
+            <li class="menu-item menu-logout">
+              <a href="../../loginbaru/baru.html"
+                ><i class="fas fa-sign-out-alt"></i> Keluar Akun</a
+              >
+            </li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="main-layout">
+        <header class="topbar-container">
+          <button type="button" class="btn-toggle-sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="page-title">Dashboard</h1>
+
+          <div class="user-profile-top">
+            <div class="user-info-text">
+              <span class="user-name">Nabila Aulia</span>
+              <span class="user-role">Admin Akademik</span>
+            </div>
+            <div class="user-avatar-badge">NA</div>
+          </div>
+        </header>
+
+        <div class="dashboard-grid-content">
+          <section class="center-content-column">
+            <div class="welcome-banner">
+              <h2>Selamat Datang, Nabila!</h2>
+              <p>
+                Tinjauan cepat untuk semua aktivitas dan operasional sistem
+                SIMPADU.
+              </p>
+            </div>
+
+            <div class="stats-card-grid">
+              <div class="stat-card">
+                <div class="stat-icon-wrapper blue-light">
+                  <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-data">
+                  <span class="stat-caption">Data Mahasiswa</span>
+                  <h3 class="stat-number" id="total-mahasiswa">0</h3>
+                  <p class="stat-desc">Terdaftar pada periode akademik aktif</p>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon-wrapper purple-light">
+                  <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="stat-data">
+                  <span class="stat-caption">Data Dosen Pengajar</span>
+                  <h3 class="stat-number" id="total-dosen">0</h3>
+                  <p class="stat-desc">
+                    Seluruh dosen berstatus aktif mengajar
+                  </p>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon-wrapper orange-light">
+                  <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="stat-data">
+                  <span class="stat-caption">Total Kelas</span>
+                  <h3 class="stat-number" id="total-kelas">0</h3>
+                  <p class="stat-desc">Kapasitas dan jadwal dikonfigurasi</p>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon-wrapper green-light">
+                  <i class="fas fa-book-open"></i>
+                </div>
+                <div class="stat-data">
+                  <span class="stat-caption">Data Mata Kuliah</span>
+                  <h3 class="stat-number" id="total-matkul">0</h3>
+                  <p class="stat-desc">Sesuai dengan kurikulum prodi</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-section-card">
+              <div class="table-header-block">
+                <h3>Daftar Kelas Aktif</h3>
+                <p>Memantau kapasitas kelas di periode akademik berjalan</p>
+              </div>
+              <div class="table-responsive-wrapper">
+                <table class="academic-table">
+                  <thead>
+                    <tr>
+                      <th>KODE KELAS</th>
+                      <th>NAMA KELAS</th>
+                      <th>PROGRAM STUDI</th>
+                      <th>KAPASITAS</th>
+                      <th>STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table-kelas-body">
+                    <!-- Data dari API masuk di sini -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <aside class="right-panel-column">
+            <div
+              class="card shadow-sm mb-4"
+              style="
+                background: #ffffff;
+                border-radius: 16px;
+                border: none;
+                padding: 24px;
+                font-family: &quot;Poppins&quot;, sans-serif;
+                width: 100%;
+                box-sizing: border-box;
+              "
+            >
+              <div
+                style="
+                  display: flex !important;
+                  justify-content: space-between !important;
+                  align-items: center !important;
+                  width: 100% !important;
+                  margin-bottom: 20px !important;
+                  position: relative !important;
+                "
+              >
+                <h5
+                  style="
+                    margin: 0 !important;
+                    font-size: 18px !important;
+                    font-weight: 600 !important;
+                    color: #1e5bb9 !important;
+                    letter-spacing: 0.5px;
+                  "
+                >
+                  Kalender
+                </h5>
+
+                <div style="position: relative !important">
+                  <div
+                    id="calendar-dropdown-trigger"
+                    style="
+                      display: flex !important;
+                      align-items: center !important;
+                      color: #4a75c7 !important;
+                      cursor: pointer;
+                      font-size: 14px !important;
+                      font-weight: 500 !important;
+                      user-select: none !important;
+                    "
+                  >
+                    <span id="calendar-month-year">Juni 2026</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      fill="currentColor"
+                      class="bi bi-chevron-down ms-1"
+                      viewBox="0 0 16 16"
+                      style="margin-left: 4px !important"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
+                      />
+                    </svg>
+                  </div>
+
+                  <div
+                    id="calendar-picker-panel"
+                    style="
+                      display: none;
+                      position: absolute !important;
+                      top: 100% !important;
+                      right: 0 !important;
+                      margin-top: 8px !important;
+                      background: #ffffff !important;
+                      border: 1px solid #e5e7eb !important;
+                      border-radius: 12px !important;
+                      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+                      padding: 14px !important;
+                      width: 220px !important;
+                      z-index: 9999 !important;
+                      box-sizing: border-box !important;
+                    "
+                  >
+                    <div
+                      style="
+                        display: flex !important;
+                        gap: 8px !important;
+                        margin-bottom: 12px !important;
+                      "
+                    >
+                      <select
+                        id="select-bulan-kalender"
+                        style="
+                          flex: 1 !important;
+                          padding: 6px !important;
+                          border-radius: 6px !important;
+                          border: 1px solid #d1d5db !important;
+                          font-size: 13px !important;
+                          outline: none !important;
+                          color: #374151 !important;
+                          background: #fff !important;
+                        "
+                      >
+                        <option value="0">Januari</option>
+                        <option value="1">Februari</option>
+                        <option value="2">Maret</option>
+                        <option value="3">April</option>
+                        <option value="4">Mei</option>
+                        <option value="5">Juni</option>
+                        <option value="6">Juli</option>
+                        <option value="7">Agustus</option>
+                        <option value="8">September</option>
+                        <option value="9">Oktober</option>
+                        <option value="10">November</option>
+                        <option value="11">Desember</option>
+                      </select>
+                      <select
+                        id="select-tahun-kalender"
+                        style="
+                          width: 80px !important;
+                          padding: 6px !important;
+                          border-radius: 6px !important;
+                          border: 1px solid #d1d5db !important;
+                          font-size: 13px !important;
+                          outline: none !important;
+                          color: #374151 !important;
+                          background: #fff !important;
+                        "
+                      ></select>
+                    </div>
+                    <button
+                      id="btn-terapkan-kalender"
+                      style="
+                        width: 100% !important;
+                        background: #1a73e8 !important;
+                        color: #ffffff !important;
+                        border: none !important;
+                        padding: 8px !important;
+                        border-radius: 6px !important;
+                        font-size: 13px !important;
+                        font-weight: 500 !important;
+                        cursor: pointer !important;
+                        transition: background 0.2s !important;
+                      "
+                    >
+                      Terapkan
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                style="
+                  display: grid !important;
+                  grid-template-columns: repeat(7, 1fr) !important;
+                  text-align: center !important;
+                  margin-bottom: 12px !important;
+                  font-size: 13px !important;
+                  color: #9ca3af !important;
+                  font-weight: 400 !important;
+                "
+              >
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+              </div>
+
+              <div
+                id="calendar-dates-grid"
+                style="
+                  display: grid !important;
+                  grid-template-columns: repeat(7, 1fr) !important;
+                  background-color: #e5e7eb !important;
+                  gap: 1px !important;
+                  border: 1px solid #e5e7eb !important;
+                  border-radius: 6px !important;
+                  overflow: hidden !important;
+                  width: 100% !important;
+                  box-sizing: border-box !important;
+                "
+              ></div>
+            </div>
+
+            <div class="panel-card widget-academic-status">
+              <div class="widget-card-header">
+                <h4>Status Tahun Akademik</h4>
+              </div>
+              <p class="sub-caption">Daftar periode akademik terbaru</p>
+
+              <div class="academic-status-list" id="academic-status-list">
+                <!-- Data dari API masuk di sini -->
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menghubungkan ke JS mandiri khusus akademik -->
+    <script src="akademik.js"></script>
+  </body>
+</html>
