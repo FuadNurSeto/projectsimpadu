@@ -98,7 +98,7 @@
               </a>
             </li>
             <li class="menu-item logout">
-              <a href="../../loginbaru/baru.html">
+              <a href="#" id="logout-trigger">
                 <img src="../../Asset/kluar.png" alt="" class="menu-icon" />
                 <span class="menu-label">Keluar Akun</span>
               </a>
@@ -271,6 +271,29 @@
           </aside>
         </div>
       </main> </div>
+
+    <!-- MODAL LOGOUT CONTAINER -->
+    <div id="logout-modal" class="logout-modal-overlay">
+      <div class="logout-modal-box">
+        <!-- Icon Keluar Bulat Merah Muda -->
+        <div class="logout-modal-icon-wrapper">
+          <img src="../../Asset/kluar.png" alt="Logout" class="logout-modal-icon-img" />
+        </div>
+
+        <!-- Konten Teks -->
+        <h3>Konfirmasi Keluar Akun</h3>
+        <p>
+          Apakah Anda yakin ingin keluar dari sistem?<br />
+          Anda harus login kembali menggunakan Email untuk mengakses data akademik SIMPADU.
+        </p>
+
+        <!-- Tombol Aksi -->
+        <div class="logout-modal-actions">
+          <button id="btn-batal-logout" class="logout-btn-modal logout-btn-batal">Batal</button>
+          <a href="../../loginbaru/baru.html" class="logout-btn-modal logout-btn-konfirmasi">Ya, Keluar Akun</a>
+        </div>
+      </div>
+    </div>
 
     <script src="akademik.js"></script>
   </body>

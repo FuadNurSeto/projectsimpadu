@@ -416,3 +416,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderCalendarDinamis(kalenderBulanAktif, kalenderTahunAktif);
 });
+
+// --- LOGIKA MODAL LOGOUT ---
+document.addEventListener("DOMContentLoaded", function () {
+  const logoutTrigger = document.getElementById("logout-trigger");
+  const logoutModal = document.getElementById("logout-modal");
+  const btnBatalLogout = document.getElementById("btn-batal-logout");
+  const btnKonfirmasiLogout = document.querySelector(".logout-btn-konfirmasi");
+
+  // 1. Tampilkan modal saat tombol Keluar Akun di klik
+  if (logoutTrigger && logoutModal) {
+    logoutTrigger.addEventListener("click", function (e) {
+      e.preventDefault();
+      logoutModal.classList.add("show");
+    });
+  }
+
+  // 2. Sembunyikan modal saat tombol Batal di klik
+  if (btnBatalLogout && logoutModal) {
+    btnBatalLogout.addEventListener("click", function () {
+      logoutModal.classList.remove("show");
+    });
+  }
+
+  // 3. Sembunyikan modal jika pengguna mengklik area luar kotak modal
+  if (logoutModal) {
+    logoutModal.addEventListener("click", function (e) {
+      if (e.target === logoutModal) {
+        logoutModal.classList.remove("show");
+      }
+    });
+  }
+
+  // 4. Aksi hapus sesi saat tombol konfirmasi diklik
+  if (btnKonfirmasiLogout) {
+    btnKonfirmasiLogout.addEventListener("click", function () {
+      localStorage.clear();
+    });
+  }
+});
