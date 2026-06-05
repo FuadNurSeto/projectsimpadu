@@ -58,8 +58,27 @@ function setDynamicProfile() {
 // FUNGSI UTAMA UNTUK MENGAMBIL DAN MENAMPILKAN DATA DASHBOARD
 // ==========================================================================
 async function loadDashboardData() {
+  console.log("Memulai pemuatan data dashboard secara modular...");
+
+  // Menjalankan pemuatan data secara berurutan namun tetap terisolasi
+  await updateMahasiswaStats();
+  await updateMataKuliahStats();
+  await updateKelasStatsAndTable();
+  await updateTahunAkademikStats();
+
+  // Amankan pemanggilan data dosen secara modular agar tidak menghambat data lain
   try {
-    // 1. AMBIL DATA MAHASISWA (Endpoint #34)
+    await updateDosenStats();
+  } catch (error) {
+    console.error("Error Dosen:", error);
+    const totalDosenEl = document.getElementById("total-dosen");
+    if (totalDosenEl) totalDosenEl.innerText = "0";
+  }
+}
+
+// --- 1. FUNGSI DATA MAHASISWA ---
+async function updateMahasiswaStats() {
+  try {
     const resMhs = await fetch(`${API_BASE_URL}/mahasiswa`, {
       method: "GET",
       headers: requestHeaders,
@@ -67,23 +86,36 @@ async function loadDashboardData() {
     if (!resMhs.ok) throw new Error("Gagal mengambil data mahasiswa");
     const mhs = await resMhs.json();
     const totalMahasiswaEl = document.getElementById("total-mahasiswa");
-    if (totalMahasiswaEl) {
+    if (totalMahasiswaEl)
       totalMahasiswaEl.innerText = mhs.length.toLocaleString("id-ID");
-    }
+  } catch (error) {
+    console.error("Error Mahasiswa:", error);
+    if (document.getElementById("total-mahasiswa"))
+      document.getElementById("total-mahasiswa").innerText = "0";
+  }
+}
 
-    // 2. AMBIL DATA MATA KULIAH (Endpoint #21)
+// --- 2. FUNGSI DATA MATA KULIAH ---
+async function updateMataKuliahStats() {
+  try {
     const resMK = await fetch(`${API_BASE_URL}/mata-kuliah`, {
       method: "GET",
       headers: requestHeaders,
     });
     if (!resMK.ok) throw new Error("Gagal mengambil data mata kuliah");
     const mk = await resMK.json();
-    const totalMatkulEl = document.getElementById("total-matkul"); // Sesuaikan ID ke 'total-matkul'
-    if (totalMatkulEl) {
-      totalMatkulEl.innerText = mk.length;
-    }
+    const totalMatkulEl = document.getElementById("total-matkul");
+    if (totalMatkulEl) totalMatkulEl.innerText = mk.length;
+  } catch (error) {
+    console.error("Error Mata Kuliah:", error);
+    if (document.getElementById("total-matkul"))
+      document.getElementById("total-matkul").innerText = "0";
+  }
+}
 
-    // 3. AMBIL DATA KELAS (Endpoint #7) & ISI TABEL KELAS AKTIF
+// --- 3. FUNGSI DATA KELAS & TABEL ---
+async function updateKelasStatsAndTable() {
+  try {
     const resKelas = await fetch(`${API_BASE_URL}/kelas`, {
       method: "GET",
       headers: requestHeaders,
@@ -91,19 +123,25 @@ async function loadDashboardData() {
     if (!resKelas.ok) throw new Error("Gagal mengambil data kelas");
     const kelas = await resKelas.json();
 
-    // Isi angka Total Kelas
     const totalKelasEl = document.getElementById("total-kelas");
-    if (totalKelasEl) {
+    if (totalKelasEl)
       totalKelasEl.innerText = kelas.length.toLocaleString("id-ID");
-    }
 
-    // Isi tabel Kelas Aktif (Filter yang statusnya aktif saja)
     const kelasAktif = kelas.filter(
       (item) => item.status === "aktif" || item.status === "1",
     );
     renderTabelKelas(kelasAktif);
+  } catch (error) {
+    console.error("Error Kelas:", error);
+    const tableBody = document.getElementById("table-kelas-body");
+    if (tableBody)
+      tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">Gagal memuat data kelas</td></tr>`;
+  }
+}
 
-    // 4. AMBIL DATA TAHUN AKADEMIK (Endpoint #5)
+// --- 4. FUNGSI STATUS TAHUN AKADEMIK ---
+async function updateTahunAkademikStats() {
+  try {
     const resTahun = await fetch(`${API_BASE_URL}/tahun-akademik`, {
       method: "GET",
       headers: requestHeaders,
@@ -111,22 +149,41 @@ async function loadDashboardData() {
     if (!resTahun.ok) throw new Error("Gagal mengambil status tahun akademik");
     const tahun = await resTahun.json();
     renderTahunAkademik(tahun);
-
-    // 5. DATA DOSEN (Placeholder sementara karena belum ada endpoint khusus role 2)
-    const totalDosenEl = document.getElementById("total-dosen");
-    if (totalDosenEl) {
-      totalDosenEl.innerText = "128"; // Hardcode atau konsultasi ke backend
-    }
   } catch (error) {
-    console.error("Error koneksi ke VPS:", error);
-    // Menampilkan pesan error di tempat yang relevan jika elemen tersedia
-    const tableBody = document.getElementById("table-kelas-body");
-    if (tableBody)
-      tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">Gagal memuat data kelas: ${error.message}</td></tr>`;
+    console.error("Error Tahun Akademik:", error);
     const statusContainer = document.getElementById("academic-status-list");
     if (statusContainer)
-      statusContainer.innerHTML = `<p style="color:red; font-size:12px;">Gagal memuat status akademik: ${error.message}</p>`;
+      statusContainer.innerHTML = `<p style="color:red; font-size:12px;">Gagal memuat status akademik</p>`;
   }
+}
+
+// --- 5. FUNGSI DATA DOSEN (Endpoint #47) ---
+async function updateDosenStats() {
+  const resDosen = await fetch(`${API_BASE_URL}/dosen`, {
+    method: "GET",
+    headers: requestHeaders,
+  });
+
+  // Jika status 403, kemungkinan role user tidak diizinkan mengakses data dosen
+  if (resDosen.status === 403) {
+    console.warn("Akses ditolak untuk data dosen (Role ID tidak sesuai)");
+    const totalDosenEl = document.getElementById("total-dosen");
+    if (totalDosenEl) totalDosenEl.innerText = "Akses Ditolak";
+    return;
+  }
+
+  if (!resDosen.ok) {
+    // Ambil detail error dari body response (JSON atau Text) untuk mempermudah debugging
+    const errorText = await resDosen.text();
+    console.error(`[API Dosen Error] Status: ${resDosen.status}`);
+    console.error(`[API Dosen Response]:`, errorText);
+    throw new Error(`Gagal mengambil data dosen (Status: ${resDosen.status})`);
+  }
+
+  const dosen = await resDosen.json();
+  const totalDosenEl = document.getElementById("total-dosen");
+  if (totalDosenEl)
+    totalDosenEl.innerText = dosen.length.toLocaleString("id-ID");
 }
 
 // ==========================================================================
@@ -153,7 +210,7 @@ function renderTabelKelas(listKelas) {
     row.innerHTML = `
       <td><strong>${kelas.kode_kelas}</strong></td>
       <td>${kelas.nama_kelas}</td>
-      <td>ID Prodi: ${kelas.prodi_id}</td>
+      <td>${kelas.prodi ? kelas.prodi.nama_prodi : `ID Prodi: ${kelas.prodi_id}`}</td>
       <td>${kapasitasTerisi} / ${kapasitas}</td>
       <td><span class="badge-status status-active">Aktif</span></td>
     `;
@@ -163,35 +220,57 @@ function renderTabelKelas(listKelas) {
 }
 
 // ==========================================================================
-// FUNGSI PEMBANTU UNTUK RENDER STATUS TAHUN AKADEMIK (PANEL KANAN)
+// FUNGSI RENDER STATUS TAHUN AKADEMIK - MATCHING DESAIN UI/UX (image_3fc85b.png)
 // ==========================================================================
-function renderTahunAkademik(listPeriode) {
+function renderTahunAkademik(daftarTahun) {
   const statusContainer = document.getElementById("academic-status-list");
   if (!statusContainer) return;
 
-  statusContainer.innerHTML = "";
+  // 1. SORTING: Mengurutkan agar ID tahun terbaru (angka paling besar) selalu di paling atas
+  daftarTahun.sort((a, b) => parseInt(b.id) - parseInt(a.id));
 
-  listPeriode.forEach((periode) => {
-    const isActive = periode.status === "aktif" || periode.status === "1";
+  let htmlContent = "";
 
-    const itemHTML = `
-      <div class="status-row-item ${isActive ? "active-row" : ""}">
-          <div class="status-left">
-              <div class="circle-check-icon ${isActive ? "blue-fill" : "grey-fill"}">
-                  ${isActive ? '<i class="fas fa-check"></i>' : ""}
-              </div>
-              <div class="period-text">
-                  <h5>${periode.id}</h5>
-                  <p>${periode.tahun_akademik}</p>
-              </div>
+  daftarTahun.forEach((item) => {
+    // Cek status aktif (bisa berupa string "aktif" atau angka "1")
+    const isAktif = item.status === "aktif" || item.status === "1";
+
+    if (isAktif) {
+      // 2. TEMPLATE UNTUK TAHUN AKADEMIK AKTIF (KARTU BIRU + CENTANG)
+      htmlContent += `
+        <div class="academic-card active" style="display: flex; align-items: center; justify-content: space-between; padding: 16px; background-color: #f0f7ff; border: 1.5px solid #bfdbfe; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 36px; height: 36px; border-radius: 50%; background-color: #dbeafe; display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div>
+              <div style="font-weight: 700; font-size: 16px; color: #1e40af;">${item.id}</div>
+              <div style="font-size: 13px; color: #2563eb; text-transform: capitalize; font-weight: 500;">${item.tahun_akademik}</div>
+            </div>
           </div>
-          <span class="badge-status ${isActive ? "status-active" : "status-inactive"}">
-              ${isActive ? "Aktif" : "Non-Aktif"}
-          </span>
-      </div>
-    `;
-    statusContainer.insertAdjacentHTML("beforeend", itemHTML);
+          <span style="background-color: #2563eb; color: #ffffff; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600;">Aktif</span>
+        </div>
+      `;
+    } else {
+      // 3. TEMPLATE UNTUK TAHUN AKADEMIK NON-AKTIF (KARTU PUTIH STANDAR)
+      htmlContent += `
+        <div class="academic-card" style="display: flex; align-items: center; justify-content: space-between; padding: 16px; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 36px; height: 36px; border-radius: 50%; background-color: #f3f4f6; display: flex; align-items: center; justify-content: center;"></div>
+            <div>
+              <div style="font-weight: 700; font-size: 16px; color: #374151;">${item.id}</div>
+              <div style="font-size: 13px; color: #6b7280; text-transform: capitalize;">${item.tahun_akademik}</div>
+            </div>
+          </div>
+          <span style="background-color: #f3f4f6; color: #6b7280; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600;">Non-Aktif</span>
+        </div>
+      `;
+    }
   });
+
+  statusContainer.innerHTML = htmlContent;
 }
 
 // VARIABEL STATE GLOBAL UNTUK KALENDER

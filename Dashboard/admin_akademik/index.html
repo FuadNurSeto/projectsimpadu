@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard Admin Akademik - SIMPADU POLIBAN</title>
+    <title>Dashboard Admin Academic - SIMPADU POLIBAN</title>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
@@ -17,89 +17,109 @@
     <link rel="stylesheet" href="akademik.css" />
   </head>
   <body>
-    <div class="dashboard-wrapper">
-      <aside class="sidebar-container">
+    <div class="dashboard-container">
+      <aside class="sidebar">
         <div class="sidebar-brand">
-          <img
-            src="../../Asset/logopoliban.png"
-            alt="Logo Poliban"
-            class="brand-logo"
-            onerror="this.style.display = 'none'"
-          />
+          <img src="../../Asset/logopoliban.png" alt="Logo Poliban" class="brand-logo" />
           <div class="brand-text">
             <h2>SIMPADU POLIBAN</h2>
             <p>Sistem Informasi Terpadu</p>
+            <span>Politeknik Negeri Banjarmasin</span>
           </div>
         </div>
 
-        <div class="sidebar-menu-group">
-          <span class="menu-caption">MENU UTAMA</span>
-          <ul class="sidebar-menu-list">
+        <div class="menu-group">
+          <span class="menu-title">MENU UTAMA</span>
+          <ul> 
             <li class="menu-item active">
-              <a href="index.html"><i class="fas fa-home"></i> Dashboard</a>
+              <a href="index.html">
+                <img src="../../Asset/Home.png" alt="" class="menu-icon" />
+                <span class="menu-label">Dashboard</span>
+              </a>
             </li>
             <li class="menu-item">
-              <a href="tahun_akademik.html"
-                ><i class="far fa-calendar-check"></i> Tahun Akademik</a
-              >
+              <a href="tahun_akademik.html">
+                <img src="../../Asset/Calendar.png" alt="" class="menu-icon" />
+                <span class="menu-label">Tahun Akademik</span>
+              </a>
             </li>
             <li class="menu-item">
-              <a href="jurusan_prodi.html"
-                ><i class="fas fa-graduation-cap"></i> Jurusan dan Prodi</a
-              >
+              <a href="jurusan_prodi.html">
+                <img src="../../Asset/jurusanprodi.png" alt="" class="menu-icon" />
+                <span class="menu-label">Jurusan dan Prodi</span>
+              </a>
             </li>
             <li class="menu-item">
-              <a href="kelas.html"><i class="fas fa-chalkboard"></i> Kelas</a>
+              <a href="kelas.html">
+                <img src="../../Asset/Kelas.png" alt="" class="menu-icon" />
+                <span class="menu-label">Kelas</span>
+              </a>
             </li>
             <li class="menu-item">
-              <a href="dosen.html"><i class="fas fa-user-tie"></i> Dosen</a>
+              <a href="dosen.html">
+                <img src="../../Asset/Teacher.png" alt="" class="menu-icon" />
+                <span class="menu-label">Dosen</span>
+              </a>
             </li>
             <li class="menu-item">
-              <a href="presensi.html"
-                ><i class="fas fa-user-check"></i> Presensi</a
-              >
+              <a href="presensi.html">
+                <img src="../../Asset/student.png" alt="" class="menu-icon" />
+                <span class="menu-label">Presensi</span>
+              </a>
             </li>
             <li class="menu-item">
-              <a href="mata_kuliah.html"
-                ><i class="fas fa-book"></i> Mata Kuliah</a
-              >
+              <a href="mata_kuliah.html">
+                <img src="../../Asset/matkul.png" alt="" class="menu-icon" />
+                <span class="menu-label">Mata Kuliah</span>
+              </a>
             </li>
             <li class="menu-item">
-              <a href="nilai.html"
-                ><i class="fas fa-file-signature"></i> Nilai</a
-              >
+              <a href="nilai.html">
+                <img src="../../Asset/nilai.png" alt="" class="menu-icon" />
+                <span class="menu-label">Nilai</span>
+              </a>
             </li>
             <li class="menu-item">
-              <a href="khs.html"
-                ><i class="fas fa-file-alt"></i> Kartu Hasil Studi</a
-              >
+              <a href="khs.html">
+                <img src="../../Asset/khs.png" alt="" class="menu-icon" />
+                <span class="menu-label">Kartu Hasil Studi</span>
+              </a>
             </li>
           </ul>
         </div>
 
-        <div class="sidebar-menu-group">
-          <span class="menu-caption">AKUN</span>
-          <ul class="sidebar-menu-list">
+        <div class="menu-group">
+          <span class="menu-title">AKUN</span>
+          <ul>
             <li class="menu-item">
-              <a href="../profil.html"
-                ><i class="far fa-user-circle"></i> Profil</a
-              >
+              <a href="../profil.html">
+                <img src="../../Asset/profile-circle.png" alt="" class="menu-icon" />
+                <span class="menu-label">Profil</span>
+              </a>
             </li>
-            <li class="menu-item menu-logout">
-              <a href="../../loginbaru/baru.html"
-                ><i class="fas fa-sign-out-alt"></i> Keluar Akun</a
-              >
+            <li class="menu-item logout">
+              <a href="../../loginbaru/baru.html">
+                <img src="../../Asset/kluar.png" alt="" class="menu-icon" />
+                <span class="menu-label">Keluar Akun</span>
+              </a>
             </li>
           </ul>
         </div>
-      </aside>
-
-      <div class="main-layout">
+      </aside> <main class="main-content">
         <header class="topbar-container">
-          <button type="button" class="btn-toggle-sidebar">
-            <i class="fas fa-bars"></i>
-          </button>
-          <h1 class="page-title">Dashboard</h1>
+          <div class="page-header-left" style="display: flex; align-items: center; gap: 16px">
+            <button id="menu-toggle" style="background: none; border: none; padding: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.2s;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 6H20" stroke="#374151" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M4 12H20" stroke="#374151" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M4 18H20" stroke="#374151" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+
+            <h1 style="font-size: 24px; font-weight: 700; color: #111827; margin: 0; font-family: sans-serif;">
+              Dashboard
+            </h1>
+          </div>
 
           <div class="user-profile-top">
             <div class="user-info-text">
@@ -114,10 +134,7 @@
           <section class="center-content-column">
             <div class="welcome-banner">
               <h2>Selamat Datang, Nabila!</h2>
-              <p>
-                Tinjauan cepat untuk semua aktivitas dan operasional sistem
-                SIMPADU.
-              </p>
+              <p>Tinjauan cepat untuk semua aktivitas dan operasional sistem SIMPADU.</p>
             </div>
 
             <div class="stats-card-grid">
@@ -139,9 +156,7 @@
                 <div class="stat-data">
                   <span class="stat-caption">Data Dosen Pengajar</span>
                   <h3 class="stat-number" id="total-dosen">0</h3>
-                  <p class="stat-desc">
-                    Seluruh dosen berstatus aktif mengajar
-                  </p>
+                  <p class="stat-desc">Seluruh dosen berstatus aktif mengajar</p>
                 </div>
               </div>
 
@@ -185,116 +200,30 @@
                     </tr>
                   </thead>
                   <tbody id="table-kelas-body">
-                    <!-- Data dari API masuk di sini -->
-                  </tbody>
+                    </tbody>
                 </table>
               </div>
             </div>
           </section>
 
           <aside class="right-panel-column">
-            <div
-              class="card shadow-sm mb-4"
-              style="
-                background: #ffffff;
-                border-radius: 16px;
-                border: none;
-                padding: 24px;
-                font-family: &quot;Poppins&quot;, sans-serif;
-                width: 100%;
-                box-sizing: border-box;
-              "
-            >
-              <div
-                style="
-                  display: flex !important;
-                  justify-content: space-between !important;
-                  align-items: center !important;
-                  width: 100% !important;
-                  margin-bottom: 20px !important;
-                  position: relative !important;
-                "
-              >
-                <h5
-                  style="
-                    margin: 0 !important;
-                    font-size: 18px !important;
-                    font-weight: 600 !important;
-                    color: #1e5bb9 !important;
-                    letter-spacing: 0.5px;
-                  "
-                >
+            <div class="card shadow-sm mb-4" style="background: #ffffff; border-radius: 16px; border: none; padding: 24px; font-family: 'Poppins', sans-serif; width: 100%; box-sizing: border-box;">
+              <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; width: 100% !important; margin-bottom: 20px !important; position: relative !important;">
+                <h5 style="margin: 0 !important; font-size: 18px !important; font-weight: 600 !important; color: #1e5bb9 !important; letter-spacing: 0.5px;">
                   Kalender
                 </h5>
 
                 <div style="position: relative !important">
-                  <div
-                    id="calendar-dropdown-trigger"
-                    style="
-                      display: flex !important;
-                      align-items: center !important;
-                      color: #4a75c7 !important;
-                      cursor: pointer;
-                      font-size: 14px !important;
-                      font-weight: 500 !important;
-                      user-select: none !important;
-                    "
-                  >
+                  <div id="calendar-dropdown-trigger" style="display: flex !important; align-items: center !important; color: #4a75c7 !important; cursor: pointer; font-size: 14px !important; font-weight: 500 !important; user-select: none !important;">
                     <span id="calendar-month-year">Juni 2026</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="14"
-                      height="14"
-                      fill="currentColor"
-                      class="bi bi-chevron-down ms-1"
-                      viewBox="0 0 16 16"
-                      style="margin-left: 4px !important"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
-                      />
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-down ms-1" viewBox="0 0 16 16" style="margin-left: 4px !important">
+                      <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
                     </svg>
                   </div>
 
-                  <div
-                    id="calendar-picker-panel"
-                    style="
-                      display: none;
-                      position: absolute !important;
-                      top: 100% !important;
-                      right: 0 !important;
-                      margin-top: 8px !important;
-                      background: #ffffff !important;
-                      border: 1px solid #e5e7eb !important;
-                      border-radius: 12px !important;
-                      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
-                      padding: 14px !important;
-                      width: 220px !important;
-                      z-index: 9999 !important;
-                      box-sizing: border-box !important;
-                    "
-                  >
-                    <div
-                      style="
-                        display: flex !important;
-                        gap: 8px !important;
-                        margin-bottom: 12px !important;
-                      "
-                    >
-                      <select
-                        id="select-bulan-kalender"
-                        style="
-                          flex: 1 !important;
-                          padding: 6px !important;
-                          border-radius: 6px !important;
-                          border: 1px solid #d1d5db !important;
-                          font-size: 13px !important;
-                          outline: none !important;
-                          color: #374151 !important;
-                          background: #fff !important;
-                        "
-                      >
+                  <div id="calendar-picker-panel" style="display: none; position: absolute !important; top: 100% !important; right: 0 !important; margin-top: 8px !important; background: #ffffff !important; border: 1px solid #e5e7eb !important; border-radius: 12px !important; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important; padding: 14px !important; width: 220px !important; z-index: 9999 !important; box-sizing: border-box !important;">
+                    <div style="display: flex !important; gap: 8px !important; margin-bottom: 12px !important;">
+                      <select id="select-bulan-kalender" style="flex: 1 !important; padding: 6px !important; border-radius: 6px !important; border: 1px solid #d1d5db !important; font-size: 13px !important; outline: none !important; color: #374151 !important; background: #fff !important;">
                         <option value="0">Januari</option>
                         <option value="1">Februari</option>
                         <option value="2">Maret</option>
@@ -308,52 +237,16 @@
                         <option value="10">November</option>
                         <option value="11">Desember</option>
                       </select>
-                      <select
-                        id="select-tahun-kalender"
-                        style="
-                          width: 80px !important;
-                          padding: 6px !important;
-                          border-radius: 6px !important;
-                          border: 1px solid #d1d5db !important;
-                          font-size: 13px !important;
-                          outline: none !important;
-                          color: #374151 !important;
-                          background: #fff !important;
-                        "
-                      ></select>
+                      <select id="select-tahun-kalender" style="width: 80px !important; padding: 6px !important; border-radius: 6px !important; border: 1px solid #d1d5db !important; font-size: 13px !important; outline: none !important; color: #374151 !important; background: #fff !important;"></select>
                     </div>
-                    <button
-                      id="btn-terapkan-kalender"
-                      style="
-                        width: 100% !important;
-                        background: #1a73e8 !important;
-                        color: #ffffff !important;
-                        border: none !important;
-                        padding: 8px !important;
-                        border-radius: 6px !important;
-                        font-size: 13px !important;
-                        font-weight: 500 !important;
-                        cursor: pointer !important;
-                        transition: background 0.2s !important;
-                      "
-                    >
+                    <button id="btn-terapkan-kalender" style="width: 100% !important; background: #1a73e8 !important; color: #ffffff !important; border: none !important; padding: 8px !important; border-radius: 6px !important; font-size: 13px !important; font-weight: 500 !important; cursor: pointer !important; transition: background 0.2s !important;">
                       Terapkan
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div
-                style="
-                  display: grid !important;
-                  grid-template-columns: repeat(7, 1fr) !important;
-                  text-align: center !important;
-                  margin-bottom: 12px !important;
-                  font-size: 13px !important;
-                  color: #9ca3af !important;
-                  font-weight: 400 !important;
-                "
-              >
+              <div style="display: grid !important; grid-template-columns: repeat(7, 1fr) !important; text-align: center !important; margin-bottom: 12px !important; font-size: 13px !important; color: #9ca3af !important; font-weight: 400 !important;">
                 <div>Sun</div>
                 <div>Mon</div>
                 <div>Tue</div>
@@ -363,20 +256,7 @@
                 <div>Sat</div>
               </div>
 
-              <div
-                id="calendar-dates-grid"
-                style="
-                  display: grid !important;
-                  grid-template-columns: repeat(7, 1fr) !important;
-                  background-color: #e5e7eb !important;
-                  gap: 1px !important;
-                  border: 1px solid #e5e7eb !important;
-                  border-radius: 6px !important;
-                  overflow: hidden !important;
-                  width: 100% !important;
-                  box-sizing: border-box !important;
-                "
-              ></div>
+              <div id="calendar-dates-grid" style="display: grid !important; grid-template-columns: repeat(7, 1fr) !important; background-color: #e5e7eb !important; gap: 1px !important; border: 1px solid #e5e7eb !important; border-radius: 6px !important; overflow: hidden !important; width: 100% !important; box-sizing: border-box !important;"></div>
             </div>
 
             <div class="panel-card widget-academic-status">
@@ -386,15 +266,12 @@
               <p class="sub-caption">Daftar periode akademik terbaru</p>
 
               <div class="academic-status-list" id="academic-status-list">
-                <!-- Data dari API masuk di sini -->
-              </div>
+                </div>
             </div>
           </aside>
         </div>
-      </div>
-    </div>
+      </main> </div>
 
-    <!-- Menghubungkan ke JS mandiri khusus akademik -->
     <script src="akademik.js"></script>
   </body>
 </html>
