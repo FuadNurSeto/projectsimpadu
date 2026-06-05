@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tahun Akademik - SIMPADU POLIBAN</title>
+
+    <!-- Font & Icon FontAwesome -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Panggil CSS menggunakan root path agar aman dan konsisten -->
+    <link rel="stylesheet" href="/Dashboard/admin_akademik/akademik.css" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- ================= SIDEBAR DI-INJECT DI SINI ================= -->
+      <div id="sidebar-container"></div>
+
+      <!-- ================= KONTEN UTAMA WORKSPACE ================= -->
+      <main class="main-content">
+        <!-- TOPBAR HEADER -->
+        <header class="topbar-container">
+          <div
+            class="page-header-left"
+            style="display: flex; align-items: center; gap: 16px"
+          >
+            <button
+              id="menu-toggle"
+              style="
+                background: none;
+                border: none;
+                padding: 4px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+              "
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 6H20"
+                  stroke="#1e5bb9"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M4 12H20"
+                  stroke="#1e5bb9"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M4 18H20"
+                  stroke="#1e5bb9"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <h1
+              style="
+                font-size: 24px;
+                font-weight: 700;
+                color: #1e5bb9;
+                margin: 0;
+                font-family: &quot;Inter&quot;, sans-serif;
+              "
+            >
+              Tahun Akademik
+            </h1>
+          </div>
+
+          <div class="user-profile-top">
+            <div class="user-info-text">
+              <span class="user-name">Admin Akademik</span>
+              <span class="user-role">Admin Academic</span>
+            </div>
+            <div class="user-avatar-badge">AA</div>
+          </div>
+        </header>
+
+        <!-- AREA KELOLA DATA TAHUN AKADEMIK -->
+        <div
+          class="profile-forms-right"
+          style="
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+          "
+        >
+          <div
+            class="form-section-card"
+            style="
+              background: #ffffff;
+              border-radius: 12px;
+              padding: 24px;
+              border: 1px solid #e2e8f0;
+            "
+          >
+            <!-- Header Konten & Tombol Tambah Data -->
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 24px;
+              "
+            >
+              <div>
+                <h3 style="margin: 0; font-size: 18px; color: #0f172a">
+                  Daftar Periode Akademik
+                </h3>
+                <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748b">
+                  Pantau, tambah, dan atur status aktif tahun perkuliahan Kampus
+                  Poliban.
+                </p>
+              </div>
+              <button
+                id="btn-buka-modal-tambah"
+                class="btn-save-changes"
+                style="width: auto; padding: 10px 20px; font-size: 13px"
+              >
+                <i class="fas fa-plus"></i> Tambah Tahun Akademik
+              </button>
+            </div>
+
+            <!-- Wadah Tabel Data Master -->
+            <div style="overflow-x: auto">
+              <table
+                style="
+                  width: 100%;
+                  border-collapse: collapse;
+                  font-size: 13.5px;
+                  text-align: left;
+                "
+              >
+                <thead>
+                  <tr
+                    style="
+                      background-color: #f8fafc;
+                      border-bottom: 2px solid #e2e8f0;
+                      color: #475569;
+                    "
+                  >
+                    <th style="padding: 12px 16px">No</th>
+                    <th style="padding: 12px 16px">Tahun Akademik</th>
+                    <th style="padding: 12px 16px">Semester</th>
+                    <th style="padding: 12px 16px">Status</th>
+                    <th style="padding: 12px 16px; text-align: center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="list-tahun-akademik">
+                  <!-- Data akan di-inject otomatis oleh file js kamu -->
+                  <tr>
+                    <td
+                      colspan="5"
+                      style="text-align: center; color: #64748b; padding: 40px"
+                    >
+                      Memuat data akademik...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- ================= MODAL OVERLAY TAMBAH TAHUN ================= -->
+    <div id="modal-tambah-tahun" class="logout-modal-overlay">
+      <div class="logout-modal-box" style="max-width: 460px; text-align: left">
+        <h3 style="margin-bottom: 16px; font-size: 18px; color: #0f172a">
+          Tambah Tahun Akademik
+        </h3>
+
+        <form id="form-tambah-tahun">
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
+              margin-bottom: 24px;
+            "
+          >
+            <div class="form-group-field" style="width: 100%">
+              <label
+                style="
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: #475569;
+                  margin-bottom: 6px;
+                  display: block;
+                "
+                >Tahun Akademik</label
+              >
+              <input
+                type="text"
+                id="input-tahun"
+                placeholder="Contoh: 2025/2026"
+                required
+                style="
+                  width: 100%;
+                  height: 40px;
+                  border: 1px solid #cbd5e1;
+                  border-radius: 6px;
+                  padding: 0 12px;
+                "
+              />
+            </div>
+            <div class="form-group-field" style="width: 100%">
+              <label
+                style="
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: #475569;
+                  margin-bottom: 6px;
+                  display: block;
+                "
+                >Semester</label
+              >
+              <select
+                id="select-semester"
+                required
+                style="
+                  width: 100%;
+                  height: 40px;
+                  border: 1px solid #cbd5e1;
+                  border-radius: 6px;
+                  padding: 0 12px;
+                  background: #fff;
+                "
+              >
+                <option value="" disabled selected>-- Pilih Semester --</option>
+                <option value="Ganjil">Ganjil</option>
+                <option value="Genap">Genap</option>
+              </select>
+            </div>
+          </div>
+
+          <div
+            class="logout-modal-actions"
+            style="justify-content: flex-end; gap: 12px"
+          >
+            <button
+              type="button"
+              id="btn-batal-tambah"
+              class="logout-btn-modal logout-btn-batal"
+              style="margin: 0"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="logout-btn-modal logout-btn-konfirmasi"
+              style="background: #1e5bb9; margin: 0; padding: 0 20px"
+            >
+              Simpan Data
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ================= SCRIPT KONTROL OLEH LOADER DAN LOGIC HALAMAN ================= -->
+    <script src="/Dashboard/admin_akademik/sidebar-loader.js"></script>
+    <script src="tahun.js"></script>
+  </body>
+</html>
