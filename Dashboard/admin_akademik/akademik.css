@@ -110,6 +110,7 @@ body {
 .menu-icon {
   width: 20px;
   height: 20px;
+  transition: filter 0.3s ease; /* Memberikan efek transisi warna yang halus */
 }
 
 /* State Menu Aktif (Biru Melengkung) */
@@ -120,13 +121,21 @@ body {
   color: #ffffff;
   font-weight: 600;
 }
+/* Mengubah ikon PNG menjadi putih saat menu aktif */
+.menu-item.active .menu-icon {
+  filter: brightness(0) invert(1);
+}
 
 /* Hover State */
 .menu-item:not(.active) a:hover {
-  background-color: #f1f5f9;
+  background-color: #e2e8f0; /* Sedikit lebih gelap agar ikon putih terlihat jika ingin putih, atau biarkan default */
 }
 .menu-item:not(.active) a:hover .menu-label {
   color: #1e293b;
+}
+/* Opsional: Aktifkan jika ingin ikon jadi putih juga saat hover */
+.menu-item:not(.active) a:hover .menu-icon {
+  filter: brightness(0) invert(1);
 }
 
 /* Khusus Menu Keluar Akun */
@@ -563,4 +572,250 @@ body {
 }
 .logout-btn-konfirmasi:hover {
   background: #dd0000;
+}
+
+/* ==========================================================================
+   --- PROFIL LAYOUT STYLES ---
+   ========================================================================== */
+.profile-grid-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  padding: 24px;
+  align-items: stretch;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.profile-card-left {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px 24px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.large-avatar {
+  width: 100px;
+  height: 100px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: 0.5px;
+}
+
+.edit-avatar-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  background: #1e5bb9;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.profile-card-left h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+}
+
+.profile-card-left .role-text {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0 0 24px 0;
+}
+
+.status-badge {
+  background: #f0fdf4;
+  color: #16a34a;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-badge .dot {
+  width: 6px;
+  height: 6px;
+  background: #16a34a;
+  border-radius: 50%;
+}
+
+.profile-forms-right {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-section-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 16px;
+}
+
+.section-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 4px 0;
+}
+
+.section-header p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.form-grid-2-col {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.form-grid-3-col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.form-group-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group-field label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+}
+
+.form-group-field input {
+  height: 46px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0 16px;
+  font-size: 14px;
+  color: #0f172a;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.form-group-field input:focus {
+  border-color: #1e5bb9;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(30, 91, 185, 0.1);
+}
+
+.form-group-field input:disabled {
+  background: #f1f5f9;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.input-with-icon-left,
+.input-with-icon-right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-with-icon-left input {
+  padding-left: 44px;
+}
+.input-with-icon-right input {
+  padding-right: 44px;
+}
+
+.email-field-icon {
+  position: absolute;
+  left: 16px;
+  color: #94a3b8;
+  font-size: 16px;
+}
+.lock-icon,
+.toggle-password-view {
+  position: absolute;
+  right: 16px;
+  color: #94a3b8;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.form-actions-row {
+  display: flex;
+  margin-top: 24px;
+}
+.form-actions-row.flex-end {
+  justify-content: flex-end;
+}
+
+.btn-save-changes {
+  background: #1e5bb9;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.btn-update-password {
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 992px) {
+  .profile-grid-layout {
+    grid-template-columns: 1fr;
+  }
+  .form-grid-2-col,
+  .form-grid-3-col {
+    grid-template-columns: 1fr;
+  }
 }

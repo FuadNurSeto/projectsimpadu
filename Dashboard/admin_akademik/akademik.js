@@ -11,6 +11,9 @@ const requestHeaders = {
   Authorization: `Bearer ${API_TOKEN}`, // Dikirim jika endpoint API diproteksi auth:sanctum
 }; // Mengganti nama variabel menjadi 'headers' agar konsisten dengan prompt
 
+// Variable global untuk menyimpan ID user yang sedang login (diperlukan untuk reset password)
+let currentUserId = null;
+
 // Fungsi utama yang dijalankan saat halaman selesai dimuat
 document.addEventListener("DOMContentLoaded", () => {
   // Jalankan pengecekan token terlebih dahulu (Proteksi Halaman)
@@ -417,41 +420,193 @@ document.addEventListener("DOMContentLoaded", () => {
   renderCalendarDinamis(kalenderBulanAktif, kalenderTahunAktif);
 });
 
-// --- LOGIKA MODAL LOGOUT ---
-document.addEventListener("DOMContentLoaded", function () {
-  const logoutTrigger = document.getElementById("logout-trigger");
-  const logoutModal = document.getElementById("logout-modal");
-  const btnBatalLogout = document.getElementById("btn-batal-logout");
-  const btnKonfirmasiLogout = document.querySelector(".logout-btn-konfirmasi");
+// ==========================================================================
+// --- LOGIKA REAL-TIME GET PROFIL DARI VPS (Endpoint #45 & #37) ---
+// ==========================================================================
+document.addEventListener("DOMContentLoaded", () => {
+  // Pastikan fungsi hanya berjalan di halaman profil yang memiliki field ini
+  if (document.getElementById("profile-full-name")) {
+    console.log("Menghubungkan ke endpoint Simpadu #45...");
+    getProfilDariVPS();
+    initAksiKeamananProfil(); // Inisialisasi fitur ganti password
+  }
+});
 
-  // 1. Tampilkan modal saat tombol Keluar Akun di klik
-  if (logoutTrigger && logoutModal) {
-    logoutTrigger.addEventListener("click", function (e) {
+// 1. FUNGSI MEMBACA PROFIL (Endpoint #45 GET /api/akademik/users/me)
+async function getProfilDariVPS() {
+  try {
+    const token = localStorage.getItem("token") || localStorage.getItem("auth_token");
+    if (!token) throw new Error("Token tidak ditemukan di localStorage.");
+
+    const headers = {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": `Bearer ${token}`
+    };
+
+    // Sesuai Dokumentasi #45: Endpoint profil user login
+    const response = await fetch(`${API_BASE_URL}/users/me`, {
+      method: "GET",
+      headers: headers,
+    });
+
+    if (!response.ok) throw new Error(`Server merespon dengan status: ${response.status}`);
+
+    const user = await response.json();
+    console.log("Data profil sukses diterima dari VPS:", user);
+
+    // Simpan ID user ke variabel global untuk keperluan ganti password nanti
+    currentUserId = user.id;
+
+    // 1. Isi Form Input Informasi Pribadi
+    document.getElementById("profile-full-name").value = user.name || "";
+    document.getElementById("profile-email").value = user.email || "";
+    
+    if (document.getElementById("profile-nip")) {
+      // Sesuai Dokumentasi: Menggunakan 'nomor_identitas'
+      document.getElementById("profile-nip").value = user.nomor_identitas || "-";
+    }
+    if (document.getElementById("profile-role")) {
+      // Sesuai Dokumentasi: 'roles' berupa array
+      if (user.roles && user.roles.length > 0) {
+        const namaRoleBersih = user.roles[0].replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
+        document.getElementById("profile-role").value = namaRoleBersih;
+      } else {
+        document.getElementById("profile-role").value = "Admin Akademik";
+      }
+    }
+
+    // 2. Isi Komponen Visual (Banner Sisi Kiri & Topbar)
+    const bannerName = document.getElementById("bannerName");
+    if (bannerName) bannerName.innerText = user.name || "Admin Akademik";
+
+    const topbarName = document.querySelector(".user-name");
+    if (topbarName) topbarName.innerText = user.name || "Admin Akademik";
+
+    localStorage.setItem("name", user.name);
+
+  } catch (error) {
+    console.error("Gagal memuat profil dari server VPS:", error);
+    const elName = document.getElementById("profile-full-name");
+    if (elName) elName.value = localStorage.getItem("name") || "Admin Akademik";
+  }
+}
+
+// 2. FUNGSI MENGUBAH KATA SANDI (Endpoint #37 POST /api/akademik/users/{id}/reset-password)
+function initAksiKeamananProfil() {
+  const btnSaveChanges = document.querySelector(".btn-save-changes");
+  if (btnSaveChanges) {
+    btnSaveChanges.addEventListener("click", async (e) => {
       e.preventDefault();
-      logoutModal.classList.add("show");
-    });
-  }
 
-  // 2. Sembunyikan modal saat tombol Batal di klik
-  if (btnBatalLogout && logoutModal) {
-    btnBatalLogout.addEventListener("click", function () {
-      logoutModal.classList.remove("show");
-    });
-  }
+      const passwordNew = document.getElementById("password-new").value;
+      const passwordConfirm = document.getElementById("password-confirm").value;
 
-  // 3. Sembunyikan modal jika pengguna mengklik area luar kotak modal
-  if (logoutModal) {
-    logoutModal.addEventListener("click", function (e) {
-      if (e.target === logoutModal) {
-        logoutModal.classList.remove("show");
+      if (!passwordNew && !passwordConfirm) {
+        alert("Silakan isi kolom Kata Sandi Baru jika ingin melakukan pembaruan keamanan.");
+        return;
+      }
+
+      if (passwordNew !== passwordConfirm) {
+        alert("Konfirmasi kata sandi baru tidak cocok. Periksa kembali.");
+        return;
+      }
+
+      if (!currentUserId) {
+        alert("Gagal memproses. ID pengguna belum termuat sempurna dari server.");
+        return;
+      }
+
+      try {
+        btnSaveChanges.innerText = "Menyimpan...";
+        btnSaveChanges.disabled = true;
+
+        // Sesuai Dokumentasi #37: POST ke /api/akademik/users/{id_user}/reset-password
+        const response = await fetch(`${API_BASE_URL}/users/${currentUserId}/reset-password`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+          },
+          body: JSON.stringify({ password: passwordNew }),
+        });
+
+        if (!response.ok) throw new Error("Gagal memperbarui kata sandi di server VPS.");
+
+        alert("Kata sandi akun Anda berhasil diperbarui langsung di VPS Simpadu!");
+        document.getElementById("password-new").value = "";
+        document.getElementById("password-confirm").value = "";
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        btnSaveChanges.innerText = "Simpan Perubahan";
+        btnSaveChanges.disabled = false;
       }
     });
   }
+  
+  // Fitur Toggle Show/Hide Password
+  const togglePasswordIcons = document.querySelectorAll('.toggle-password-view');
+  togglePasswordIcons.forEach(icon => {
+    icon.addEventListener('click', function () {
+      const inputField = this.previousElementSibling;
+      if (inputField.type === "password") {
+        inputField.type = "text";
+        this.classList.remove('fa-eye');
+        this.classList.add('fa-eye-slash');
+      } else {
+        inputField.type = "password";
+        this.classList.remove('fa-eye-slash');
+        this.classList.add('fa-eye');
+      }
+    });
+  });
+}
 
-  // 4. Aksi hapus sesi saat tombol konfirmasi diklik
-  if (btnKonfirmasiLogout) {
-    btnKonfirmasiLogout.addEventListener("click", function () {
-      localStorage.clear();
+// ==========================================================================
+// --- LOGIKA MODAL LOGOUT (KLUAR) ---
+// ==========================================================================
+document.addEventListener("DOMContentLoaded", () => {
+  initLogoutLogic();
+});
+
+function initLogoutLogic() {
+  // Mengambil elemen berdasarkan class yang ada di file CSS dan HTML Anda
+  const logoutTrigger = document.querySelector(".menu-item.logout a");
+  const modalOverlay = document.querySelector(".logout-modal-overlay");
+  const btnBatal = document.querySelector(".logout-btn-batal");
+  const btnKonfirmasi = document.querySelector(".logout-btn-konfirmasi");
+
+  if (!logoutTrigger || !modalOverlay) {
+    return;
+  }
+
+  // 1. Munculkan Pop-up Konfirmasi saat tombol Keluar di Sidebar diklik
+  logoutTrigger.addEventListener("click", (e) => {
+    e.preventDefault(); 
+    modalOverlay.classList.add("show");
+  });
+
+  // 2. Sembunyikan Pop-up jika tombol "Batal" diklik
+  if (btnBatal) {
+    btnBatal.addEventListener("click", () => {
+      modalOverlay.classList.remove("show");
     });
   }
-});
+
+  // 3. Sembunyikan Pop-up jika area luar kotak (overlay abu-abu) diklik
+  modalOverlay.addEventListener("click", (e) => {
+    if (e.target === modalOverlay) {
+      modalOverlay.classList.remove("show");
+    }
+  });
+
+  // 4. Eksekusi Hapus Sesi dan Redirect jika tombol "Konfirmasi" diklik
+  if (btnKonfirmasi) {
+    btnKonfirmasi.addEventListener("click", () => {
+      localStorage.clear();
+      window.location.href = "../../loginbaru/baru.html";
+    });
+  }
+}

@@ -20,7 +20,11 @@
     <div class="dashboard-container">
       <aside class="sidebar">
         <div class="sidebar-brand">
-          <img src="../../Asset/logopoliban.png" alt="Logo Poliban" class="brand-logo" />
+          <img
+            src="../../Asset/logopoliban.png"
+            alt="Logo Poliban"
+            class="brand-logo"
+          />
           <div class="brand-text">
             <h2>SIMPADU POLIBAN</h2>
             <p>Sistem Informasi Terpadu</p>
@@ -30,7 +34,7 @@
 
         <div class="menu-group">
           <span class="menu-title">MENU UTAMA</span>
-          <ul> 
+          <ul>
             <li class="menu-item active">
               <a href="index.html">
                 <img src="../../Asset/Home.png" alt="" class="menu-icon" />
@@ -45,7 +49,11 @@
             </li>
             <li class="menu-item">
               <a href="jurusan_prodi.html">
-                <img src="../../Asset/jurusanprodi.png" alt="" class="menu-icon" />
+                <img
+                  src="../../Asset/jurusanprodi.png"
+                  alt=""
+                  class="menu-icon"
+                />
                 <span class="menu-label">Jurusan dan Prodi</span>
               </a>
             </li>
@@ -92,8 +100,12 @@
           <span class="menu-title">AKUN</span>
           <ul>
             <li class="menu-item">
-              <a href="../profil.html">
-                <img src="../../Asset/profile-circle.png" alt="" class="menu-icon" />
+              <a href="../../Dashboard/admin_akademik/profil.html">
+                <img
+                  src="../../Asset/profile-circle.png"
+                  alt=""
+                  class="menu-icon"
+                />
                 <span class="menu-label">Profil</span>
               </a>
             </li>
@@ -105,18 +117,66 @@
             </li>
           </ul>
         </div>
-      </aside> <main class="main-content">
+      </aside>
+      <main class="main-content">
         <header class="topbar-container">
-          <div class="page-header-left" style="display: flex; align-items: center; gap: 16px">
-            <button id="menu-toggle" style="background: none; border: none; padding: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.2s;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6H20" stroke="#374151" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M4 12H20" stroke="#374151" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M4 18H20" stroke="#374151" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          <div
+            class="page-header-left"
+            style="display: flex; align-items: center; gap: 16px"
+          >
+            <button
+              id="menu-toggle"
+              style="
+                background: none;
+                border: none;
+                padding: 4px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: opacity 0.2s;
+              "
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 6H20"
+                  stroke="#374151"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M4 12H20"
+                  stroke="#374151"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M4 18H20"
+                  stroke="#374151"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
               </svg>
             </button>
 
-            <h1 style="font-size: 24px; font-weight: 700; color: #111827; margin: 0; font-family: sans-serif;">
+            <h1
+              style="
+                font-size: 24px;
+                font-weight: 700;
+                color: #111827;
+                margin: 0;
+                font-family: sans-serif;
+              "
+            >
               Dashboard
             </h1>
           </div>
@@ -134,7 +194,10 @@
           <section class="center-content-column">
             <div class="welcome-banner">
               <h2>Selamat Datang, Nabila!</h2>
-              <p>Tinjauan cepat untuk semua aktivitas dan operasional sistem SIMPADU.</p>
+              <p>
+                Tinjauan cepat untuk semua aktivitas dan operasional sistem
+                SIMPADU.
+              </p>
             </div>
 
             <div class="stats-card-grid">
@@ -156,7 +219,9 @@
                 <div class="stat-data">
                   <span class="stat-caption">Data Dosen Pengajar</span>
                   <h3 class="stat-number" id="total-dosen">0</h3>
-                  <p class="stat-desc">Seluruh dosen berstatus aktif mengajar</p>
+                  <p class="stat-desc">
+                    Seluruh dosen berstatus aktif mengajar
+                  </p>
                 </div>
               </div>
 
@@ -199,31 +264,115 @@
                       <th>STATUS</th>
                     </tr>
                   </thead>
-                  <tbody id="table-kelas-body">
-                    </tbody>
+                  <tbody id="table-kelas-body"></tbody>
                 </table>
               </div>
             </div>
           </section>
 
           <aside class="right-panel-column">
-            <div class="card shadow-sm mb-4" style="background: #ffffff; border-radius: 16px; border: none; padding: 24px; font-family: 'Poppins', sans-serif; width: 100%; box-sizing: border-box;">
-              <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; width: 100% !important; margin-bottom: 20px !important; position: relative !important;">
-                <h5 style="margin: 0 !important; font-size: 18px !important; font-weight: 600 !important; color: #1e5bb9 !important; letter-spacing: 0.5px;">
+            <div
+              class="card shadow-sm mb-4"
+              style="
+                background: #ffffff;
+                border-radius: 16px;
+                border: none;
+                padding: 24px;
+                font-family: &quot;Poppins&quot;, sans-serif;
+                width: 100%;
+                box-sizing: border-box;
+              "
+            >
+              <div
+                style="
+                  display: flex !important;
+                  justify-content: space-between !important;
+                  align-items: center !important;
+                  width: 100% !important;
+                  margin-bottom: 20px !important;
+                  position: relative !important;
+                "
+              >
+                <h5
+                  style="
+                    margin: 0 !important;
+                    font-size: 18px !important;
+                    font-weight: 600 !important;
+                    color: #1e5bb9 !important;
+                    letter-spacing: 0.5px;
+                  "
+                >
                   Kalender
                 </h5>
 
                 <div style="position: relative !important">
-                  <div id="calendar-dropdown-trigger" style="display: flex !important; align-items: center !important; color: #4a75c7 !important; cursor: pointer; font-size: 14px !important; font-weight: 500 !important; user-select: none !important;">
+                  <div
+                    id="calendar-dropdown-trigger"
+                    style="
+                      display: flex !important;
+                      align-items: center !important;
+                      color: #4a75c7 !important;
+                      cursor: pointer;
+                      font-size: 14px !important;
+                      font-weight: 500 !important;
+                      user-select: none !important;
+                    "
+                  >
                     <span id="calendar-month-year">Juni 2026</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-down ms-1" viewBox="0 0 16 16" style="margin-left: 4px !important">
-                      <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      fill="currentColor"
+                      class="bi bi-chevron-down ms-1"
+                      viewBox="0 0 16 16"
+                      style="margin-left: 4px !important"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
+                      />
                     </svg>
                   </div>
 
-                  <div id="calendar-picker-panel" style="display: none; position: absolute !important; top: 100% !important; right: 0 !important; margin-top: 8px !important; background: #ffffff !important; border: 1px solid #e5e7eb !important; border-radius: 12px !important; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important; padding: 14px !important; width: 220px !important; z-index: 9999 !important; box-sizing: border-box !important;">
-                    <div style="display: flex !important; gap: 8px !important; margin-bottom: 12px !important;">
-                      <select id="select-bulan-kalender" style="flex: 1 !important; padding: 6px !important; border-radius: 6px !important; border: 1px solid #d1d5db !important; font-size: 13px !important; outline: none !important; color: #374151 !important; background: #fff !important;">
+                  <div
+                    id="calendar-picker-panel"
+                    style="
+                      display: none;
+                      position: absolute !important;
+                      top: 100% !important;
+                      right: 0 !important;
+                      margin-top: 8px !important;
+                      background: #ffffff !important;
+                      border: 1px solid #e5e7eb !important;
+                      border-radius: 12px !important;
+                      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+                      padding: 14px !important;
+                      width: 220px !important;
+                      z-index: 9999 !important;
+                      box-sizing: border-box !important;
+                    "
+                  >
+                    <div
+                      style="
+                        display: flex !important;
+                        gap: 8px !important;
+                        margin-bottom: 12px !important;
+                      "
+                    >
+                      <select
+                        id="select-bulan-kalender"
+                        style="
+                          flex: 1 !important;
+                          padding: 6px !important;
+                          border-radius: 6px !important;
+                          border: 1px solid #d1d5db !important;
+                          font-size: 13px !important;
+                          outline: none !important;
+                          color: #374151 !important;
+                          background: #fff !important;
+                        "
+                      >
                         <option value="0">Januari</option>
                         <option value="1">Februari</option>
                         <option value="2">Maret</option>
@@ -237,16 +386,52 @@
                         <option value="10">November</option>
                         <option value="11">Desember</option>
                       </select>
-                      <select id="select-tahun-kalender" style="width: 80px !important; padding: 6px !important; border-radius: 6px !important; border: 1px solid #d1d5db !important; font-size: 13px !important; outline: none !important; color: #374151 !important; background: #fff !important;"></select>
+                      <select
+                        id="select-tahun-kalender"
+                        style="
+                          width: 80px !important;
+                          padding: 6px !important;
+                          border-radius: 6px !important;
+                          border: 1px solid #d1d5db !important;
+                          font-size: 13px !important;
+                          outline: none !important;
+                          color: #374151 !important;
+                          background: #fff !important;
+                        "
+                      ></select>
                     </div>
-                    <button id="btn-terapkan-kalender" style="width: 100% !important; background: #1a73e8 !important; color: #ffffff !important; border: none !important; padding: 8px !important; border-radius: 6px !important; font-size: 13px !important; font-weight: 500 !important; cursor: pointer !important; transition: background 0.2s !important;">
+                    <button
+                      id="btn-terapkan-kalender"
+                      style="
+                        width: 100% !important;
+                        background: #1a73e8 !important;
+                        color: #ffffff !important;
+                        border: none !important;
+                        padding: 8px !important;
+                        border-radius: 6px !important;
+                        font-size: 13px !important;
+                        font-weight: 500 !important;
+                        cursor: pointer !important;
+                        transition: background 0.2s !important;
+                      "
+                    >
                       Terapkan
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div style="display: grid !important; grid-template-columns: repeat(7, 1fr) !important; text-align: center !important; margin-bottom: 12px !important; font-size: 13px !important; color: #9ca3af !important; font-weight: 400 !important;">
+              <div
+                style="
+                  display: grid !important;
+                  grid-template-columns: repeat(7, 1fr) !important;
+                  text-align: center !important;
+                  margin-bottom: 12px !important;
+                  font-size: 13px !important;
+                  color: #9ca3af !important;
+                  font-weight: 400 !important;
+                "
+              >
                 <div>Sun</div>
                 <div>Mon</div>
                 <div>Tue</div>
@@ -256,7 +441,20 @@
                 <div>Sat</div>
               </div>
 
-              <div id="calendar-dates-grid" style="display: grid !important; grid-template-columns: repeat(7, 1fr) !important; background-color: #e5e7eb !important; gap: 1px !important; border: 1px solid #e5e7eb !important; border-radius: 6px !important; overflow: hidden !important; width: 100% !important; box-sizing: border-box !important;"></div>
+              <div
+                id="calendar-dates-grid"
+                style="
+                  display: grid !important;
+                  grid-template-columns: repeat(7, 1fr) !important;
+                  background-color: #e5e7eb !important;
+                  gap: 1px !important;
+                  border: 1px solid #e5e7eb !important;
+                  border-radius: 6px !important;
+                  overflow: hidden !important;
+                  width: 100% !important;
+                  box-sizing: border-box !important;
+                "
+              ></div>
             </div>
 
             <div class="panel-card widget-academic-status">
@@ -265,32 +463,46 @@
               </div>
               <p class="sub-caption">Daftar periode akademik terbaru</p>
 
-              <div class="academic-status-list" id="academic-status-list">
-                </div>
+              <div class="academic-status-list" id="academic-status-list"></div>
             </div>
           </aside>
         </div>
-      </main> </div>
+      </main>
+    </div>
 
     <!-- MODAL LOGOUT CONTAINER -->
     <div id="logout-modal" class="logout-modal-overlay">
       <div class="logout-modal-box">
         <!-- Icon Keluar Bulat Merah Muda -->
         <div class="logout-modal-icon-wrapper">
-          <img src="../../Asset/kluar.png" alt="Logout" class="logout-modal-icon-img" />
+          <img
+            src="../../Asset/kluar.png"
+            alt="Logout"
+            class="logout-modal-icon-img"
+          />
         </div>
 
         <!-- Konten Teks -->
         <h3>Konfirmasi Keluar Akun</h3>
         <p>
           Apakah Anda yakin ingin keluar dari sistem?<br />
-          Anda harus login kembali menggunakan Email untuk mengakses data akademik SIMPADU.
+          Anda harus login kembali menggunakan Email untuk mengakses data
+          akademik SIMPADU.
         </p>
 
         <!-- Tombol Aksi -->
         <div class="logout-modal-actions">
-          <button id="btn-batal-logout" class="logout-btn-modal logout-btn-batal">Batal</button>
-          <a href="../../loginbaru/baru.html" class="logout-btn-modal logout-btn-konfirmasi">Ya, Keluar Akun</a>
+          <button
+            id="btn-batal-logout"
+            class="logout-btn-modal logout-btn-batal"
+          >
+            Batal
+          </button>
+          <a
+            href="../../loginbaru/baru.html"
+            class="logout-btn-modal logout-btn-konfirmasi"
+            >Ya, Keluar Akun</a
+          >
         </div>
       </div>
     </div>

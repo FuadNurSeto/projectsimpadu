@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profil Akun - SIMPADU POLIBAN</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="akademik.css" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <img
+            src="../../Asset/logopoliban.png"
+            alt="Logo Poliban"
+            class="brand-logo"
+          />
+          <div class="brand-text">
+            <h2>SIMPADU POLIBAN</h2>
+            <p>Sistem Informasi Terpadu</p>
+            <span>Politeknik Negeri Banjarmasin</span>
+          </div>
+        </div>
+
+        <div class="menu-group">
+          <span class="menu-title">MENU UTAMA</span>
+          <ul>
+            <li class="menu-item">
+              <a href="index.html">
+                <img src="../../Asset/Home.png" alt="" class="menu-icon" />
+                <span class="menu-label">Dashboard</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="tahun_akademik.html">
+                <img src="../../Asset/Calendar.png" alt="" class="menu-icon" />
+                <span class="menu-label">Tahun Akademik</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="jurusan_prodi.html">
+                <img
+                  src="../../Asset/jurusanprodi.png"
+                  alt=""
+                  class="menu-icon"
+                />
+                <span class="menu-label">Jurusan dan Prodi</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="kelas.html">
+                <img src="../../Asset/Kelas.png" alt="" class="menu-icon" />
+                <span class="menu-label">Kelas</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="dosen.html">
+                <img src="../../Asset/Teacher.png" alt="" class="menu-icon" />
+                <span class="menu-label">Dosen</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="presensi.html">
+                <img src="../../Asset/student.png" alt="" class="menu-icon" />
+                <span class="menu-label">Presensi</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="mata_kuliah.html">
+                <img src="../../Asset/matkul.png" alt="" class="menu-icon" />
+                <span class="menu-label">Mata Kuliah</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="nilai.html">
+                <img src="../../Asset/nilai.png" alt="" class="menu-icon" />
+                <span class="menu-label">Nilai</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="khs.html">
+                <img src="../../Asset/khs.png" alt="" class="menu-icon" />
+                <span class="menu-label">Kartu Hasil Studi</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="menu-group">
+          <span class="menu-title">AKUN</span>
+          <ul>
+            <li class="menu-item active">
+              <a href="../../Dashboard/admin_akademik/profil.html">
+                <img
+                  src="../../Asset/profile-circle.png"
+                  alt=""
+                  class="menu-icon"
+                />
+                <span class="menu-label">Profil</span>
+              </a>
+            </li>
+            <li class="menu-item logout">
+              <a href="#" id="logout-trigger">
+                <img src="../../Asset/kluar.png" alt="" class="menu-icon" />
+                <span class="menu-label">Keluar Akun</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar-container">
+          <div
+            class="page-header-left"
+            style="display: flex; align-items: center; gap: 16px"
+          >
+            <button
+              id="menu-toggle"
+              style="
+                background: none;
+                border: none;
+                padding: 4px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+              "
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 6H20"
+                  stroke="#1e5bb9"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M4 12H20"
+                  stroke="#1e5bb9"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M4 18H20"
+                  stroke="#1e5bb9"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <h1
+              style="
+                font-size: 24px;
+                font-weight: 700;
+                color: #1e5bb9;
+                margin: 0;
+                font-family: &quot;Inter&quot;, sans-serif;
+              "
+            >
+              Profil Akun
+            </h1>
+          </div>
+
+          <div class="user-profile-top">
+            <div class="user-info-text">
+              <span class="user-name">Admin Akademik</span>
+              <span class="user-role">Admin Akademik</span>
+            </div>
+            <div class="user-avatar-badge">AA</div>
+          </div>
+        </header>
+
+        <div class="profile-grid-layout">
+          <div class="profile-card-left">
+            <div class="avatar-container">
+              <div class="large-avatar user-avatar-badge">AA</div>
+              <button class="edit-avatar-btn">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+            </div>
+            <h2 id="bannerName" class="user-name">Admin Academic</h2>
+            <p class="role-text">Admin Akademik</p>
+            <span class="status-badge"><span class="dot"></span> Aktif</span>
+          </div>
+
+          <div class="profile-forms-right">
+            <div class="form-section-card">
+              <div class="section-header">
+                <h3>Informasi Pribadi</h3>
+                <p>Kelola data diri dasar untuk akun SIMPADU Anda.</p>
+              </div>
+
+              <div class="form-grid-2-col">
+                <div class="form-group-field">
+                  <label>Nama Lengkap</label>
+                  <input
+                    type="text"
+                    id="profile-full-name"
+                    value=""
+                    placeholder="Memuat nama lengkap..."
+                  />
+                </div>
+                <div class="form-group-field">
+                  <label>Nomor Identitas (NIP / NIK)</label>
+                  <div class="input-with-icon-right">
+                    <input
+                      type="text"
+                      id="profile-nip"
+                      value=""
+                      placeholder="Memuat NIP/NIK..."
+                      disabled
+                    />
+                    <i class="fas fa-circle-info lock-icon"></i>
+                  </div>
+                </div>
+                <div class="form-group-field">
+                  <label>Alamat Email</label>
+                  <div class="input-with-icon-left">
+                    <i class="far fa-envelope email-field-icon"></i>
+                    <input
+                      type="email"
+                      id="profile-email"
+                      value=""
+                      placeholder="Memuat email..."
+                    />
+                  </div>
+                </div>
+                <div class="form-group-field">
+                  <label>Hak Akses Sistem</label>
+                  <input
+                    type="text"
+                    id="profile-role"
+                    value=""
+                    placeholder="Memuat hak akses..."
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div class="form-actions-row">
+                <button class="btn-save-changes">Simpan Perubahan</button>
+              </div>
+            </div>
+
+            <div class="form-section-card">
+              <div class="section-header">
+                <h3>Keamanan Akun</h3>
+                <p>
+                  Perbarui kata sandi Anda secara berkala untuk menjaga
+                  keamanan.
+                </p>
+              </div>
+
+              <div class="form-grid-3-col">
+                <div class="form-group-field">
+                  <label>Kata Sandi Saat Ini</label>
+                  <input
+                    type="password"
+                    id="password-current"
+                    placeholder="Kata sandi lama..."
+                  />
+                </div>
+                <div class="form-group-field">
+                  <label>Kata Sandi Baru</label>
+                  <div class="input-with-icon-right">
+                    <input
+                      type="password"
+                      id="password-new"
+                      placeholder="Masukkan kata sandi baru..."
+                    />
+                    <i class="far fa-eye toggle-password-view"></i>
+                  </div>
+                </div>
+                <div class="form-group-field">
+                  <label>Konfirmasi Kata Sandi Baru</label>
+                  <div class="input-with-icon-right">
+                    <input
+                      type="password"
+                      id="password-confirm"
+                      placeholder="Ulangi kata sandi baru..."
+                    />
+                    <i class="far fa-eye toggle-password-view"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions-row flex-end">
+                <button class="btn-update-password">Perbarui Password</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div id="logout-modal" class="logout-modal-overlay">
+      <div class="logout-modal-box">
+        <!-- Icon Keluar Bulat Merah Muda -->
+        <div class="logout-modal-icon-wrapper">
+          <img src="../../Asset/kluar.png" alt="Logout" class="logout-modal-icon-img" />
+        </div>
+
+        <!-- Konten Teks -->
+        <h3>Konfirmasi Keluar Akun</h3>
+        <p>
+          Apakah Anda yakin ingin keluar dari sistem?<br />
+          Anda harus login kembali menggunakan Email untuk mengakses data
+          akademik SIMPADU.
+        </p>
+
+        <!-- Tombol Aksi -->
+        <div class="logout-modal-actions">
+          <button id="btn-batal-logout" class="logout-btn-modal logout-btn-batal">
+            Batal
+          </button>
+          <a href="../../loginbaru/baru.html" class="logout-btn-modal logout-btn-konfirmasi">Ya, Keluar Akun</a>
+        </div>
+      </div>
+    </div>
+    <script src="akademik.js"></script>
+  </body>
+</html>
