@@ -23,6 +23,43 @@ document.addEventListener("DOMContentLoaded", function () {
             link.parentElement.classList.add("active");
           }
         });
+
+        // 4. LOGIKA MODAL LOGOUT GLOBAL
+        const modalLogout = document.getElementById("modal-logout-container");
+        const btnBatal = document.getElementById("btn-close-logout");
+        const btnExecute = document.getElementById("btn-execute-logout");
+
+        // Mencari tombol logout di dalam sidebar yang baru dimuat
+        const triggerLogout = container.querySelector(
+          ".menu-item.logout a, #logout-trigger, a[href*='keluar']",
+        );
+
+        if (triggerLogout && modalLogout) {
+          triggerLogout.addEventListener("click", function (e) {
+            e.preventDefault();
+            modalLogout.classList.add("aktif-modal");
+          });
+
+          if (btnBatal) {
+            btnBatal.addEventListener("click", () =>
+              modalLogout.classList.remove("aktif-modal"),
+            );
+          }
+
+          modalLogout.addEventListener("click", (e) => {
+            if (e.target === modalLogout)
+              modalLogout.classList.remove("aktif-modal");
+          });
+
+          if (btnExecute) {
+            btnExecute.addEventListener("click", function () {
+              localStorage.clear();
+              sessionStorage.clear();
+              // Sesuaikan path redirect dengan lokasi file login Anda
+              window.location.href = "../../../loginbaru/baru.html";
+            });
+          }
+        }
       }
     })
     .catch((error) => console.error("Error pada Sidebar Loader:", error));
