@@ -1017,6 +1017,42 @@ body {
   cursor: not-allowed;
 }
 
+/* ==========================================================================
+   --- STYLE TOMBOL AKSI KOTAK (2 TOMBOL) ---
+   ========================================================================== */
+
+.action-btn-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0; /* Border abu-abu muda halus */
+  border-radius: 8px; /* Sudut membulat modern */
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Efek ketika kursor diarahkan ke tombol */
+.action-btn-container:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+/* Warna khusus untuk Ikon Detail (User) */
+.action-btn-container.detail-btn i {
+  color: #64748b; /* Abu-abu gelap / slate */
+  font-size: 12px;
+}
+
+/* Warna khusus untuk Ikon Edit (Pencil) */
+.action-btn-container.edit-btn i {
+  color: #3b82f6; /* Biru cerah */
+  font-size: 12px;
+}
+
 /* --- STYLING KHUSUS MODAL KONFIRMASI --- */
 .modal-confirm-card {
   max-width: 440px; /* Ukuran lebih kecil & compact sesuai desain UI */
@@ -1086,4 +1122,52 @@ body {
 }
 .btn-submit.btn-danger-action:hover {
   background-color: #dc2626 !important;
+}
+
+/* ==========================================================================
+   --- TATA LETAK TOOLBAR & BUTTON FILTER KELAS ---
+   ========================================================================== */
+
+/* Container utama untuk memisahkan grup kiri (search+filter) dan tombol kanan */
+.toolbar-kelas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+/* Membuat search bar dan tombol filter sejajar ke samping */
+.search-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Jarak presisi antara search bar dan tombol filter */
+}
+
+/* Style spesifik untuk Tombol Filter sesuai Gambar Desain UI */
+.btn-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px; /* Jarak antara ikon sliders dan teks "Filter" */
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0; /* Border abu-abu tipis halus */
+  border-radius: 10px; /* Kelengkungan sudut yang modern */
+  padding: 10px 20px; /* Padding dalam tombol */
+  color: #334155; /* Warna teks abu-abu gelap/slate */
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 42px; /* Samakan tinggi dengan search bar Anda */
+}
+
+/* Efek saat tombol filter diarahkan kursor (Hover) */
+.btn-filter:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.btn-filter i {
+  color: #64748b; /* Warna ikon filter sedikit lebih redup */
+  font-size: 14px;
 }

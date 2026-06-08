@@ -25,9 +25,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // 4. LOGIKA MODAL LOGOUT GLOBAL
-        const modalLogout = document.getElementById("modal-logout-container");
-        const btnBatal = document.getElementById("btn-close-logout");
-        const btnExecute = document.getElementById("btn-execute-logout");
+        const modalLogout = document.getElementById("logout-modal"); // Menggunakan ID yang benar
+        const btnBatal = document.getElementById("btn-batal-logout"); // Menggunakan ID yang benar
+        const btnExecute = document.querySelector(".logout-btn-konfirmasi"); // Menggunakan selector kelas yang benar
 
         // Mencari tombol logout di dalam sidebar yang baru dimuat
         const triggerLogout = container.querySelector(
@@ -37,18 +37,18 @@ document.addEventListener("DOMContentLoaded", function () {
         if (triggerLogout && modalLogout) {
           triggerLogout.addEventListener("click", function (e) {
             e.preventDefault();
-            modalLogout.classList.add("aktif-modal");
+            modalLogout.classList.add("show"); // Menggunakan kelas 'show' untuk menampilkan modal
           });
 
           if (btnBatal) {
-            btnBatal.addEventListener("click", () =>
-              modalLogout.classList.remove("aktif-modal"),
+            btnBatal.addEventListener(
+              "click",
+              () => modalLogout.classList.remove("show"), // Menggunakan kelas 'show' untuk menyembunyikan modal
             );
           }
 
           modalLogout.addEventListener("click", (e) => {
-            if (e.target === modalLogout)
-              modalLogout.classList.remove("aktif-modal");
+            if (e.target === modalLogout) modalLogout.classList.remove("show"); // Menggunakan kelas 'show'
           });
 
           if (btnExecute) {
