@@ -572,20 +572,27 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initLogoutLogic() {
-  // Mengambil elemen berdasarkan class yang ada di file CSS dan HTML Anda
-  const logoutTrigger = document.querySelector(".menu-item.logout a");
-  const modalOverlay = document.querySelector(".logout-modal-overlay");
-  const btnBatal = document.querySelector(".logout-btn-batal");
+  // Sinkronisasi dengan admin_akademik/index.html
+  const modalOverlay = document.getElementById("logout-modal");
+  const btnBatal = document.getElementById("btn-batal-logout");
   const btnKonfirmasi = document.querySelector(".logout-btn-konfirmasi");
 
-  if (!logoutTrigger || !modalOverlay) {
-    return;
+  // Pengecekan elemen untuk debugging
+  if (!modalOverlay) {
+    console.error("❌ [Logout API] Modal '#logout-modal' tidak ditemukan.");
   }
 
-  // 1. Munculkan Pop-up Konfirmasi saat tombol Keluar di Sidebar diklik
-  logoutTrigger.addEventListener("click", (e) => {
-    e.preventDefault(); 
-    modalOverlay.classList.add("show");
+  if (!modalOverlay) return;
+
+  // Gunakan event delegation agar tombol logout tetap bisa diklik meski sidebar dimuat dinamis
+  document.addEventListener("click", (e) => {
+    const trigger = e.target.closest(".menu-item.logout") || 
+                    e.target.closest("#logout-trigger") || 
+                    e.target.closest("#btn-sidebar-keluar");
+    if (trigger) {
+      e.preventDefault();
+      modalOverlay.classList.add("show");
+    }
   });
 
   // 2. Sembunyikan Pop-up jika tombol "Batal" diklik
@@ -593,6 +600,8 @@ function initLogoutLogic() {
     btnBatal.addEventListener("click", () => {
       modalOverlay.classList.remove("show");
     });
+  } else {
+    console.warn("⚠️ [Logout API] Tombol Batal (#btn-close-logout) tidak ditemukan di dalam modal.");
   }
 
   // 3. Sembunyikan Pop-up jika area luar kotak (overlay abu-abu) diklik
@@ -604,9 +613,14 @@ function initLogoutLogic() {
 
   // 4. Eksekusi Hapus Sesi dan Redirect jika tombol "Konfirmasi" diklik
   if (btnKonfirmasi) {
-    btnKonfirmasi.addEventListener("click", () => {
+    btnKonfirmasi.addEventListener("click", (e) => {
+      e.preventDefault();
+      console.log("🚪 [Logout API] Melakukan logout dan membersihkan sesi...");
       localStorage.clear();
+      sessionStorage.clear();
       window.location.href = "../../loginbaru/baru.html";
     });
+  } else {
+    console.warn("⚠️ [Logout API] Tombol Konfirmasi (#btn-execute-logout) tidak ditemukan di dalam modal.");
   }
 }

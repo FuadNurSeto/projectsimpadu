@@ -16,7 +16,9 @@ class KelasController extends Controller
      */
     public function index()
     {
-        $kelas = Kelas::with(['prodi', 'tahunAkademik'])->get();
+        $kelas = Kelas::with(['prodi', 'tahunAkademik'])
+            ->withCount('mahasiswaKelasMks as terisi')
+            ->get();
 
         return response()->json($kelas);
     }
@@ -29,7 +31,9 @@ class KelasController extends Controller
      */
     public function show($id_kelas)
     {
-        $kelas = Kelas::with(['prodi', 'tahunAkademik'])->findOrFail($id_kelas);
+        $kelas = Kelas::with(['prodi', 'tahunAkademik'])
+            ->withCount('mahasiswaKelasMks as terisi')
+            ->findOrFail($id_kelas);
 
         return response()->json($kelas);
     }
@@ -95,7 +99,7 @@ class KelasController extends Controller
 
         return response()->json([
             'message' => 'Kelas updated successfully',
-            'data' => $kelas->load(['prodi', 'tahunAkademik']),
+            'data' => $kelas->load(['prodi', 'tahunAkademik'])->loadCount('mahasiswaKelasMks as terisi'),
         ]);
     }
 }

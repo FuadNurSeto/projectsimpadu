@@ -29,60 +29,67 @@
         <header class="topbar-container">
           <div
             class="page-header-left"
-            style="display: flex; align-items: center; gap: 16px"
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              gap: 2px;
+            "
           >
-            <button
-              id="menu-toggle"
-              style="
-                background: none;
-                border: none;
-                padding: 4px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-              "
+            <!-- Breadcrumb diletakkan di atas dengan margin-left agar sejajar dengan teks judul -->
+            <span
+              class="breadcrumb-text"
+              style="margin-left: 44px; display: block"
+              >Akademik / Data Master</span
             >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+
+            <!-- Baris Judul & Tombol Menu menggunakan align-items: center agar sejajar sempurna -->
+            <div style="display: flex; align-items: center; gap: 12px">
+              <button
+                id="menu-toggle"
+                style="
+                  background: none;
+                  border: none;
+                  padding: 4px;
+                  cursor: pointer;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  transition: opacity 0.2s;
+                "
               >
-                <path
-                  d="M4 6H20"
-                  stroke="#1e5bb9"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M4 12H20"
-                  stroke="#1e5bb9"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M4 18H20"
-                  stroke="#1e5bb9"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </button>
-            <h1
-              style="
-                font-size: 24px;
-                font-weight: 700;
-                color: #1e5bb9;
-                margin: 0;
-                font-family: &quot;Inter&quot;, sans-serif;
-              "
-            >
-              Tahun Akademik
-            </h1>
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4 6H20"
+                    stroke="#1e5bb9"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M4 12H20"
+                    stroke="#1e5bb9"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M4 18H20"
+                    stroke="#1e5bb9"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <h1 class="main-title" style="margin: 0">Tahun Akademik</h1>
+            </div>
           </div>
 
           <div class="user-profile-top">
@@ -108,35 +115,87 @@
             class="form-section-card"
             style="
               background: #ffffff;
-              border-radius: 12px;
+              border-radius: 16px;
               padding: 24px;
-              border: 1px solid #e2e8f0;
+              box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+              min-height: 1000px;
+              display: flex;
+              flex-direction: column;
             "
           >
-            <!-- Header Konten & Tombol Tambah Data -->
             <div
               style="
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 margin-bottom: 24px;
+                gap: 16px;
               "
             >
-              <div>
-                <h3 style="margin: 0; font-size: 18px; color: #0f172a">
-                  Daftar Periode Akademik
-                </h3>
-                <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748b">
-                  Pantau, tambah, dan atur status aktif tahun perkuliahan Kampus
-                  Poliban.
-                </p>
+              <div style="position: relative; width: 100%; max-width: 320px">
+                <span
+                  style="
+                    position: absolute;
+                    left: 16px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: #94a3b8;
+                    display: flex;
+                    align-items: center;
+                    pointer-events: none;
+                  "
+                >
+                  <i class="fas fa-search" style="font-size: 14px"></i>
+                </span>
+                <input
+                  type="text"
+                  id="search-tahun"
+                  placeholder="Cari tahun akademik (mis. 20261)..."
+                  style="
+                    width: 100%;
+                    padding: 10px 16px 10px 44px;
+                    background-color: #f8fafc;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 10px;
+                    font-size: 13px;
+                    color: #334155;
+                    outline: none;
+                    transition: all 0.2s;
+                  "
+                  onfocus="
+                    this.style.borderColor = '#2563eb';
+                    this.style.backgroundColor = '#ffffff';
+                    this.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
+                  "
+                  onblur="
+                    this.style.borderColor = '#e2e8f0';
+                    this.style.backgroundColor = '#f8fafc';
+                    this.style.boxShadow = 'none';
+                  "
+                />
               </div>
+
               <button
                 id="btn-buka-modal-tambah"
-                class="btn-save-changes"
-                style="width: auto; padding: 10px 20px; font-size: 13px"
+                style="
+                  background: #2563eb;
+                  color: #ffffff;
+                  border: none;
+                  padding: 10px 20px;
+                  border-radius: 8px;
+                  font-size: 13px;
+                  font-weight: 600;
+                  cursor: pointer;
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  transition: background 0.2s;
+                "
+                onmouseover="this.style.background = '#1d4ed8'"
+                onmouseout="this.style.background = '#2563eb'"
               >
-                <i class="fas fa-plus"></i> Tambah Tahun Akademik
+                <i class="fas fa-plus" style="font-size: 12px"></i> Tambah Tahun
+                Akademik
               </button>
             </div>
 
@@ -156,20 +215,22 @@
                       background-color: #f8fafc;
                       border-bottom: 2px solid #e2e8f0;
                       color: #475569;
+                      font-size: 12px;
+                      text-transform: uppercase;
+                      letter-spacing: 0.5px;
                     "
                   >
-                    <th style="padding: 12px 16px">No</th>
-                    <th style="padding: 12px 16px">Tahun Akademik</th>
-                    <th style="padding: 12px 16px">Semester</th>
-                    <th style="padding: 12px 16px">Status</th>
-                    <th style="padding: 12px 16px; text-align: center">Aksi</th>
+                    <th style="padding: 16px 24px">ID Tahun</th>
+                    <th style="padding: 16px 24px">Nama Tahun Akademik</th>
+                    <th style="padding: 16px 24px">Status</th>
+                    <th style="padding: 16px 24px; text-align: center">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="list-tahun-akademik">
                   <!-- Data akan di-inject otomatis oleh file js kamu -->
                   <tr>
                     <td
-                      colspan="5"
+                      colspan="4"
                       style="text-align: center; color: #64748b; padding: 40px"
                     >
                       Memuat data akademik...
@@ -178,103 +239,285 @@
                 </tbody>
               </table>
             </div>
+
+            <div
+              class="table-footer"
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-top: 24px;
+                border-top: 1px solid #f1f5f9;
+                background-color: #ffffff;
+                margin-top: auto;
+              "
+            >
+              <div style="font-size: 13px; color: #94a3b8; font-weight: 400">
+                Menampilkan
+                <span
+                  id="count-sekarang"
+                  style="color: #475569; font-weight: 500"
+                  >0</span
+                >
+                dari total
+                <span id="count-total" style="color: #475569; font-weight: 500"
+                  >0</span
+                >
+                data
+              </div>
+
+              <div
+                class="pagination-container"
+                style="display: flex; gap: 6px; align-items: center"
+              >
+                <button
+                  style="
+                    background: #ffffff;
+                    border: 1px solid #e2e8f0;
+                    color: #94a3b8;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 11px;
+                  "
+                >
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <button
+                  style="
+                    background: #2563eb;
+                    border: 1px solid #2563eb;
+                    color: #ffffff;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 6px;
+                    font-weight: 600;
+                    font-size: 13px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  1
+                </button>
+                <button
+                  style="
+                    background: #ffffff;
+                    border: 1px solid #e2e8f0;
+                    color: #64748b;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 6px;
+                    font-weight: 500;
+                    font-size: 13px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  2
+                </button>
+                <button
+                  style="
+                    background: #ffffff;
+                    border: 1px solid #e2e8f0;
+                    color: #64748b;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 6px;
+                    font-weight: 500;
+                    font-size: 13px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  3
+                </button>
+
+                <button
+                  style="
+                    background: #ffffff;
+                    border: 1px solid #e2e8f0;
+                    color: #64748b;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 11px;
+                  "
+                >
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </main>
     </div>
 
     <!-- ================= MODAL OVERLAY TAMBAH TAHUN ================= -->
-    <div id="modal-tambah-tahun" class="logout-modal-overlay">
-      <div class="logout-modal-box" style="max-width: 460px; text-align: left">
-        <h3 style="margin-bottom: 16px; font-size: 18px; color: #0f172a">
-          Tambah Tahun Akademik
-        </h3>
+    <div id="modal-tambah-tahun" class="modal-overlay hidden">
+      <div class="modal-card">
+        <!-- Header Modal -->
+        <div class="modal-header">
+          <h3 class="modal-title">Buat Tahun Akademik</h3>
+          <p class="modal-subtitle">
+            Masukkan periode tahun akademik baru ke dalam sistem.
+          </p>
+        </div>
 
-        <form id="form-tambah-tahun">
-          <div
-            style="
-              display: flex;
-              flex-direction: column;
-              gap: 16px;
-              margin-bottom: 24px;
-            "
-          >
-            <div class="form-group-field" style="width: 100%">
-              <label
-                style="
-                  font-size: 13px;
-                  font-weight: 600;
-                  color: #475569;
-                  margin-bottom: 6px;
-                  display: block;
-                "
-                >Tahun Akademik</label
-              >
-              <input
-                type="text"
-                id="input-tahun"
-                placeholder="Contoh: 2025/2026"
-                required
-                style="
-                  width: 100%;
-                  height: 40px;
-                  border: 1px solid #cbd5e1;
-                  border-radius: 6px;
-                  padding: 0 12px;
-                "
-              />
-            </div>
-            <div class="form-group-field" style="width: 100%">
-              <label
-                style="
-                  font-size: 13px;
-                  font-weight: 600;
-                  color: #475569;
-                  margin-bottom: 6px;
-                  display: block;
-                "
-                >Semester</label
-              >
-              <select
-                id="select-semester"
-                required
-                style="
-                  width: 100%;
-                  height: 40px;
-                  border: 1px solid #cbd5e1;
-                  border-radius: 6px;
-                  padding: 0 12px;
-                  background: #fff;
-                "
-              >
-                <option value="" disabled selected>-- Pilih Semester --</option>
-                <option value="Ganjil">Ganjil</option>
-                <option value="Genap">Genap</option>
+        <!-- Form Input -->
+        <form id="form-tambah-tahun" class="modal-form">
+          <!-- Input 1: Kode/ID Tahun -->
+          <div class="form-group">
+            <label for="id-tahun">ID Tahun Akademik <span class="text-danger">*</span></label>
+            <span class="helper-text">Format: YYYYY (Contoh: 20261 untuk 2026 Ganjil)</span>
+            <input type="text" id="id-tahun" class="form-input" placeholder="20261" required autocomplete="off" />
+          </div>
+
+          <!-- Input 2: Nama Tahun -->
+          <div class="form-group">
+            <label for="nama-tahun">Nama Tahun Akademik <span class="text-danger">*</span></label>
+            <input type="text" id="nama-tahun" class="form-input" placeholder="Misal: 2026 Ganjil" required autocomplete="off" />
+          </div>
+
+          <!-- Input 3: Dropdown Status -->
+          <div class="form-group">
+            <label for="status-tahun">Status Tahun Akademik <span class="text-danger">*</span></label>
+            <div class="select-wrapper">
+              <select id="status-tahun" class="form-select" required>
+                <option value="aktif">Aktif</option>
+                <option value="nonaktif">Non-Aktif</option>
               </select>
             </div>
           </div>
 
-          <div
-            class="logout-modal-actions"
-            style="justify-content: flex-end; gap: 12px"
-          >
-            <button
-              type="button"
-              id="btn-batal-tambah"
-              class="logout-btn-modal logout-btn-batal"
-              style="margin: 0"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              class="logout-btn-modal logout-btn-konfirmasi"
-              style="background: #1e5bb9; margin: 0; padding: 0 20px"
-            >
-              Simpan Data
-            </button>
+          <!-- Action Buttons Footer -->
+          <div class="modal-footer">
+            <button type="button" id="btn-batal-tambah" class="btn-cancel">Batal</button>
+            <button type="submit" class="btn-submit">Simpan Data</button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- ================= MODAL OVERLAY EDIT TAHUN ================= -->
+    <div id="modal-edit-tahun" class="modal-overlay hidden">
+      <div class="modal-card">
+        <!-- Header Modal -->
+        <div class="modal-header">
+          <h3 class="modal-title">Ubah Tahun Akademik</h3>
+          <p class="modal-subtitle">
+            Perbarui data tahun akademik sistem SIMPADU.
+          </p>
+        </div>
+
+        <!-- Form Input -->
+        <form id="form-edit-tahun" class="modal-form">
+          <!-- Input 1: Kode/ID Tahun (Read-only) -->
+          <div class="form-group">
+            <label for="edit-id-tahun"
+              >ID Tahun Akademik <span class="text-danger">*</span></label
+            >
+            <input type="text" id="edit-id-tahun" class="form-input field-disabled" readonly />
+          </div>
+
+          <!-- Input 2: Nama Tahun -->
+          <div class="form-group">
+            <label for="edit-nama-tahun"
+              >Nama Tahun Akademik <span class="text-danger">*</span></label
+            >
+            <input type="text" id="edit-nama-tahun" class="form-input" placeholder="Misal: 2026 Genap" required autocomplete="off" />
+          </div>
+
+          <!-- Input 3: Dropdown Status -->
+          <div class="form-group">
+            <label for="edit-status-tahun"
+              >Status Tahun Akademik <span class="text-danger">*</span></label
+            >
+            <div class="select-wrapper">
+              <select id="edit-status-tahun" class="form-select" required>
+                <option value="aktif">Aktif</option>
+                <option value="nonaktif">Non-Aktif</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Action Buttons Footer -->
+          <div class="modal-footer">
+            <button type="button" id="btn-batal-edit" class="btn-cancel">
+              Batal
+            </button>
+            <button type="submit" class="btn-submit">Simpan Perubahan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ================= MODAL KONFIRMASI STATUS (DINAMIS) ================= -->
+    <div id="modal-konfirmasi-status" class="modal-overlay hidden">
+      <div class="modal-card modal-confirm-card">
+        <div class="confirm-icon-wrapper">
+          <div id="confirm-icon-box"></div>
+        </div>
+
+        <h3 id="confirm-title" class="confirm-title">Judul Konfirmasi</h3>
+        <p id="confirm-desc" class="confirm-desc">
+          Kalimat deskripsi konfirmasi...
+        </p>
+
+        <div class="modal-footer confirm-footer">
+          <button type="button" id="btn-status-batal" class="btn-cancel">
+            Batal
+          </button>
+          <button type="button" id="btn-status-ya" class="btn-submit">
+            Ya, Eksekusi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= MODAL OVERLAY LOGOUT ================= -->
+    <div id="logout-modal" class="logout-modal-overlay">
+      <div class="logout-modal-box">
+        <div class="logout-modal-icon-wrapper">
+          <img
+            src="../../../Asset/kluar.png"
+            alt="Logout"
+            class="logout-modal-icon-img"
+          />
+        </div>
+
+        <h3>Konfirmasi Keluar Akun</h3>
+        <p>
+          Apakah Anda yakin ingin keluar dari sistem?<br />
+          Anda harus login kembali menggunakan Email untuk mengakses data
+          akademik SIMPADU.
+        </p>
+
+        <div class="logout-modal-actions">
+          <button
+            id="btn-batal-logout"
+            class="logout-btn-modal logout-btn-batal"
+          >
+            Batal
+          </button>
+          <button class="logout-btn-modal logout-btn-konfirmasi">
+            Ya, Keluar Akun
+          </button>
+        </div>
       </div>
     </div>
 
