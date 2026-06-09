@@ -1,0 +1,328 @@
+/* ==========================================================================
+   --- RESET ENGINE & BASE LAYOUT DARI KODE UTAMA ---
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+  overflow-x: hidden;
+}
+
+/* Mengatur agar sidebar dan workspace sejajar horizontal tanpa patah */
+.dashboard-layout-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Memastikan elemen loader sidebar mengambil space konstan jika tidak bergaya fixed */
+#sidebar-container {
+  width: 260px;
+  flex-shrink: 0;
+}
+
+/* PERBAIKAN UTAMA: Mengatur panel kanan agar memberikan celah seukuran sidebar */
+/* Panel kanan otomatis mengikuti aliran Flexbox tanpa perlu dorongan margin */
+.main-right-panel {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8fafc;
+  min-width: 0;
+
+  margin-left: 0;
+  width: 100%;
+  padding: 24px;
+}
+
+/* Baris header atas (Breadcrumbs & Profile) */
+.main-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hamburger-menu-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.breadcrumbs-nav .parent-bc {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.breadcrumbs-nav .current-page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 2px;
+}
+
+.topbar-right-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-meta {
+  text-align: right;
+}
+
+.meta-name {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.meta-role {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.profile-avatar-circle {
+  width: 40px;
+  height: 40px;
+  background-color: #2563eb;
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Workspace wrapper */
+.workspace-area {
+  width: 100%;
+}
+
+.data-card-wrapper {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================================================
+   --- TAB NAVIGASI UTAMA (JURUSAN / PRODI) ---
+   ========================================================================== */
+.tabs-navigation {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 8px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  font-family: "Inter", sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
+}
+
+.tab-btn.active {
+  background-color: #2563eb;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Action block (Search & Tambah) */
+.action-bar-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.search-box-container {
+  position: relative;
+  flex-grow: 1;
+  max-width: 400px;
+}
+
+.search-box-container .search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.search-box-container input {
+  width: 100%;
+  padding: 10px 14px 10px 40px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.search-box-container input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.add-data-btn {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-data-btn:hover {
+  background-color: #1d4ed8;
+}
+
+/* ==========================================================================
+   --- ACTION BUTTON FILTER MINI ---
+   ========================================================================== */
+.action-mini-btn-filter {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-mini-btn-filter:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+/* ==========================================================================
+   --- BADGES COUNTER (TOTAL PROGRAM STUDI) ---
+   ========================================================================== */
+.badge-prodi-count {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.badge-prodi-count.has-prodi {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.badge-prodi-count.no-prodi {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+/* ==========================================================================
+   --- DATA DATA TABEL ---
+   ========================================================================== */
+.responsive-table-holder {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.data-academic-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.data-academic-table th {
+  background-color: #f8fafc;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.data-academic-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.data-academic-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.action-mini-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: #64748b;
+}
+
+.action-mini-btn:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+  background-color: #f0f5ff;
+}
+
+/* ==========================================================================
+   --- FOOTER INFO AREA ---
+   ========================================================================== */
+#pagination-info {
+  font-family: "Inter", sans-serif;
+  font-size: 12.5px;
+  color: #64748b;
+  font-weight: 500;
+  padding-top: 20px;
+}
