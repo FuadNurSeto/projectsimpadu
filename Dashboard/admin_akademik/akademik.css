@@ -31,6 +31,8 @@ body {
   top: 0;
   left: 0;
   z-index: 100;
+  overflow-y: auto; /* Memungkinkan scroll jika menu terlalu banyak/panjang, dan scrollbar akan terlihat */
+  /* Hapus properti yang menyembunyikan scrollbar agar terlihat saat overflow */
 }
 
 .main-content {
@@ -839,6 +841,44 @@ input::-ms-clear {
   color: #94a3b8; /* Abu-abu muted sesuai desain */
   font-weight: 500;
   margin-bottom: 2px;
+}
+
+/* ==========================================================================
+   --- PAGINATION ITEM STYLES (Untuk Halaman Kelas) ---
+   ========================================================================== */
+.pagination-item {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 4px 8px; /* Mengurangi padding untuk ukuran lebih kecil */
+  border-radius: 6px;
+  cursor: pointer;
+  color: #475569;
+  font-size: 12px; /* Mengurangi ukuran font */
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 28px; /* Memastikan lebar minimum untuk angka satu digit */
+  height: 28px; /* Memastikan tinggi konsisten */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-item.active {
+  background: #1e5bb9;
+  color: white;
+  border-color: #1e5bb9;
+  font-weight: 600;
+}
+
+.pagination-item:disabled {
+  background: #f8fafc;
+  cursor: not-allowed;
+  color: #94a3b8;
+}
+
+.pagination-item:not(:disabled):hover {
+  background: #f0f4f8;
+  border-color: #cbd5e1;
 }
 
 .main-title {

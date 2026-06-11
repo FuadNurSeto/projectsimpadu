@@ -238,8 +238,8 @@ function renderPagination() {
 
   // Tombol Previous
   const prevBtn = document.createElement("button");
+  prevBtn.className = "pagination-item";
   prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
-  prevBtn.style.cssText = `border: 1px solid #e2e8f0; background: ${currentPage === 1 ? "#f8fafc" : "#ffffff"}; padding: 6px 12px; border-radius: 6px; cursor: ${currentPage === 1 ? "not-allowed" : "pointer"}; color: #94a3b8;`;
   prevBtn.disabled = currentPage === 1;
   prevBtn.onclick = () => changePage(currentPage - 1);
   container.appendChild(prevBtn);
@@ -247,22 +247,16 @@ function renderPagination() {
   // Tombol Angka Halaman
   for (let i = 1; i <= totalPages; i++) {
     const pageBtn = document.createElement("button");
+    pageBtn.className = `pagination-item ${i === currentPage ? "active" : ""}`;
     pageBtn.innerText = i;
-    if (i === currentPage) {
-      pageBtn.style.cssText =
-        "border: none; background: #1e5bb9; color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600;";
-    } else {
-      pageBtn.style.cssText =
-        "border: 1px solid #e2e8f0; background: #ffffff; padding: 6px 12px; border-radius: 6px; cursor: pointer; color: #475569;";
-      pageBtn.onclick = () => changePage(i);
-    }
+    pageBtn.onclick = () => changePage(i);
     container.appendChild(pageBtn);
   }
 
   // Tombol Next
   const nextBtn = document.createElement("button");
+  nextBtn.className = "pagination-item";
   nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
-  nextBtn.style.cssText = `border: 1px solid #e2e8f0; background: ${currentPage === totalPages ? "#f8fafc" : "#ffffff"}; padding: 6px 12px; border-radius: 6px; cursor: ${currentPage === totalPages ? "not-allowed" : "pointer"}; color: #475569;`;
   nextBtn.disabled = currentPage === totalPages;
   nextBtn.onclick = () => changePage(currentPage + 1);
   container.appendChild(nextBtn);
