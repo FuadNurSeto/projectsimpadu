@@ -228,7 +228,6 @@
                       placeholder="Memuat NIP/NIK..."
                       disabled
                     />
-                    <i class="fas fa-circle-info lock-icon"></i>
                   </div>
                 </div>
                 <div class="form-group-field">
@@ -272,11 +271,14 @@
               <div class="form-grid-3-col">
                 <div class="form-group-field">
                   <label>Kata Sandi Saat Ini</label>
-                  <input
-                    type="password"
-                    id="password-current"
-                    placeholder="Kata sandi lama..."
-                  />
+                  <div class="input-with-icon-right">
+                    <input
+                      type="password"
+                      id="password-current"
+                      placeholder="Kata sandi lama..."
+                    />
+                    <i class="far fa-eye toggle-password-view"></i>
+                  </div>
                 </div>
                 <div class="form-group-field">
                   <label>Kata Sandi Baru</label>
@@ -315,7 +317,11 @@
       <div class="logout-modal-box">
         <!-- Icon Keluar Bulat Merah Muda -->
         <div class="logout-modal-icon-wrapper">
-          <img src="../../Asset/kluar.png" alt="Logout" class="logout-modal-icon-img" />
+          <img
+            src="../../Asset/kluar.png"
+            alt="Logout"
+            class="logout-modal-icon-img"
+          />
         </div>
 
         <!-- Konten Teks -->
@@ -328,10 +334,17 @@
 
         <!-- Tombol Aksi -->
         <div class="logout-modal-actions">
-          <button id="btn-batal-logout" class="logout-btn-modal logout-btn-batal">
+          <button
+            id="btn-batal-logout"
+            class="logout-btn-modal logout-btn-batal"
+          >
             Batal
           </button>
-          <a href="../../loginbaru/baru.html" class="logout-btn-modal logout-btn-konfirmasi">Ya, Keluar Akun</a>
+          <a
+            href="../../loginbaru/baru.html"
+            class="logout-btn-modal logout-btn-konfirmasi"
+            >Ya, Keluar Akun</a
+          >
         </div>
       </div>
     </div>

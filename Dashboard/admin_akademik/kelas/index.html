@@ -107,7 +107,7 @@
               border-radius: 16px;
               padding: 24px;
               box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-              min-height: 1000px;
+              min-height: 750px;
               display: flex;
               flex-direction: column;
             "
@@ -237,7 +237,14 @@
               </button>
             </div>
 
-            <div style="overflow-x: auto">
+            <div
+              style="
+                position: relative;
+                overflow: visible;
+                padding-top: 10px;
+                margin-top: -10px;
+              "
+            >
               <table
                 style="
                   width: 100%;
@@ -310,55 +317,349 @@
       </main>
     </div>
 
-    <div id="modal-tambah-kelas" class="modal-overlay hidden">
-      <div class="modal-card">
-        <div class="modal-header">
-          <h3 class="modal-title">Tambah Data Kelas</h3>
+    <div id="modal-tambah-kelas" class="modal-layout-overlay">
+      <div class="modal-content-card" style="max-width: 850px">
+        <div
+          class="modal-header-section"
+          style="
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            padding: 32px 40px 10px;
+          "
+        >
+          <h2
+            style="font-size: 20px; font-weight: 700; color: #0f172a; margin: 0"
+          >
+            Buat Kelas Baru
+          </h2>
+          <p style="font-size: 13px; color: #64748b; margin: 0">
+            Lengkapi form di bawah ini untuk menambahkan data kelas ke sistem.
+          </p>
         </div>
-        <form id="form-tambah-kelas" class="modal-form">
-          <div class="form-group">
-            <label>Kode Kelas <span class="text-danger">*</span></label>
-            <input
-              type="text"
-              id="add-kode-kelas"
-              class="form-input"
-              required
-              placeholder="Contoh: TI-4E"
-            />
+
+        <form id="form-tambah-kelas">
+          <div class="modal-body-section" style="padding: 30px 40px">
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                margin-bottom: 20px;
+              "
+            >
+              <div class="input-form-control">
+                <label
+                  >Tahun Akademik <span style="color: #ef4444">*</span></label
+                >
+                <select id="add-tahun" required></select>
+              </div>
+              <div class="input-form-control">
+                <label
+                  >Program Studi <span style="color: #ef4444">*</span></label
+                >
+                <select id="add-prodi" required></select>
+              </div>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                margin-bottom: 20px;
+              "
+            >
+              <div class="input-form-control">
+                <label>Kode Kelas <span style="color: #ef4444">*</span></label>
+                <input
+                  type="text"
+                  id="add-kode-kelas"
+                  required
+                  placeholder="TI-4E"
+                />
+              </div>
+              <div class="input-form-control">
+                <label>Nama Kelas <span style="color: #ef4444">*</span></label>
+                <input
+                  type="text"
+                  id="add-nama-kelas"
+                  required
+                  placeholder="Teknik Informatika 4E"
+                />
+              </div>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                margin-bottom: 20px;
+              "
+            >
+              <div class="input-form-control">
+                <label
+                  >Kapasitas Maksimal Mahasiswa
+                  <span style="color: #ef4444">*</span></label
+                >
+                <div style="position: relative">
+                  <input
+                    type="number"
+                    id="add-kapasitas"
+                    required
+                    placeholder="28"
+                    style="padding-right: 80px"
+                  />
+                  <span
+                    style="
+                      position: absolute;
+                      right: 16px;
+                      top: 50%;
+                      transform: translateY(-50%);
+                      color: #94a3b8;
+                      font-size: 13px;
+                    "
+                    >Peserta</span
+                  >
+                </div>
+              </div>
+              <div class="input-form-control">
+                <label
+                  >Status Kelas <span style="color: #ef4444">*</span></label
+                >
+                <select id="add-status" required>
+                  <option value="aktif">🟢 Aktif</option>
+                  <option value="non-aktif">⚪ Non-Aktif</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="input-form-control">
+              <label
+                >Keterangan / Catatan Kelas
+                <span style="color: #ef4444">*</span></label
+              >
+              <textarea
+                id="add-keterangan"
+                placeholder="Kelas semester genap."
+                style="
+                  height: 120px;
+                  padding: 12px;
+                  border: 1px solid #cbd5e1;
+                  border-radius: 8px;
+                  resize: none;
+                  font-family: inherit;
+                  font-size: 13.5px;
+                "
+              ></textarea>
+            </div>
           </div>
-          <div class="form-group">
-            <label>Nama Kelas <span class="text-danger">*</span></label>
-            <input
-              type="text"
-              id="add-nama-kelas"
-              class="form-input"
-              required
-              placeholder="Contoh: Teknik Informatika 4E"
-            />
-          </div>
-          <div class="form-group">
-            <label>Program Studi <span class="text-danger">*</span></label>
-            <select id="add-prodi" class="form-select" required></select>
-          </div>
-          <div class="form-group">
-            <label>Tahun Akademik <span class="text-danger">*</span></label>
-            <select id="add-tahun" class="form-select" required></select>
-          </div>
-          <div class="form-group">
-            <label>Kapasitas <span class="text-danger">*</span></label>
-            <input
-              type="number"
-              id="add-kapasitas"
-              class="form-input"
-              required
-              placeholder="0"
-            />
-          </div>
-          <div class="modal-footer">
-            <button type="button" id="btn-batal-tambah" class="btn-cancel">
+
+          <div
+            class="modal-footer-section"
+            style="
+              padding: 20px 40px 40px;
+              background: transparent;
+              border-top: none;
+            "
+          >
+            <button
+              type="button"
+              id="btn-batal-tambah"
+              class="btn-cancel"
+              style="padding: 12px 32px; border-radius: 10px"
+            >
               Batal
             </button>
-            <button type="submit" class="btn-submit">Simpan</button>
+            <button
+              type="submit"
+              class="btn-submit-save"
+              style="
+                padding: 12px 32px;
+                border-radius: 10px;
+                background-color: #1b63dc;
+              "
+            >
+              Simpan Kelas
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ================= MODAL OVERLAY EDIT KELAS ================= -->
+    <div id="modal-edit-kelas" class="modal-layout-overlay">
+      <div class="modal-content-card" style="max-width: 850px">
+        <div
+          class="modal-header-section"
+          style="
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            padding: 32px 40px 10px;
+          "
+        >
+          <h2
+            style="font-size: 20px; font-weight: 700; color: #0f172a; margin: 0"
+          >
+            Ubah Data Kelas
+          </h2>
+          <p style="font-size: 13px; color: #64748b; margin: 0">
+            Perbarui informasi untuk kelas
+            <span id="edit-header-kode" style="font-weight: 700; color: #1e293b"
+              >-</span
+            >
+          </p>
+        </div>
+
+        <form id="form-edit-kelas">
+          <input type="hidden" id="edit-id-kelas" />
+          <div class="modal-body-section" style="padding: 30px 40px">
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                margin-bottom: 20px;
+              "
+            >
+              <div class="input-form-control">
+                <label
+                  >Tahun Akademik <span style="color: #ef4444">*</span></label
+                >
+                <select id="edit-tahun" required></select>
+              </div>
+              <div class="input-form-control">
+                <label
+                  >Program Studi <span style="color: #ef4444">*</span></label
+                >
+                <select id="edit-prodi" required></select>
+              </div>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                margin-bottom: 20px;
+              "
+            >
+              <div class="input-form-control">
+                <label>Kode Kelas <span style="color: #ef4444">*</span></label>
+                <input
+                  type="text"
+                  id="edit-kode-kelas"
+                  required
+                  placeholder="TI-4E"
+                />
+              </div>
+              <div class="input-form-control">
+                <label>Nama Kelas <span style="color: #ef4444">*</span></label>
+                <input
+                  type="text"
+                  id="edit-nama-kelas"
+                  required
+                  placeholder="Teknik Informatika 4E"
+                />
+              </div>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                margin-bottom: 20px;
+              "
+            >
+              <div class="input-form-control">
+                <label
+                  >Kapasitas Maksimal Mahasiswa
+                  <span style="color: #ef4444">*</span></label
+                >
+                <div style="position: relative">
+                  <input
+                    type="number"
+                    id="edit-kapasitas"
+                    required
+                    placeholder="27"
+                    style="padding-right: 80px"
+                  />
+                  <span
+                    style="
+                      position: absolute;
+                      right: 16px;
+                      top: 50%;
+                      transform: translateY(-50%);
+                      color: #94a3b8;
+                      font-size: 13px;
+                      pointer-events: none;
+                    "
+                    >Peserta</span
+                  >
+                </div>
+              </div>
+              <div class="input-form-control">
+                <label
+                  >Status Kelas <span style="color: #ef4444">*</span></label
+                >
+                <select id="edit-status" required>
+                  <option value="aktif">🟢 Aktif</option>
+                  <option value="non-aktif">⚪ Non-Aktif</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="input-form-control">
+              <label
+                >Keterangan / Catatan Kelas
+                <span style="color: #ef4444">*</span></label
+              >
+              <textarea
+                id="edit-keterangan"
+                placeholder="Kelas semester genap."
+                style="
+                  height: 120px;
+                  padding: 12px;
+                  border: 1px solid #cbd5e1;
+                  border-radius: 8px;
+                  resize: none;
+                  font-family: inherit;
+                  font-size: 13.5px;
+                "
+              ></textarea>
+            </div>
+          </div>
+
+          <div
+            class="modal-footer-section"
+            style="
+              padding: 20px 40px 40px;
+              background: transparent;
+              border-top: none;
+            "
+          >
+            <button
+              type="button"
+              id="btn-batal-edit"
+              class="btn-cancel"
+              style="padding: 12px 32px; border-radius: 10px"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="btn-submit-save"
+              style="
+                padding: 12px 32px;
+                border-radius: 10px;
+                background-color: #1b63dc;
+              "
+            >
+              Simpan Perubahan
+            </button>
           </div>
         </form>
       </div>

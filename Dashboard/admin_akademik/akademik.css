@@ -779,6 +779,12 @@ body {
   cursor: pointer;
 }
 
+/* Sembunyikan ikon mata bawaan browser (Edge/Chrome) agar tidak double dengan custom icon */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
 .form-actions-row {
   display: flex;
   margin-top: 24px;

@@ -35,25 +35,31 @@ document.addEventListener("DOMContentLoaded", () => {
 function setDynamicProfile() {
   const loggedInName = localStorage.getItem("name") || "Admin Akademik";
 
-  // Ganti nama di Topbar Header
-  const topbarNameEl = document.querySelector(".user-name");
-  if (topbarNameEl) topbarNameEl.innerText = loggedInName;
+  // Update semua elemen nama (Topbar Header & Card Profil Kiri)
+  const nameElements = document.querySelectorAll(".user-name");
+  nameElements.forEach((el) => {
+    el.innerText = loggedInName;
+  });
 
   // Ganti nama di Banner Selamat Datang
   const welcomeBannerEl = document.querySelector(".welcome-banner h2");
   if (welcomeBannerEl)
     welcomeBannerEl.innerText = `Selamat Datang, ${loggedInName}!`;
 
-  // Buat inisial avatar otomatis (misal: Aditya Pratama -> AP)
-  const avatarEl = document.querySelector(".user-avatar-badge");
-  if (avatarEl) {
+  // Update semua inisial avatar secara otomatis (Topbar & Card Profil Kiri)
+  const avatarElements = document.querySelectorAll(".user-avatar-badge");
+  if (avatarElements.length > 0) {
     const initials = loggedInName
       .split(" ")
+      .filter((n) => n.length > 0)
       .map((n) => n[0])
       .slice(0, 2)
       .join("")
       .toUpperCase();
-    avatarEl.innerText = initials;
+    
+    avatarElements.forEach((el) => {
+      el.innerText = initials || "AA";
+    });
   }
 }
 
@@ -130,8 +136,11 @@ async function updateKelasStatsAndTable() {
     if (totalKelasEl)
       totalKelasEl.innerText = kelas.length.toLocaleString("id-ID");
 
+    // Perbaikan: Gunakan toLowerCase() agar pengecekan status tidak sensitif huruf besar/kecil
     const kelasAktif = kelas.filter(
-      (item) => item.status === "aktif" || item.status === "1",
+      (item) =>
+        item.status?.toString().toLowerCase() === "aktif" ||
+        item.status?.toString() === "1",
     );
     renderTabelKelas(kelasAktif);
   } catch (error) {
@@ -203,7 +212,12 @@ function renderTabelKelas(listKelas) {
 
     // Ambil data kapasitas dan jumlah terisi dari objek kelas
     const kapasitas = kelas.kapasitas_mahasiswa || 40;
-    const terisi = kelas.terisi || 0;
+
+    // Gunakan jumlah_mahasiswa (alias baru) atau fallback ke count default Laravel
+    const terisi =
+      kelas.jumlah_mahasiswa !== undefined
+        ? kelas.jumlah_mahasiswa
+        : kelas.mahasiswa_kelas_mks_count || 0;
 
     const kapasitasTerisi =
       terisi >= kapasitas
@@ -435,13 +449,14 @@ document.addEventListener("DOMContentLoaded", () => {
 // 1. FUNGSI MEMBACA PROFIL (Endpoint #45 GET /api/akademik/users/me)
 async function getProfilDariVPS() {
   try {
-    const token = localStorage.getItem("token") || localStorage.getItem("auth_token");
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("auth_token");
     if (!token) throw new Error("Token tidak ditemukan di localStorage.");
 
     const headers = {
       "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Authorization": `Bearer ${token}`
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
     };
 
     // Sesuai Dokumentasi #45: Endpoint profil user login
@@ -450,7 +465,8 @@ async function getProfilDariVPS() {
       headers: headers,
     });
 
-    if (!response.ok) throw new Error(`Server merespon dengan status: ${response.status}`);
+    if (!response.ok)
+      throw new Error(`Server merespon dengan status: ${response.status}`);
 
     const user = await response.json();
     console.log("Data profil sukses diterima dari VPS:", user);
@@ -461,15 +477,18 @@ async function getProfilDariVPS() {
     // 1. Isi Form Input Informasi Pribadi
     document.getElementById("profile-full-name").value = user.name || "";
     document.getElementById("profile-email").value = user.email || "";
-    
+
     if (document.getElementById("profile-nip")) {
       // Sesuai Dokumentasi: Menggunakan 'nomor_identitas'
-      document.getElementById("profile-nip").value = user.nomor_identitas || "-";
+      document.getElementById("profile-nip").value =
+        user.nomor_identitas || "-";
     }
     if (document.getElementById("profile-role")) {
       // Sesuai Dokumentasi: 'roles' berupa array
       if (user.roles && user.roles.length > 0) {
-        const namaRoleBersih = user.roles[0].replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
+        const namaRoleBersih = user.roles[0]
+          .replace("_", " ")
+          .replace(/\b\w/g, (c) => c.toUpperCase());
         document.getElementById("profile-role").value = namaRoleBersih;
       } else {
         document.getElementById("profile-role").value = "Admin Akademik";
@@ -484,7 +503,6 @@ async function getProfilDariVPS() {
     if (topbarName) topbarName.innerText = user.name || "Admin Akademik";
 
     localStorage.setItem("name", user.name);
-
   } catch (error) {
     console.error("Gagal memuat profil dari server VPS:", error);
     const elName = document.getElementById("profile-full-name");
@@ -494,26 +512,21 @@ async function getProfilDariVPS() {
 
 // 2. FUNGSI MENGUBAH KATA SANDI (Endpoint #37 POST /api/akademik/users/{id}/reset-password)
 function initAksiKeamananProfil() {
+  // --- A. LOGIKA UPDATE INFORMASI PROFIL (Nama & Email) ---
   const btnSaveChanges = document.querySelector(".btn-save-changes");
   if (btnSaveChanges) {
     btnSaveChanges.addEventListener("click", async (e) => {
       e.preventDefault();
 
-      const passwordNew = document.getElementById("password-new").value;
-      const passwordConfirm = document.getElementById("password-confirm").value;
+      const name = document.getElementById("profile-full-name").value;
+      const email = document.getElementById("profile-email").value;
 
-      if (!passwordNew && !passwordConfirm) {
-        alert("Silakan isi kolom Kata Sandi Baru jika ingin melakukan pembaruan keamanan.");
-        return;
-      }
-
-      if (passwordNew !== passwordConfirm) {
-        alert("Konfirmasi kata sandi baru tidak cocok. Periksa kembali.");
-        return;
-      }
+      if (!name || !email) return alert("Nama dan Email tidak boleh kosong.");
 
       if (!currentUserId) {
-        alert("Gagal memproses. ID pengguna belum termuat sempurna dari server.");
+        alert(
+          "Gagal memproses. ID pengguna belum termuat sempurna dari server.",
+        );
         return;
       }
 
@@ -521,22 +534,26 @@ function initAksiKeamananProfil() {
         btnSaveChanges.innerText = "Menyimpan...";
         btnSaveChanges.disabled = true;
 
-        // Sesuai Dokumentasi #37: POST ke /api/akademik/users/{id_user}/reset-password
-        const response = await fetch(`${API_BASE_URL}/users/${currentUserId}/reset-password`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
+        // Sesuai Dokumentasi #3: PUT ke /api/akademik/users/{id_user} untuk update profil
+        const response = await fetch(
+          `${API_BASE_URL}/users/${currentUserId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({ name, email }),
           },
-          body: JSON.stringify({ password: passwordNew }),
-        });
+        );
 
-        if (!response.ok) throw new Error("Gagal memperbarui kata sandi di server VPS.");
+        if (!response.ok)
+          throw new Error("Gagal memperbarui informasi profil di server VPS.");
 
-        alert("Kata sandi akun Anda berhasil diperbarui langsung di VPS Simpadu!");
-        document.getElementById("password-new").value = "";
-        document.getElementById("password-confirm").value = "";
+        alert("Profil Anda berhasil diperbarui!");
+        localStorage.setItem("name", name);
+        setDynamicProfile(); // Refresh tampilan nama di dashboard/sidebar
       } catch (error) {
         alert(error.message);
       } finally {
@@ -545,20 +562,76 @@ function initAksiKeamananProfil() {
       }
     });
   }
-  
+
+  // --- B. LOGIKA UPDATE KATA SANDI (Keamanan) ---
+  const btnUpdatePass = document.querySelector(".btn-update-password");
+  if (btnUpdatePass) {
+    btnUpdatePass.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      const passwordNew = document.getElementById("password-new").value;
+      const passwordConfirm = document.getElementById("password-confirm").value;
+
+      if (!passwordNew) {
+        alert("Silakan isi kolom Kata Sandi Baru.");
+        return;
+      }
+
+      if (passwordNew !== passwordConfirm) {
+        alert("Konfirmasi kata sandi baru tidak cocok.");
+        return;
+      }
+
+      try {
+        btnUpdatePass.innerText = "Memproses...";
+        btnUpdatePass.disabled = true;
+
+        // Sesuai Dokumentasi #37: POST ke /api/akademik/users/{id_user}/reset-password
+        const response = await fetch(
+          `${API_BASE_URL}/users/${currentUserId}/reset-password`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({ password: passwordNew }),
+          },
+        );
+
+        if (!response.ok) throw new Error("Gagal memperbarui kata sandi.");
+
+        alert("Kata sandi Anda berhasil diperbarui!");
+        document.getElementById("password-new").value = "";
+        document.getElementById("password-confirm").value = "";
+        if (document.getElementById("password-current")) {
+          document.getElementById("password-current").value = "";
+        }
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        btnUpdatePass.innerText = "Perbarui Password";
+        btnUpdatePass.disabled = false;
+      }
+    });
+  }
+
   // Fitur Toggle Show/Hide Password
-  const togglePasswordIcons = document.querySelectorAll('.toggle-password-view');
-  togglePasswordIcons.forEach(icon => {
-    icon.addEventListener('click', function () {
+  const togglePasswordIcons = document.querySelectorAll(
+    ".toggle-password-view",
+  );
+  togglePasswordIcons.forEach((icon) => {
+    icon.addEventListener("click", function () {
       const inputField = this.previousElementSibling;
       if (inputField.type === "password") {
         inputField.type = "text";
-        this.classList.remove('fa-eye');
-        this.classList.add('fa-eye-slash');
+        this.classList.remove("fa-eye");
+        this.classList.add("fa-eye-slash");
       } else {
         inputField.type = "password";
-        this.classList.remove('fa-eye-slash');
-        this.classList.add('fa-eye');
+        this.classList.remove("fa-eye-slash");
+        this.classList.add("fa-eye");
       }
     });
   });
@@ -586,9 +659,10 @@ function initLogoutLogic() {
 
   // Gunakan event delegation agar tombol logout tetap bisa diklik meski sidebar dimuat dinamis
   document.addEventListener("click", (e) => {
-    const trigger = e.target.closest(".menu-item.logout") || 
-                    e.target.closest("#logout-trigger") || 
-                    e.target.closest("#btn-sidebar-keluar");
+    const trigger =
+      e.target.closest(".menu-item.logout") ||
+      e.target.closest("#logout-trigger") ||
+      e.target.closest("#btn-sidebar-keluar");
     if (trigger) {
       e.preventDefault();
       modalOverlay.classList.add("show");
@@ -601,7 +675,9 @@ function initLogoutLogic() {
       modalOverlay.classList.remove("show");
     });
   } else {
-    console.warn("⚠️ [Logout API] Tombol Batal (#btn-close-logout) tidak ditemukan di dalam modal.");
+    console.warn(
+      "⚠️ [Logout API] Tombol Batal (#btn-close-logout) tidak ditemukan di dalam modal.",
+    );
   }
 
   // 3. Sembunyikan Pop-up jika area luar kotak (overlay abu-abu) diklik
@@ -621,6 +697,8 @@ function initLogoutLogic() {
       window.location.href = "../../loginbaru/baru.html";
     });
   } else {
-    console.warn("⚠️ [Logout API] Tombol Konfirmasi (#btn-execute-logout) tidak ditemukan di dalam modal.");
+    console.warn(
+      "⚠️ [Logout API] Tombol Konfirmasi (#btn-execute-logout) tidak ditemukan di dalam modal.",
+    );
   }
 }

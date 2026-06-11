@@ -17,7 +17,7 @@ class KelasController extends Controller
     public function index()
     {
         $kelas = Kelas::with(['prodi', 'tahunAkademik'])
-            ->withCount('mahasiswaKelasMks as terisi')
+            ->withCount('mahasiswaKelasMks as jumlah_mahasiswa')
             ->get();
 
         return response()->json($kelas);
@@ -32,7 +32,7 @@ class KelasController extends Controller
     public function show($id_kelas)
     {
         $kelas = Kelas::with(['prodi', 'tahunAkademik'])
-            ->withCount('mahasiswaKelasMks as terisi')
+            ->withCount('mahasiswaKelasMks as jumlah_mahasiswa')
             ->findOrFail($id_kelas);
 
         return response()->json($kelas);
@@ -99,7 +99,7 @@ class KelasController extends Controller
 
         return response()->json([
             'message' => 'Kelas updated successfully',
-            'data' => $kelas->load(['prodi', 'tahunAkademik'])->loadCount('mahasiswaKelasMks as terisi'),
+            'data' => $kelas->load(['prodi', 'tahunAkademik'])->loadCount('mahasiswaKelasMks as jumlah_mahasiswa'),
         ]);
     }
 }

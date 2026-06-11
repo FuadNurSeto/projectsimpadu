@@ -18,8 +18,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
         menuLinks.forEach((link) => {
           const hrefValue = link.getAttribute("href");
-          // Jika URL browser saat ini mengandung atau sama dengan href di sidebar
-          if (currentPath.includes(hrefValue)) {
+
+          // Abaikan link logout atau anchor (#) agar tidak dianggap aktif otomatis di setiap halaman
+          if (!hrefValue || hrefValue === "#" || link.parentElement.classList.contains("logout")) return;
+
+          // Ambil direktori folder dari menu (misal: /Dashboard/admin_akademik/kelas/)
+          const menuFolder = hrefValue.substring(
+            0,
+            hrefValue.lastIndexOf("/") + 1,
+          );
+
+          const isExactMatch = currentPath === hrefValue;
+          // Jika berada di folder yang sama (untuk halaman detail), tapi abaikan folder root agar Dashboard tidak aktif terus
+          const isFolderMatch =
+            menuFolder !== "" &&
+            menuFolder !== "/Dashboard/admin_akademik/" &&
+            currentPath.startsWith(menuFolder);
+
+          if (isExactMatch || isFolderMatch) {
             link.parentElement.classList.add("active");
           }
         });

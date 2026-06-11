@@ -79,7 +79,6 @@ body {
   margin-bottom: 12px;
 }
 
-/* Pembersihan list bullet point secara mutlak */
 .nav-menu-list {
   list-style: none !important;
   padding: 0;
@@ -109,7 +108,6 @@ body {
   color: #1e293b;
 }
 
-/* Menu Aktif - Biru Terang Sesuai Gambar Mockup */
 .nav-item.active a {
   background-color: #2563eb;
   color: #ffffff;
@@ -141,7 +139,6 @@ body {
   min-width: 0;
 }
 
-/* Topbar Header Nav */
 .main-topbar {
   height: 70px;
   background-color: #ffffff;
@@ -355,7 +352,7 @@ body {
   background-color: #f0f5ff;
 }
 
-/* DESAIN TOMBOL FILTER (Sesuai Presisi Gambar UI) */
+/* DESAIN TOMBOL FILTER */
 .btn-filter-kelas {
   display: flex !important;
   flex-direction: row !important;
@@ -394,66 +391,199 @@ body {
 }
 
 /* ==========================================================================
-   --- SYSTEM COMPONENT: PAGINASI TABEL (SINKRON 100% DENGAN TAHUN.CSS) ---
+   --- SINKRONISASI BARU: FLOATING FILTER CARD SYSTEM ---
+   ========================================================================== */
+.hidden {
+  display: none !important;
+}
+
+.filter-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-popup {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 340px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow: hidden;
+  animation: filterDropdownFade 0.15s ease-out;
+}
+
+@keyframes filterDropdownFade {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.filter-header h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.filter-header .close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #94a3b8;
+  cursor: pointer;
+}
+
+.filter-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-group label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.filter-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 13.5px;
+  color: #334155;
+  background-color: #ffffff;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.filter-select:focus {
+  border-color: #1b63dc;
+  box-shadow: 0 0 0 3px rgba(27, 99, 220, 0.1);
+}
+
+.filter-footer {
+  display: flex;
+  gap: 10px;
+  padding: 14px 20px;
+  background-color: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+}
+
+.filter-footer button {
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btn-reset {
+  flex: 1;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+}
+
+.btn-reset:hover {
+  background-color: #f1f5f9;
+}
+
+.btn-apply {
+  flex: 1.5;
+  background-color: #1b63dc;
+  color: #ffffff;
+}
+
+.btn-apply:hover {
+  background-color: #154ec1;
+}
+
+/* ==========================================================================
+   --- SYSTEM COMPONENT: PAGINASI TABEL ---
    ========================================================================== */
 .table-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
-  margin-top: 12px;
-  background-color: #ffffff;
+  margin-top: 24px;
+  padding-top: 16px;
   border-top: 1px solid #f1f5f9;
 }
 
 .table-info-text {
   font-size: 13px;
   color: #64748b;
-  font-weight: 400;
+}
+
+.table-info-text span {
+  font-weight: 600;
+  color: #1e293b;
 }
 
 .pagination-container {
   display: flex;
   align-items: center;
-  gap: 8px; /* Jarak antar kotak tombol ditingkatkan menjadi 8px */
+  gap: 12px;
 }
 
-.pagination-btn {
-  width: 36px;  /* Dimensi kotak diubah dari 32px ke 36px */
-  height: 36px;
+.pagination-item {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #cbd5e1;
   background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;       /* Sudut tumpul presisi 10px melengkung rapi */
-  color: #475569;
-  font-size: 14px;
-  font-weight: 500;
+  color: #64748b;
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.pagination-btn:hover:not(:disabled):not(.active) {
+.pagination-item:hover:not(:disabled):not(.active) {
+  border-color: #94a3b8;
   background-color: #f8fafc;
-  border-color: #cbd5e1;
   color: #1e293b;
 }
 
-.pagination-btn.active {
-  background-color: #1b63dc !important; /* Biru Royal Poliban premium */
-  border-color: #1b63dc !important;
+.pagination-item.active {
+  background-color: #2563eb !important;
   color: #ffffff !important;
-  font-weight: 600;
+  border-color: #2563eb !important;
   cursor: default;
 }
 
-.pagination-btn:disabled {
-  background-color: #f8fafc;
-  border-color: #e2e8f0;
-  color: #cbd5e1;
+.pagination-item:disabled {
+  opacity: 0.4;
   cursor: not-allowed;
-  opacity: 1; /* Override opacity lama agar solid bersih */
+  background-color: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #94a3b8;
 }
 
 /* ==========================================================================
@@ -465,8 +595,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(15, 23, 42, 0.3);
-  backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -513,28 +643,35 @@ body {
 .input-form-control {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .input-form-control label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  color: #475569;
+  color: #1e293b;
+  margin-bottom: 8px;
 }
 
 .input-form-control input,
-.input-form-control select {
-  height: 40px;
+.input-form-control select,
+.input-form-control textarea {
+  width: 100%;
+  background-color: #ffffff;
   border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  padding: 0 12px;
-  font-size: 13.5px;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #334155;
   outline: none;
+  transition: all 0.2s;
 }
 
 .input-form-control input:focus,
-.input-form-control select:focus {
-  border-color: #2563eb;
+.input-form-control select:focus,
+.input-form-control textarea:focus {
+  border-color: #1b63dc;
+  box-shadow: 0 0 0 3px rgba(27, 99, 220, 0.1);
 }
 
 .modal-footer-section {
@@ -563,76 +700,4 @@ body {
 .btn-submit-save {
   background: #2563eb;
   color: #ffffff;
-}
-/* ==========================================================================
-   --- SYSTEM LAYOUT & TOMBOL PAGINASI ---
-   ========================================================================== */
-
-/* Wrapper Utama - Membuat teks di kiri & tombol di kanan secara otomatis */
-.table-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px solid #f1f5f9;
-}
-
-/* Teks Informasi Data (Menampilkan 1-10 dari...) */
-.table-info-text {
-    font-size: 13px;
-    color: #64748b;
-}
-
-.table-info-text span {
-    font-weight: 600;
-    color: #1e293b;
-}
-
-/* Container Tombol - Dibuat agak renggang sesuai request */
-.pagination-container {
-    display: flex;
-    align-items: center;
-    gap: 12px; 
-}
-
-/* Tombol Abu-abu & Navigasi Panah */
-.pagination-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    border: 1px solid #cbd5e1; /* Border abu-abu halus */
-    background-color: #ffffff;
-    color: #64748b; /* Angka & Ikon warna abu-abu */
-    font-size: 13.5px;
-    font-weight: 600;
-    border-radius: 10px; /* Sudut melengkung mirip card */
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-/* Efek Hover untuk Tombol Abu-abu */
-.pagination-item:hover:not(:disabled):not(.active) {
-    border-color: #94a3b8;
-    background-color: #f8fafc;
-    color: #1e293b;
-}
-
-/* Halaman Aktif Saat Ini (Warna Biru Utama SIMPADU) */
-.pagination-item.active {
-    background-color: #2563eb !important; /* Biru solid sesuai tombol tambah data */
-    color: #ffffff !important; /* Angka putih */
-    border-color: #2563eb !important;
-    cursor: default;
-}
-
-/* State Tombol Mati (Kunci di Ujung Halaman) */
-.pagination-item:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    background-color: #f1f5f9;
-    border-color: #e2e8f0;
-    color: #94a3b8;
 }
