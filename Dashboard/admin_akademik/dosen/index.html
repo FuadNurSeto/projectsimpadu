@@ -1,785 +1,99 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SIMPADU POLIBAN - Dosen Pengajar</title>
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --primary-color: #1e62ff;
-      --primary-hover: #0f4ecf;
-      --bg-main: #f4f6fa;
-      --bg-sidebar: #ffffff;
-      --text-dark: #1e293b;
-      --text-muted: #64748b;
-      --border-color: #e2e8f0;
-      --success-bg: #e6f4ea;
-      --success-text: #137333;
-      --danger-bg: #fce8e6;
-      --danger-text: #c5221f;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-    }
-
-    body {
-      background-color: var(--bg-main);
-      color: var(--text-dark);
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* --- SIDEBAR --- */
-    .sidebar {
-      width: 260px;
-      background-color: var(--bg-sidebar);
-      border-right: 1px solid var(--border-color);
-      display: flex;
-      flex-direction: column;
-      padding: 24px 0;
-      flex-shrink: 0;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      padding: 0 24px;
-      margin-bottom: 32px;
-    }
-
-    .brand-logo {
-      width: 40px;
-      height: 40px;
-      margin-right: 12px;
-      background-color: #eaeaea;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .brand-text h1 {
-      font-size: 14px;
-      font-weight: 700;
-      color: #1a202c;
-    }
-
-    .brand-text p {
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-
-    .menu-group {
-      padding: 0 12px;
-      flex-grow: 1;
-      overflow-y: auto;
-    }
-
-    .menu-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      margin: 16px 12px 8px 12px;
-      letter-spacing: 0.5px;
-    }
-
-    .menu-item {
-      display: flex;
-      align-items: center;
-      padding: 12px 16px;
-      color: var(--text-muted);
-      text-decoration: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 4px;
-      transition: all 0.2s ease;
-    }
-
-    .menu-item i {
-      margin-right: 14px;
-      font-size: 16px;
-      width: 20px;
-      text-align: center;
-    }
-
-    .menu-item:hover {
-      background-color: #f8fafc;
-      color: var(--text-dark);
-    }
-
-    .menu-item.active {
-      background-color: var(--primary-color);
-      color: #ffffff;
-    }
-
-    .menu-item.logout {
-      color: #dc2626;
-      margin-top: auto;
-    }
-    
-    .menu-item.logout:hover {
-      background-color: #fef2f2;
-    }
-
-    /* --- MAIN CONTENT CONTAINER --- */
-    .main-content {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    /* --- HEADER --- */
-    .header {
-      background-color: #ffffff;
-      padding: 16px 32px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .header-title-area p {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .header-title-area h2 {
-      font-size: 22px;
-      font-weight: 600;
-      color: var(--primary-color);
-      margin-top: 2px;
-    }
-
-    .user-profile {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .user-info {
-      text-align: right;
-    }
-
-    .user-name {
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .user-role {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .avatar {
-      width: 40px;
-      height: 40px;
-      background-color: var(--primary-color);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    /* --- WORKSPACE --- */
-    .workspace {
-      padding: 24px 32px;
-      flex-grow: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .table-card {
-      background-color: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      border: 1px solid var(--border-color);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    /* --- TOOLBAR CONTROL --- */
-    .toolbar {
-      padding: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .search-box {
-      position: relative;
-      flex-grow: 1;
-      min-width: 240px;
-    }
-
-    .search-box i {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-    }
-
-    .search-box input {
-      width: 100%;
-      padding: 10px 14px 10px 40px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .filter-select {
-      padding: 10px 14px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background-color: #fff;
-      font-size: 14px;
-      color: var(--text-dark);
-      outline: none;
-      cursor: pointer;
-      min-width: 160px;
-    }
-
-    /* Custom Dropdown Semester */
-    .custom-dropdown-container {
-      position: relative;
-    }
-
-    .dropdown-trigger {
-      padding: 10px 16px;
-      border: 1px solid var(--primary-color);
-      border-radius: 8px;
-      background-color: #fff;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-dark);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      cursor: pointer;
-      min-width: 160px;
-    }
-
-    .dropdown-menu {
-      position: absolute;
-      top: 110%;
-      left: 0;
-      width: 100%;
-      background: white;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      z-index: 10;
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .dropdown-menu.show {
-      display: flex;
-    }
-
-    .dropdown-item {
-      padding: 10px 16px;
-      font-size: 13px;
-      color: var(--text-dark);
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .dropdown-item:hover {
-      background-color: #f1f5f9;
-    }
-
-    .dropdown-item.selected {
-      color: var(--primary-color);
-      font-weight: 500;
-      background-color: #f0f7ff;
-    }
-
-    .btn-add {
-      background-color: var(--primary-color);
-      color: white;
-      padding: 10px 18px;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-left: auto;
-      text-decoration: none;
-    }
-
-    .btn-add:hover {
-      background-color: var(--primary-hover);
-    }
-
-    /* --- DATA TABLE --- */
-    .table-responsive {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-    }
-
-    th {
-      background-color: #fafafa;
-      padding: 14px 20px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      border-bottom: 1px solid var(--border-color);
-      letter-spacing: 0.5px;
-    }
-
-    td {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 14px;
-      vertical-align: middle;
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    .col-dosen {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .dosen-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background-color: #e0f2fe;
-      color: #0369a1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 12px;
-    }
-    
-    .dosen-avatar.pink {
-      background-color: #fce7f3;
-      color: #b91c1c;
-    }
-
-    .dosen-info .name {
-      font-weight: 600;
-      color: var(--text-dark);
-    }
-
-    .dosen-info .nip {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .mk-code {
-      font-size: 11px;
-      background-color: #f1f5f9;
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: var(--text-muted);
-      margin-right: 6px;
-    }
-
-    .mk-sks {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .class-meta {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .badge.success {
-      background-color: var(--success-bg);
-      color: var(--success-text);
-    }
-
-    .badge.danger {
-      background-color: var(--danger-bg);
-      color: var(--danger-text);
-    }
-
-    .badge.normal {
-      background-color: #f1f5f9;
-      color: var(--text-dark);
-    }
-
-    .actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn-action {
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
-      border: 1px solid var(--border-color);
-      background-color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-
-    .btn-action:hover {
-      background-color: #f8fafc;
-      color: var(--primary-color);
-      border-color: var(--primary-color);
-    }
-
-    /* --- FOOTER / PAGINATION --- */
-    .table-footer {
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #ffffff;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .pagination {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-    }
-
-    .page-link {
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      color: var(--text-dark);
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-
-    .page-link:hover {
-      background-color: #f1f5f9;
-    }
-
-    .page-link.active {
-      background-color: var(--primary-color);
-      color: #ffffff;
-      border-color: var(--primary-color);
-    }
-  </style>
-</head>
-<body>
-
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-logo">
-        <i class="fa-solid fa-graduation-cap" style="color: var(--primary-color); font-size: 20px;"></i>
-      </div> 
-      <div class="brand-text">
-        <h1>SIMPADU POLIBAN</h1>
-        <p>Sistem Informasi Terpadu</p>
-      </div>
-    </div>
-
-    <div class="menu-group">
-      <div class="menu-label">Menu Utama</div>
-      <a href="#" class="menu-item"><i class="fa-solid fa-gauge"></i> Dashboard</a>
-      <a href="#" class="menu-item"><i class="fa-solid fa-calendar-days"></i> Tahun Akademik</a>
-      <a href="#" class="menu-item"><i class="fa-solid fa-graduation-cap"></i> Jurusan dan Prodi</a>
-      <a href="#" class="menu-item"><i class="fa-solid fa-chalkboard"></i> Kelas</a>
-      <a href="#" class="menu-item active"><i class="fa-solid fa-user-tie"></i> Dosen</a>
-      <a href="#" class="menu-item"><i class="fa-solid fa-clipboard-user"></i> Presensi</a>
-      <a href="#" class="menu-item"><i class="fa-solid fa-book"></i> Mata Kuliah</a>
-      <a href="#" class="menu-item"><i class="fa-solid fa-file-invoice"></i> Nilai</a>
-      <a href="#" class="menu-item"><i class="fa-solid fa-file-lines"></i> Kartu Hasil Studi</a>
-      
-      <div class="menu-label">Akun</div>
-      <a href="#" class="menu-item"><i class="fa-solid fa-circle-user"></i> Profil</a>
-      <a href="#" class="menu-item logout"><i class="fa-solid fa-right-from-bracket"></i> Keluar Akun</a>
-    </div>
-  </aside>
-
-  <main class="main-content">
-    
-    <header class="header">
-      <div class="header-title-area">
-        <p>Akademik / Data Master</p>
-        <h2>Dosen Pengajar</h2>
-      </div>
-      <div class="user-profile">
-        <div class="user-info">
-          <div class="user-name">Nabila Aulia</div>
-          <div class="user-role">Admin Academic</div>
-        </div>
-        <div class="avatar">NA</div>
-      </div>
-    </header>
-
-    <div class="workspace">
-      <div class="table-card">
-        
-        <div class="toolbar">
-          <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="Cari nama dosen, mata kuliah, atau kelas...">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dosen Pengajar - SIMPADU POLIBAN</title>
+    <link rel="stylesheet" href="/Dashboard/admin_akademik/akademik.css" />
+    <link rel="stylesheet" href="dosen.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <div id="sidebar-container"></div>
+
+      <main class="main-content">
+        <header class="content-header">
+          <div class="header-title-area">
+            <span class="breadcrumb">Akademik / Data Master</span>
+            <h2>Dosen Pengajar</h2>
           </div>
-
-          <select class="filter-select">
-            <option>Tahun: 20262 (Genap)</option>
-            <option>Tahun: 20251 (Ganjil)</option>
-          </select>
-
-          <select class="filter-select">
-            <option>Pilih Program Studi</option>
-            <option>D3 Teknik Informatika</option>
-            <option>D3 Akuntansi</option>
-          </select>
-
-          <div class="custom-dropdown-container">
-            <div class="dropdown-trigger" id="dropdownTrigger">
-              <span>Semua Semester</span>
-              <i class="fa-solid fa-chevron-down"></i>
+          <div class="header-profile">
+            <div class="profile-info">
+              <span class="profile-name">Nabila Aulia</span>
+              <span class="profile-role">Admin Academic</span>
             </div>
-            <div class="dropdown-menu show" id="dropdownMenu">
-              <div class="dropdown-item selected">Semua Semester <i class="fa-solid fa-check"></i></div>
-              <div class="dropdown-item">Semester 2</div>
-              <div class="dropdown-item">Semester 4</div>
-              <div class="dropdown-item">Semester 6</div>
-              <div class="dropdown-item">Semester 8</div>
+            <div class="profile-avatar">NA</div>
+          </div>
+        </header>
+
+        <div class="data-card">
+          <div class="filter-action-bar">
+            <div class="search-box">
+              <i class="fas fa-search search-icon"></i>
+              <input
+                type="text"
+                id="search-dosen"
+                placeholder="Cari nama dosen, mata kuliah, atau kelas..."
+              />
             </div>
+
+            <div class="filter-dropdowns">
+              <select id="filter-tahun">
+                <option>Tahun: 20262 (Genap)</option>
+              </select>
+              <select id="filter-prodi">
+                <option value="">Pilih Program Studi</option>
+              </select>
+              <select id="filter-semester">
+                <option value="">Pilih Semester</option>
+              </select>
+            </div>
+
+            <button class="btn-primary" id="btn-tambah-dosen">
+              <i class="fas fa-plus"></i> Tambah Dosen Pengajar
+            </button>
           </div>
 
-          <button class="btn-add">
-            <i class="fa-solid fa-plus"></i> Tambah Dosen Pengajar
-          </button>
-        </div>
-
-        <div class="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th>Dosen Pengajar (NIP/Nama)</th>
-                <th>Mata Kuliah</th>
-                <th>Kelas & Periode</th>
-                <th>Peserta Kelas</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="tableBody">
-              <tr>
-                <td>
-                  <div class="col-dosen">
-                    <div class="dosen-avatar">BS</div>
-                    <div class="dosen-info">
-                      <div class="name">Budi Setiawan, M.Kom</div>
-                      <div class="nip">NIP. 198001012005011001</div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div><strong>Administrasi Database</strong></div>
-                  <div style="margin-top: 4px;"><span class="mk-code">MK-402</span><span class="mk-sks">3 SKS</span></div>
-                </td>
-                <td>
-                  <div><strong>TI-4E</strong></div>
-                  <div class="class-meta">Thn: 20262 (Genap)</div>
-                </td>
-                <td>
-                  <span class="badge success">28 Mahasiswa</span>
-                </td>
-                <td>
-                  <div class="actions">
-                    <a href="#" class="btn-action" title="Lihat"><i class="fa-regular fa-eye"></i></a>
-                    <a href="#" class="btn-action" title="Edit"><i class="fa-solid fa-pencil"></i></a>
-                  </div>
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <div class="col-dosen">
-                    <div class="dosen-avatar">BS</div>
-                    <div class="dosen-info">
-                      <div class="name">Budi Setiawan, M.Kom</div>
-                      <div class="nip">NIP. 198001012005011001</div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div><strong>Basis Data</strong></div>
-                  <div style="margin-top: 4px;"><span class="mk-sks">3 SKS</span></div>
-                </td>
-                <td>
-                  <div><strong>TI-2B</strong></div>
-                  <div class="class-meta">Thn: 20262 (Genap)</div>
-                </td>
-                <td>
-                  <span class="badge normal">40 Mahasiswa</span>
-                </td>
-                <td>
-                  <div class="actions">
-                    <a href="#" class="btn-action" title="Lihat"><i class="fa-regular fa-eye"></i></a>
-                    <a href="#" class="btn-action" title="Edit"><i class="fa-solid fa-pencil"></i></a>
-                  </div>
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <div class="col-dosen">
-                    <div class="dosen-avatar pink">RA</div>
-                    <div class="dosen-info">
-                      <div class="name">Rina Aulia, S.E., M.Si</div>
-                      <div class="nip">NIP. 198505052010012002</div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div><strong>Akuntansi Biaya Dasar</strong></div>
-                  <div style="margin-top: 4px;"><span class="mk-sks">2 SKS</span></div>
-                </td>
-                <td>
-                  <div><strong>AK-2A</strong> <span style="color:var(--text-muted); font-size:12px;">/ D3 Akuntansi</span></div>
-                  <div class="class-meta">Thn: 20262 (Genap)</div>
-                </td>
-                <td>
-                  <span class="badge danger">0 / 35 Mahasiswa</span>
-                </td>
-                <td>
-                  <div class="actions">
-                    <a href="#" class="btn-action" title="Lihat"><i class="fa-regular fa-eye"></i></a>
-                    <a href="#" class="btn-action" title="Edit"><i class="fa-solid fa-pencil"></i></a>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="table-footer">
-          <div>Menampilkan 3 dari total 142 dosen pengajar</div>
-          <div class="pagination">
-            <a href="#" class="page-link"><i class="fa-solid fa-chevron-left" style="font-size:11px;"></i></a>
-            <a href="#" class="page-link active">1</a>
-            <a href="#" class="page-link">2</a>
-            <a href="#" class="page-link">3</a>
-            <a href="#" class="page-link"><i class="fa-solid fa-chevron-right" style="font-size:11px;"></i></a>
+          <div class="table-container">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Dosen Pengajar (NIP/Nama)</th>
+                  <th>Mata Kuliah</th>
+                  <th>Kelas & Tahun</th>
+                  <th>Peserta Kelas</th>
+                  <th style="text-align: center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    colspan="5"
+                    style="text-align: center; padding: 40px; color: #64748b"
+                  >
+                    <i
+                      class="fas fa-spinner fa-spin"
+                      style="margin-right: 8px"
+                    ></i>
+                    Memuat data dosen pengajar...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-
-      </div>
+      </main>
     </div>
-  </main>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      
-      // 1. Logika Custom Dropdown Semester
-      const trigger = document.getElementById('dropdownTrigger');
-      const menu = document.getElementById('dropdownMenu');
-
-      if (trigger && menu) {
-        trigger.addEventListener('click', function(e) {
-          e.stopPropagation();
-          menu.classList.toggle('show');
-        });
-
-        const items = menu.querySelectorAll('.dropdown-item');
-        items.forEach(item => {
-          item.addEventListener('click', function() {
-            items.forEach(i => {
-              i.classList.remove('selected');
-              const checkIcon = i.querySelector('.fa-check');
-              if(checkIcon) checkIcon.remove();
-            });
-            
-            this.classList.add('selected');
-            
-            const icon = document.createElement('i');
-            icon.className = 'fa-solid fa-check';
-            this.appendChild(icon);
-
-            trigger.querySelector('span').innerText = this.textContent.trim();
-            menu.classList.remove('show');
-          });
-        });
-
-        document.addEventListener('click', function() {
-          menu.classList.remove('show');
-        });
-      }
-
-      // 2. Fitur Live Search Real-time
-      const searchInput = document.getElementById('searchInput');
-      const tableRows = document.querySelectorAll('#tableBody tr');
-
-      if (searchInput) {
-        searchInput.addEventListener('input', function() {
-          const filterValue = this.value.toLowerCase().trim();
-          
-          tableRows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            if(text.includes(filterValue)) {
-              row.style.display = '';
-            } else {
-              row.style.display = 'none';
-            }
-          });
-        });
-      }
-    });
-  </script>
-</body>
+    <script src="/Dashboard/admin_akademik/sidebar-loader.js"></script>
+    <script src="dosen.js"></script>
+  </body>
 </html>

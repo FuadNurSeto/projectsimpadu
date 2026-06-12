@@ -17,107 +17,7 @@
   </head>
   <body>
     <div class="dashboard-container">
-      <!-- SIDEBAR -->
-      <aside class="sidebar">
-        <div class="sidebar-brand">
-          <img
-            src="../../Asset/logopoliban.png"
-            alt="Logo Poliban"
-            class="brand-logo"
-          />
-          <div class="brand-text">
-            <h2>SIMPADU POLIBAN</h2>
-            <p>Sistem Informasi Terpadu</p>
-            <span>Politeknik Negeri Banjarmasin</span>
-          </div>
-        </div>
-
-        <div class="menu-group">
-          <span class="menu-title">MENU UTAMA</span>
-          <ul>
-            <li class="menu-item">
-              <a href="index.html">
-                <img src="../../Asset/Home.png" alt="" class="menu-icon" />
-                <span class="menu-label">Dashboard</span>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="../admin_akademik/tahun_akademik/index.html">
-                <img src="../../Asset/Calendar.png" alt="" class="menu-icon" />
-                <span class="menu-label">Tahun Akademik</span>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="../admin_akademik/jurusan_prodi/jurusan.html">
-                <img
-                  src="../../Asset/jurusanprodi.png"
-                  alt=""
-                  class="menu-icon"
-                />
-                <span class="menu-label">Jurusan dan Prodi</span>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="../admin_akademik/kelas/index.html">
-                <img src="../../Asset/Kelas.png" alt="" class="menu-icon" />
-                <span class="menu-label">Kelas</span>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="dosen.html">
-                <img src="../../Asset/Teacher.png" alt="" class="menu-icon" />
-                <span class="menu-label">Dosen</span>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="presensi.html">
-                <img src="../../Asset/student.png" alt="" class="menu-icon" />
-                <span class="menu-label">Presensi</span>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="mata_kuliah.html">
-                <img src="../../Asset/matkul.png" alt="" class="menu-icon" />
-                <span class="menu-label">Mata Kuliah</span>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="nilai.html">
-                <img src="../../Asset/nilai.png" alt="" class="menu-icon" />
-                <span class="menu-label">Nilai</span>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="khs.html">
-                <img src="../../Asset/khs.png" alt="" class="menu-icon" />
-                <span class="menu-label">Kartu Hasil Studi</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="menu-group">
-          <span class="menu-title">AKUN</span>
-          <ul>
-            <li class="menu-item active">
-              <a href="../../Dashboard/admin_akademik/profil.html">
-                <img
-                  src="../../Asset/profile-circle.png"
-                  alt=""
-                  class="menu-icon"
-                />
-                <span class="menu-label">Profil</span>
-              </a>
-            </li>
-            <li class="menu-item logout">
-              <a href="#" id="logout-trigger">
-                <img src="../../Asset/kluar.png" alt="" class="menu-icon" />
-                <span class="menu-label">Keluar Akun</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </aside>
+      <div id="sidebar-container"></div>
 
       <main class="main-content">
         <header class="topbar-container">
@@ -348,6 +248,7 @@
         </div>
       </div>
     </div>
+    <script src="/Dashboard/admin_akademik/sidebar-loader.js"></script>
     <script src="akademik.js"></script>
   </body>
 </html>
