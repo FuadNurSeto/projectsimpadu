@@ -1,15 +1,22 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jurusan & Prodi - SIMPADU POLIBAN</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
 
     <link rel="stylesheet" href="/Dashboard/admin_akademik/akademik.css" />
     <link rel="stylesheet" href="jurusan.css" />
+    <link rel="stylesheet" href="modal.css" />
   </head>
   <body>
     <div class="dashboard-layout-container">
@@ -19,7 +26,7 @@
         <header class="main-topbar">
           <div class="topbar-left">
             <button id="menu-toggle" class="hamburger-menu-btn">
-              <i class="fa-solid fa-bars" style="color: #2563eb;"></i>
+              <i class="fa-solid fa-bars" style="color: #2563eb"></i>
             </button>
             <div class="breadcrumbs-nav">
               <span class="parent-bc">Akademik / Data Master /</span>
@@ -38,26 +45,228 @@
 
         <section class="workspace-area">
           <div class="data-card-wrapper">
-            
             <div class="tabs-navigation">
-              <button class="tab-btn active" data-tab="jurusan">Daftar Jurusan</button>
+              <button class="tab-btn active" data-tab="jurusan">
+                Daftar Jurusan
+              </button>
               <button class="tab-btn" data-tab="prodi">Program Studi</button>
             </div>
 
             <div class="action-bar-block">
               <div class="search-box-container">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" id="search-input" placeholder="Cari nama jurusan..." />
-              </div>
-              
-              <div class="filter-wrapper-buttons" style="display: flex; gap: 8px;">
-                <button class="action-mini-btn-filter"><i class="fa-solid fa-arrow-down-wide-short"></i> Urutkan</button>
-                <button class="action-mini-btn-filter"><i class="fa-solid fa-sliders"></i> Filter</button>
+                <input
+                  type="text"
+                  id="search-input"
+                  placeholder="Cari nama jurusan..."
+                />
               </div>
 
-              <button id="btn-tambah" class="add-data-btn">
-                <i class="fas fa-plus"></i> Tambah Jurusan
-              </button>
+              <div class="action-buttons-group">
+                <div class="left-actions">
+                  <div
+                    class="dropdown-sort-container"
+                    id="sort-wrapper-jurusan"
+                  >
+                    <button
+                      class="action-mini-btn-filter active-btn"
+                      id="sort-btn-jurusan"
+                    >
+                      <i class="fa-solid fa-arrow-down-wide-short"></i> Urutkan:
+                      Nama (A-Z)
+                      <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                    </button>
+
+                    <div class="dropdown-sort-menu" id="sort-menu-jurusan">
+                      <span class="dropdown-title">URUTKAN BERDASARKAN</span>
+                      <div
+                        class="dropdown-item active"
+                        data-sort="nama_asc"
+                        data-label="Nama (A-Z)"
+                      >
+                        <span>Nama Jurusan (A - Z)</span>
+                        <i class="fa-solid fa-check check-icon"></i>
+                      </div>
+                      <div
+                        class="dropdown-item"
+                        data-sort="nama_desc"
+                        data-label="Nama (Z-A)"
+                      >
+                        <span>Nama Jurusan (Z - A)</span>
+                      </div>
+                      <div
+                        class="dropdown-item"
+                        data-sort="prodi_count_desc"
+                        data-label="Prodi (Terbanyak)"
+                      >
+                        <span>Total Prodi (Terbanyak)</span>
+                      </div>
+                      <div
+                        class="dropdown-item"
+                        data-sort="prodi_count_asc"
+                        data-label="Prodi (Tersedikit)"
+                      >
+                        <span>Total Prodi (Tersedikit)</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Dropdown Urutkan Khusus Program Studi -->
+                  <div
+                    class="dropdown-sort-container"
+                    id="sort-wrapper-prodi"
+                    style="display: none"
+                  >
+                    <button class="action-mini-btn-filter" id="sort-btn-prodi">
+                      <i class="fa-solid fa-arrow-down-wide-short"></i> Urutkan:
+                      Nama (A-Z)
+                      <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                    </button>
+
+                    <div class="dropdown-sort-menu" id="sort-menu-prodi">
+                      <span class="dropdown-title">URUTKAN BERDASARKAN</span>
+                      <div
+                        class="dropdown-item active"
+                        data-sort="nama_asc"
+                        data-label="Nama (A-Z)"
+                      >
+                        <span>Nama Program Studi (A-Z)</span>
+                        <i class="fa-solid fa-check check-icon"></i>
+                      </div>
+                      <div
+                        class="dropdown-item"
+                        data-sort="jurusan_asc"
+                        data-label="Jurusan"
+                      >
+                        <span>Jurusan Induk (A-Z)</span>
+                      </div>
+                      <div
+                        class="dropdown-item"
+                        data-sort="jenjang_asc"
+                        data-label="Jenjang"
+                      >
+                        <span>Jenjang (D3 - D4)</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="filter-wrapper" id="filter-wrapper-jurusan">
+                    <button
+                      class="action-mini-btn-filter"
+                      id="filterBtnJurusan"
+                    >
+                      <i class="fa-solid fa-sliders"></i> Filter
+                      <span class="dot-indicator"></span>
+                    </button>
+
+                    <div class="filter-dropdown" id="filterDropdownJurusan">
+                      <h4>Filter Jurusan</h4>
+                      <div class="filter-group">
+                        <label class="group-title"
+                          >STATUS KEPEMILIKAN PRODI</label
+                        >
+                        <label class="radio-option">
+                          <input
+                            type="radio"
+                            name="status_prodi"
+                            value="semua"
+                            checked
+                          />
+                          Tampilkan Semua
+                        </label>
+                        <label class="radio-option">
+                          <input
+                            type="radio"
+                            name="status_prodi"
+                            value="memiliki"
+                          />
+                          Memiliki Program Studi
+                        </label>
+                        <label class="radio-option">
+                          <input
+                            type="radio"
+                            name="status_prodi"
+                            value="belum"
+                          />
+                          Belum Ada Prodi (Kosong)
+                        </label>
+                      </div>
+                      <div class="dropdown-footer">
+                        <button type="button" class="btn-reset">Reset</button>
+                        <button type="button" class="btn-apply">
+                          Terapkan
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Filter Khusus Program Studi -->
+                  <div
+                    class="filter-wrapper"
+                    id="filter-wrapper-prodi"
+                    style="display: none"
+                  >
+                    <button class="action-mini-btn-filter" id="filterBtnProdi">
+                      <i class="fa-solid fa-sliders"></i> Filter
+                      <span class="dot-indicator"></span>
+                    </button>
+
+                    <div class="filter-dropdown" id="filterDropdownProdi">
+                      <h4>Filter Program Studi</h4>
+                      <div class="filter-group">
+                        <label class="group-title">JENJANG</label>
+                        <label class="checkbox-option">
+                          <input type="checkbox" name="jenjang" value="D3" /> D3
+                        </label>
+                        <label class="checkbox-option">
+                          <input type="checkbox" name="jenjang" value="D4" /> D4
+                        </label>
+                      </div>
+
+                      <div class="divider"></div>
+
+                      <div class="filter-group">
+                        <label class="group-title">JURUSAN INDUK</label>
+                        <label class="checkbox-option">
+                          <input
+                            type="checkbox"
+                            name="jurusan_induk"
+                            value="elektro"
+                          />
+                          Teknik Elektro
+                        </label>
+                        <label class="checkbox-option">
+                          <input
+                            type="checkbox"
+                            name="jurusan_induk"
+                            value="bisnis"
+                          />
+                          Administrasi Bisnis
+                        </label>
+                        <label class="checkbox-option">
+                          <input
+                            type="checkbox"
+                            name="jurusan_induk"
+                            value="mesin"
+                          />
+                          Teknik Mesin
+                        </label>
+                      </div>
+
+                      <div class="dropdown-footer">
+                        <button type="button" class="btn-reset">Reset</button>
+                        <button type="button" class="btn-apply">
+                          Terapkan
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button id="btn-tambah" class="add-data-btn">
+                  <i class="fas fa-plus"></i> Tambah Jurusan
+                </button>
+              </div>
             </div>
 
             <div class="responsive-table-holder">
@@ -67,7 +276,10 @@
                 </thead>
                 <tbody id="table-body">
                   <tr>
-                    <td colspan="4" style="text-align: center; color: #64748b; padding: 40px">
+                    <td
+                      colspan="4"
+                      style="text-align: center; color: #64748b; padding: 40px"
+                    >
                       Memuat data dari server VPS Poliban...
                     </td>
                   </tr>
@@ -76,7 +288,6 @@
             </div>
 
             <div id="pagination-info"></div>
-
           </div>
         </section>
       </main>

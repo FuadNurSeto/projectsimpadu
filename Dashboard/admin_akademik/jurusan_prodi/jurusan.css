@@ -169,6 +169,21 @@ body {
   margin-bottom: 20px;
 }
 
+/* Grup tombol aksi (Urutkan, Filter, Tambah) */
+.action-buttons-group {
+  display: flex;
+  justify-content: space-between; /* Memisah kiri dan kanan otomatis */
+  align-items: center; /* Menyelaraskan posisi atas-bawah agar sejajar */
+  flex: 1; /* Memastikan grup ini mengambil sisa ruang yang tersedia */
+  gap: 16px; /* Jarak antara grup kiri dan tombol tambah jika tidak ada space-between */
+}
+
+/* Grup tombol Urutkan dan Filter */
+.left-actions {
+  display: flex;
+  gap: 12px; /* Memberikan jarak horizontal antara tombol Urutkan dan Filter */
+}
+
 .search-box-container {
   position: relative;
   flex-grow: 1;
@@ -231,6 +246,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  position: relative; /* Diperlukan untuk dot-indicator */
 }
 
 .action-mini-btn-filter:hover {
@@ -325,4 +341,203 @@ body {
   color: #64748b;
   font-weight: 500;
   padding-top: 20px;
+}
+
+/* ==========================================================================
+   --- DROPDOWN SORTING ---
+   ========================================================================== */
+/* Container pembungkus utama */
+.dropdown-sort-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Penyesuaian tombol urutkan saat aktif */
+.action-mini-btn-filter.active-btn {
+  border: 1px solid #2563eb;
+  color: #2563eb;
+  background-color: #f0f5ff;
+}
+
+.arrow-icon {
+  font-size: 10px;
+  margin-left: 4px;
+}
+
+/* Card Menu Dropdown (Melayang) */
+.dropdown-sort-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 100;
+  width: 210px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  /* Default hidden, controlled by JS */
+  display: none; 
+}
+
+/* Tulisan kecil URUTKAN BERDASARKAN */
+.dropdown-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: #94a3b8;
+  padding: 6px 16px;
+  letter-spacing: 0.5px;
+}
+
+/* Setiap baris opsi di dalam dropdown */
+.dropdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: #334155;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #f8fafc;
+}
+
+/* Style ketika opsi dipilih/aktif (Centang biru) */
+.dropdown-item.active {
+  background-color: #eff6ff;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.dropdown-item .check-icon {
+  font-size: 12px;
+  color: #2563eb;
+}
+
+/* ==========================================================================
+   --- DROPDOWN FILTER ---
+   ========================================================================== */
+.filter-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.dot-indicator {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  background-color: #ef4444;
+  border-radius: 50%;
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 260px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  padding: 16px;
+  z-index: 150;
+  display: none;
+}
+
+.filter-dropdown.show {
+  display: block;
+}
+
+.filter-dropdown h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 12px;
+}
+
+.filter-group {
+  margin-bottom: 12px;
+}
+
+.group-title {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #4b5563;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #4b5563;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.checkbox-option input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+}
+
+.divider {
+  height: 1px;
+  background-color: #f3f4f6;
+  margin: 12px 0;
+}
+
+.dropdown-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.btn-reset,
+.btn-apply {
+  border: none;
+  background: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.btn-reset {
+  color: #94a3b8;
+}
+
+.btn-apply {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.btn-add-prodi {
+  background-color: #1e4ed8;
 }
