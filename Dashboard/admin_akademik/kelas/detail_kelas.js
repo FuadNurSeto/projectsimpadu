@@ -66,22 +66,61 @@ async function fetchDetailKelas(id) {
     });
     if (!res.ok) throw new Error("Gagal mengambil detail kelas");
 
-    detailKelasData = await res.json();
+    const result = await res.json();
+    // Antisipasi jika API membungkus data dalam properti 'data'
+    let tempData = result.data || result;
 
-    // Render Informasi ke Header Card Utama
-    document.getElementById("header-nama-kelas").innerText =
-      `Kelas ${detailKelasData.nama_kelas || "-"}`;
+    // PERBAIKAN: Jika API mengembalikan array (karena penggunaan ->get() di backend), ambil elemen pertama
+    if (Array.isArray(tempData)) {
+      detailKelasData = tempData[0];
+    } else if (tempData && typeof tempData === "object" && tempData.kelas) {
+      // Antisipasi jika data dibungkus lagi dalam objek 'kelas'
+      detailKelasData = tempData.kelas;
+    } else {
+      detailKelasData = tempData;
+    }
 
-    const namaProdi = detailKelasData.prodi
-      ? detailKelasData.prodi.nama_prodi
-      : "-";
-    document.getElementById("header-sub-detail").innerText =
-      `${detailKelasData.nama_kelas || "-"} • ${namaProdi}`;
+    if (detailKelasData) {
+      // Log untuk debugging (bisa dihapus jika sudah jalan)
+      console.log("Data Detail Kelas:", detailKelasData);
 
-    const tahunText = detailKelasData.tahun_akademik
-      ? `${detailKelasData.tahun_akademik.tahun_akademik} (${detailKelasData.tahun_akademik.semester || "Genap"})`
-      : "-";
-    document.getElementById("widget-tahun").innerText = tahunText;
+      // Render Informasi ke Header Card Utama
+      const elHeaderNama = document.getElementById("header-nama-kelas");
+      // Cek variasi nama properti: nama_kelas, nama, atau kode_kelas
+      const namaKelas =
+        detailKelasData.nama_kelas ||
+        detailKelasData.nama ||
+        detailKelasData.kode_kelas ||
+        "-";
+      if (elHeaderNama) elHeaderNama.innerText = `Kelas ${namaKelas}`;
+
+      const namaProdi = detailKelasData.prodi
+        ? detailKelasData.prodi.nama_prodi || detailKelasData.prodi.nama || "-"
+        : "-";
+
+      const elHeaderSub = document.getElementById("header-sub-detail");
+      if (elHeaderSub) elHeaderSub.innerText = `${namaKelas} • ${namaProdi}`;
+
+      // Cek apakah tahun_akademik berupa objek (relasi) atau string langsung
+      let tahunText = "-";
+      if (detailKelasData.tahun_akademik) {
+        tahunText =
+          typeof detailKelasData.tahun_akademik === "object"
+            ? detailKelasData.tahun_akademik.tahun_akademik ||
+              detailKelasData.tahun_akademik.nama_tahun ||
+              detailKelasData.tahun_akademik.tahun ||
+              "-"
+            : detailKelasData.tahun_akademik;
+      }
+
+      const elWidgetTahun = document.getElementById("widget-tahun");
+      if (elWidgetTahun) elWidgetTahun.innerText = tahunText;
+    } else {
+      console.warn("Detail kelas data is empty or malformed.");
+      document.getElementById("header-nama-kelas").innerText = "Kelas -";
+      document.getElementById("header-sub-detail").innerText = "- • -";
+      document.getElementById("widget-tahun").innerText = "-";
+    }
   } catch (error) {
     console.error("Error detail kelas:", error);
   }
@@ -116,9 +155,7 @@ async function fetchMahasiswaKelas(id) {
 
     // Update kapasitas widget (Jumlah terdaftar / Maksimal kapasitas)
     // Perbaikan: Gunakan kapasitas_mahasiswa sesuai dengan database/API
-    const maxKapasitas = detailKelasData
-      ? detailKelasData.kapasitas_mahasiswa || 40
-      : 40;
+    const maxKapasitas = detailKelasData?.kapasitas_mahasiswa || 40;
     document.getElementById("widget-kapasitas").innerText =
       `${allStudents.length} / ${maxKapasitas} Mhs`;
 
@@ -281,7 +318,7 @@ window.kickMahasiswa = function (id, nama, nim) {
   studentIdToDelete = id; // Simpan ID plotting mahasiswa yang ditargetkan
 
   // Ambil nama kelas dari data objek utama kelas yang sedang aktif
-  const namaKelasSekarang = detailKelasData
+  const namaKelasSekarang = detailKelasData?.nama_kelas
     ? `Kelas ${detailKelasData.nama_kelas}`
     : "Kelas";
 

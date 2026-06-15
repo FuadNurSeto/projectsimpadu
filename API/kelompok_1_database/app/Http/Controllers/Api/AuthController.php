@@ -34,6 +34,7 @@ class AuthController extends Controller
             'id' => $user->id,
             'name' => $user->name,
             'username' => $user->username,
+            'nomor_identitas' => $user->nomor_identitas,
             'email' => $user->email,
             'role_ids' => $user->roles->pluck('id_role')->toArray(),
             'roles' => $user->roles->pluck('nama_role')->toArray(),

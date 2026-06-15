@@ -1,197 +1,336 @@
 /* ==========================================================================
-   RESET & LAYOUT ENGINE (Kunci Penghilang Gap Tengah)
+   --- RESET ENGINE & BASE LAYOUT (ASLI DARI KELAS) ---
    ========================================================================== */
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: "Inter", sans-serif;
 }
 
 body {
+  font-family: "Inter", sans-serif;
   background-color: #f8fafc;
   color: #1e293b;
-  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* Container flex utama pengunci posisi layar */
-.app-container {
-  display: flex;
-  width: 100%;
+/* Container utama pembungkus Sidebar + Main Content */
+.dashboard-layout-container {
+  display: block; /* Diubah ke block agar margin-left bekerja terhadap batas layar (viewport) */
   min-height: 100vh;
+  width: 100%;
 }
 
 /* ==========================================================================
-   SIDEBAR STYLE UPDATED (Bentuk Presisi Sesuai Gambar Target)
+   --- SIDEBAR INDEPENDENT SYSTEM (ASLI DARI KELAS) ---
    ========================================================================== */
-.sidebar {
+.sidebar-left-panel {
   width: 260px;
   height: 100vh;
   background-color: #ffffff;
-  border-right: 1px solid #f1f5f9;
+  border-right: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
-  position: fixed;
+  padding: 24px 16px;
+  flex-shrink: 0;
+  position: fixed; /* Mengunci posisi sidebar di kiri layar */
   top: 0;
   left: 0;
   z-index: 100;
-  overflow: hidden; /* Menghilangkan scrollbar siluman yang merusak layout */
 }
 
-.sidebar-brand {
-  padding: 24px 20px;
+.sidebar-brand-block {
   display: flex;
-  align-items: center; /* Mengunci posisi vertikal di tengah */
+  align-items: center;
   gap: 12px;
+  margin-bottom: 32px;
+  padding-left: 8px;
 }
 
-.brand-logo {
-  width: 42px; /* Ukuran proporsional sesuai Gambar Target */
+.brand-logo-img {
+  width: 42px;
   height: 42px;
   object-fit: contain;
-  flex-shrink: 0;
 }
 
-.brand-text h1 {
-  font-size: 14px;
+.brand-title-wrapper h2 {
+  font-size: 12px;
   font-weight: 700;
-  color: #1e293b;
-  letter-spacing: 0.03em;
+  color: #0f172a;
+  letter-spacing: -0.3px;
   line-height: 1.2;
 }
 
-.brand-text p {
-  font-size: 10px;
+.brand-title-wrapper p {
+  font-size: 8px;
   color: #64748b;
   line-height: 1.3;
 }
 
-.brand-text .sub-brand {
-  display: block;
-  font-size: 9px;
+.brand-title-wrapper span {
+  font-size: 7px;
   color: #94a3b8;
+  display: block;
 }
 
-.sidebar-menu {
-  padding: 8px 0;
-  display: flex;
-  flex-direction: column;
+.sidebar-menu-section {
+  margin-bottom: 24px;
 }
 
-.menu-category {
-  font-size: 11px;
+/* Tweak tambahan untuk mendorong menu logout ke bawah jika diinginkan */
+.sidebar-menu-section.section-logout {
+  margin-top: auto;
+  margin-bottom: 0;
+}
+
+.section-badge-title {
+  font-size: 9px;
   font-weight: 700;
   color: #94a3b8;
-  padding: 16px 24px 6px 24px;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.5px;
+  padding-left: 12px;
+  display: block;
+  margin-bottom: 12px;
   text-transform: uppercase;
 }
 
-/* Pengaturan Item Navigasi */
-.menu-item {
+.nav-menu-list {
+  list-style: none !important;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  list-style: none !important;
+  margin-bottom: 4px;
+}
+
+.nav-item a {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 18px; /* Mengurangi padding vertikal agar kapsul lebih pipih */
-  margin: 2px 14px;  /* Jarak antar menu luar-dalam */
+  padding: 12px 14px;
   color: #64748b;
   text-decoration: none;
-  font-size: 13px;   /* Ukuran font disesuaikan agar lebih bersih */
+  font-size: 11.5px;
   font-weight: 500;
-  border-radius: 8px; /* Menggunakan lengkungan rounded sedang */
-  text-transform: none !important; /* Memaksa teks kembali normal (Bukan UPPERCASE) */
-  transition: all 0.2s ease-in-out;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  text-transform: none !important;
 }
 
-.menu-item i {
-  width: 18px;
-  font-size: 16px;
-  text-align: center;
-  color: #94a3b8;
-}
-
-/* Hover State */
-.menu-item:hover {
+.nav-item a:hover {
   background-color: #f1f5f9;
   color: #1e293b;
 }
 
-/* Active State: Kapsul Biru Terang Sesuai Gambar Target */
-.menu-item.active {
-  background-color: #2563eb !important;
-  color: #ffffff !important;
+.nav-item.active a {
+  background-color: #2563eb;
+  color: #ffffff;
   font-weight: 600;
 }
 
-.menu-item.active i {
-  color: #ffffff;
+/* Mengubah icon gambar menjadi putih saat menu aktif */
+.nav-item.active .nav-icon {
+  filter: brightness(0) invert(1);
 }
 
-.logout-link {
-  color: #ef4444;
-  margin-top: auto; /* Mendorong tombol logout otomatis ke paling bawah */
-  margin-bottom: 24px;
-}
-.logout-link i {
+.nav-item.item-logout a {
   color: #ef4444;
 }
-.logout-link:hover {
+
+.nav-item.item-logout a:hover {
   background-color: #fef2f2;
-  color: #dc2626;
+}
+
+/* Pengaturan khusus untuk Icon Gambar (SVG/PNG) */
+.nav-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
 }
 
 /* ==========================================================================
-   MAIN CONTENT (Geser Sempurna Mengisi Sisa Ruang Kanan)
+   SIDEBAR STYLE UPDATED (Mengikuti Template Pipih Berdasarkan akademik.css)
    ========================================================================== */
-.main-content {
-  flex: 1; /* Ambil seluruh sisa area tanpa menyisakan gap kosong */
-  padding: 24px 32px;
-  background-color: #f8fafc;
+.menu-item {
   display: flex;
-  flex-direction: column;
-}
-
-/* Top Header Profile */
-.content-header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  /* RESET TOTAL: Menghapus paksa margin, padding, dan bentuk kapsul custom */
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+  transition: all 0.2s ease-in-out;
 }
 
-.breadcrumb {
-  font-size: 12px;
-  color: #94a3b8;
-}
-
-.content-header h2 {
-  font-size: 24px;
-  font-weight: 700;
-  color: #1e3a8a;
-  margin-top: 2px;
-}
-
-.header-profile {
+/* Pengaturan Link di Dalam Menu */
+.menu-item a {
   display: flex;
   align-items: center;
   gap: 12px;
+  width: 100%;
+  color: #64748b;
+  text-decoration: none !important; /* Memaksa garis bawah link hilang */
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: none !important;
+}
+
+.menu-item i {
+  width: 18px;
+  font-size: 14px;
+  text-align: center;
+  color: #94a3b8;
+}
+
+/* Hover State - Menghapus efek background kotak abu-abu custom */
+.menu-item:hover {
+  background-color: transparent !important;
+}
+
+/* Active State - Menghapus total sisa kotak aktif agar gaya pipih template mengambil alih */
+.menu-item.active {
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.menu-item.active a {
+  font-weight: 600;
+}
+
+/* Logout Link - Menyesuaikan posisi tanpa merusak estetika pipih */
+.logout-link {
+  margin-top: auto; /* Mendorong tombol logout otomatis ke paling bawah */
+  margin-bottom: 24px;
+  margin-left: 0 !important;
+  padding: 0 !important;
+  background-color: transparent !important;
+}
+
+.logout-link:hover {
+  background-color: transparent !important;
+}
+
+/* ==========================================================================
+   MAIN CONTENT & HEADER FIX (PENGUNCI ABSOLUT KIRI-KANAN)
+   ========================================================================== */
+
+/* ==========================================================================
+   --- SINKRONISASI JARAK & RUANG (MENGIKUTI HALAMAN KELAS) ---
+   ========================================================================== */
+
+/* 1. Pengaturan Panel Utama */
+.main-content {
+  margin-left: 260px !important; /* KUNCI: Memberi jarak 260px untuk Sidebar (Fixed) */
+  padding: 0 !important;
+  width: auto !important; /* Otomatis menghitung lebar sisa layar (100% - 260px margin) */
+  background-color: #f8fafc; /* Warna background abu-abu terang Kelas */
+  min-width: 0;
+}
+
+/* 2. Menyamakan Jarak Header Dosen dengan Topbar Kelas */
+.content-header {
+  height: 70px !important; /* Tinggi topbar standar kelas */
+  padding: 0 48px !important; /* DITINGKATKAN: Memberi ruang lebih besar di sisi samping agar header lebih ramping */
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 !important; /* Memastikan tidak ada margin yang mendorong header ke bawah */
+}
+
+/* 3. Menyamakan Ruang Bernapas Kotak Data dengan Workspace Kelas */
+.data-card {
+  margin: 24px 48px !important; /* DITINGKATKAN: Menambah margin kiri & kanan (48px) agar lebar card berkurang secara visual */
+  padding: 24px !important;
+  background-color: #ffffff !important;
+  border-radius: 12px !important; /* Sudut melengkung card khas halaman Kelas */
+  border: 1px solid #e2e8f0 !important;
+}
+
+/* Top Header Profile */
+header.content-header {
+  display: flex !important;
+  flex-direction: row !important; /* Memastikan berjajar horizontal */
+  justify-content: space-between !important; /* KUNCI 2: Memaksa area judul ke kiri, profil ke kanan */
+  align-items: center !important;
+  width: auto !important; /* Menghapus paksa width 100% agar tidak meluber keluar dari main-content */
+  max-width: 100% !important;
+  text-align: left !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important; /* DIHAPUS: Menghilangkan gap antara header and card agar konten naik */
+}
+
+/* Area Judul (Kiri) */
+.header-title-area {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important; /* KUNCI 3: Memaksa teks judul & breadcrumb rata kiri */
+  text-align: left !important;
+  margin: 0 !important; /* Hapus margin auto bawaan template yang bikin ke tengah */
+}
+
+.breadcrumb {
+  font-size: 9px; /* Disamakan dengan ukuran standar breadcrumb-text */
+  color: #94a3b8;
+  text-align: left !important;
+  margin: 0 !important;
+}
+
+/* Baris Ikon Garis 3 + Judul */
+.title-with-icon {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px;
+  margin-top: 4px !important;
+  text-align: left !important;
+}
+
+.title-with-icon .sidebar-toggle-icon {
+  font-size: 16px;
+  color: #1e3a8a;
+  cursor: pointer;
+}
+
+header.content-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin: 0 !important; /* Menghilangkan margin auto bawaan template */
+  text-align: left !important;
+  line-height: 1.2;
+}
+
+/* Area Profil (Kanan) */
+.header-profile {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-left: auto !important; /* Mendorong paksa ke ujung kanan */
+  text-align: right !important;
 }
 
 .profile-info {
-  display: flex;
-  flex-direction: column;
-  text-align: right;
+  display: flex !important;
+  flex-direction: column !important;
+  text-align: right !important;
 }
 
 .profile-name {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 600;
   color: #2563eb;
+  text-align: right !important;
 }
 
 .profile-role {
-  font-size: 11px;
+  font-size: 9px;
   color: #64748b;
+  text-align: right !important;
 }
 
 .profile-avatar {
@@ -200,11 +339,12 @@ body {
   background-color: #2563eb;
   color: #ffffff;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 11px;
+  flex-shrink: 0;
 }
 
 /* ==========================================================================
@@ -215,7 +355,8 @@ body {
   border-radius: 12px;
   border: 1px solid #e2e8f0;
   padding: 24px;
-  width: 100%; /* Pastikan card melebar penuh mengikuti main-content */
+  margin: 24px 48px !important; /* Jarak luar tetap aman */
+  width: auto !important; /* KUNCI: Ubah dari 100% ke auto agar patuh pada margin */
 }
 
 .filter-action-bar {
@@ -237,7 +378,7 @@ body {
   top: 50%;
   transform: translateY(-50%);
   color: #94a3b8;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .search-box input {
@@ -245,13 +386,14 @@ body {
   padding: 10px 12px 10px 36px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 11px;
   background-color: #ffffff;
   outline: none;
 }
 
 .filter-dropdowns {
   display: flex;
+  align-items: center;
   gap: 8px;
 }
 
@@ -259,10 +401,11 @@ body {
   padding: 10px 14px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 11px;
   color: #475569;
   background-color: #ffffff;
   outline: none;
+  height: 38px; /* Menyamakan tinggi dengan custom dropdown */
 }
 
 .btn-primary {
@@ -271,7 +414,7 @@ body {
   border: none;
   padding: 10px 16px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -301,7 +444,7 @@ body {
   background-color: #f8fafc;
   color: #64748b;
   font-weight: 600;
-  font-size: 11px;
+  font-size: 9px;
   text-transform: uppercase;
   padding: 12px 16px;
   border-bottom: 1px solid #e2e8f0;
@@ -312,6 +455,7 @@ body {
   padding: 16px 20px;
   border-bottom: 1px solid #f1f5f9;
   vertical-align: middle;
+  font-size: 11px; /* Ukuran dasar isi tabel */
 }
 
 /* Elemen Kolom Dosen */
@@ -329,7 +473,7 @@ body {
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 8px;
   flex-shrink: 0; /* Prevent avatar from shrinking */
 }
 
@@ -361,7 +505,7 @@ body {
 }
 
 .dosen-nip {
-  font-size: 11px;
+  font-size: 7px;
   color: #64748b;
   margin-top: 2px;
 }
@@ -380,7 +524,7 @@ body {
 
 .badge-sks {
   align-self: flex-start;
-  font-size: 10px;
+  font-size: 6px;
   font-weight: 600;
   color: #64748b;
   background-color: #f1f5f9;
@@ -407,7 +551,7 @@ body {
 }
 
 .kelas-tahun {
-  font-size: 11px;
+  font-size: 7px;
   color: #64748b;
 }
 
@@ -416,7 +560,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: 8px;
   font-weight: 600;
   padding: 6px 14px;
   border-radius: 20px;
@@ -479,7 +623,7 @@ body {
 }
 
 .pagination-info {
-  font-size: 13px;
+  font-size: 11px;
   color: #64748b;
 }
 
@@ -502,7 +646,7 @@ body {
   background-color: #ffffff;
   color: #334155;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -528,46 +672,6 @@ body {
   background-color: #f8fafc;
 }
 
-/* Custom dropdown styles (if used, otherwise remove) */
-/* These are for custom HTML dropdowns, not native <select>.
-   If the HTML uses native <select>, these styles might not be fully applied
-   or might be intended for a future custom dropdown implementation.
-   Keeping them for now as they were in the previous context.
-*/
-.dropdown-wrapper {
-  position: relative;
-}
-
-.dropdown-menu-list {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  width: 100%;
-  min-width: 160px;
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  z-index: 999;
-  padding: 6px 0;
-  list-style: none;
-  margin: 0;
-  display: none; /* Hidden by default, toggled by JS */
-}
-
-.dropdown-menu-list li {
-  padding: 8px 14px;
-  font-size: 13px;
-  color: #1e293b;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.dropdown-menu-list li:hover {
-  background-color: #f1f5f9;
-  color: #2563eb;
-}
-
 /* Warning row for table */
 .styled-table .warning-row td {
   background-color: #fffbeb; /* Light yellow background */
@@ -576,4 +680,290 @@ body {
   background-color: #fef2f2; /* Red badge for 0 students */
   color: #dc2626;
   font-weight: 700;
+}
+
+/* ==========================================================================
+   --- SYSTEM STYLE UNTUK CUSTOM DROPDOWN SEMESTER (BARU) ---
+   ========================================================================== */
+.custom-dropdown {
+  position: relative;
+  min-width: 160px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Kotak Trigger Utama Dropdown */
+.dropdown-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #475569;
+  height: 38px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Efek Hover Trigger */
+.dropdown-trigger:hover {
+  border-color: #cbd5e1;
+}
+
+/* Keadaan Dropdown Saat Terbuka (Open) */
+.custom-dropdown.open .dropdown-trigger {
+  border-color: #2563eb;
+  color: #1e293b;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Icon Panah Chevron */
+.custom-dropdown .arrow-icon {
+  font-size: 10px;
+  color: #64748b;
+  transition: transform 0.2s ease;
+}
+
+/* Rotasi Panah Saat Terbuka */
+.custom-dropdown.open .arrow-icon {
+  transform: rotate(180deg);
+  color: #2563eb;
+}
+
+/* Menu List Dropdown (Kombinasi Floating & Shadow Efek Khas UI) */
+.dropdown-menu-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.06),
+    0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  z-index: 999;
+  padding: 5px;
+  display: none; /* Dikontrol via class .open di Javascript */
+}
+
+/* Menampilkan Menu */
+.custom-dropdown.open .dropdown-menu-list {
+  display: block;
+}
+
+.dropdown-menu-list ul {
+  list-style: none !important;
+  padding: 0;
+  margin: 0;
+}
+
+/* Item Opsi Pilihan */
+.dropdown-menu-list li {
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #334155;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.15s ease;
+  margin-bottom: 2px;
+}
+
+.dropdown-menu-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* Hover State pada Item List */
+.dropdown-menu-list li:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* Active State (Item yang Terpilih - Sesuai Mockup UI) */
+.dropdown-menu-list li.active {
+  background-color: #eff6ff;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+/* Ikon Checkmark Centang Biru */
+.dropdown-menu-list li .check-icon {
+  font-size: 10px;
+  color: #2563eb;
+}
+
+/* ==========================================================================
+   STYLING MODAL FORM EDIT DOSEN (MOCKUP MATCH)
+   ========================================================================== */
+.modal-form-card {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  width: 95%;
+  max-width: 800px; /* Ukuran lebar proporsional untuk 2 kolom */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-form-header {
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.modal-form-header h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.modal-form-header p {
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* Grid Layout 2 Kolom */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 24px;
+  row-gap: 20px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr; /* Responsif hp jadi 1 kolom */
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.form-group label .required {
+  color: #ef4444;
+}
+
+/* Style Input & Select Global */
+.form-group input[type="text"],
+.form-group select {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: #0f172a;
+  background-color: #ffffff;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+/* State Focus / Active Input Aktif (Seperti input Kelas di mockup) */
+.form-group input[type="text"]:focus,
+.form-group select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+/* Style Locked / Disabled Input (Tahun Akademik) */
+.form-group input.input-disabled {
+  background-color: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* Wrapper untuk Input ber-Ikon (Mata Kuliah & Kelas) */
+.input-icon-wrapper, 
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-inside-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+/* Custom Dropdown Select Native */
+.form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.select-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+/* Footer Buttons Actions */
+.modal-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 24px;
+}
+
+.btn-form-secondary {
+  padding: 12px 28px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #334155;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-form-secondary:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.btn-form-primary {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-form-primary:hover {
+  background: #1d4ed8;
 }

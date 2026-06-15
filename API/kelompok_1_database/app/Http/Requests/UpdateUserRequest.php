@@ -31,6 +31,8 @@ class UpdateUserRequest extends FormRequest
                 Rule::unique('users', 'email')->ignore($userId),
             ],
             'role_id' => 'sometimes|integer|exists:role,id_role',
+            'prodi_id' => 'sometimes|nullable|exists:prodis,id',
+            'semester_id' => 'sometimes|nullable|exists:semesters,id',
             'password' => 'sometimes|string|min:6',
             'status' => 'sometimes|in:aktif,nonaktif',
         ];

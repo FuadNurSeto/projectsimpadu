@@ -49,4 +49,25 @@ class ProdiController extends Controller
             'data' => $prodi->load('jurusan'),
         ], 201);
     }
+
+    /**
+     * Mengubah prodi berdasarkan ID.
+     *
+     * @param ProdiRequest $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @bodyParam jurusan_id int required Example: 1
+     * @bodyParam nama_prodi string required Example: D4 Teknik Elektro
+     */
+    public function update(ProdiRequest $request, $id)
+    {
+        $prodi = Prodi::findOrFail($id);
+        $prodi->update($request->validated());
+
+        return response()->json([
+            'message' => 'Prodi updated successfully',
+            'data' => $prodi->load('jurusan'),
+        ]);
+    }
 }

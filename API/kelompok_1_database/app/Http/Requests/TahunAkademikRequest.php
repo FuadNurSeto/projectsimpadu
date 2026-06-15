@@ -13,7 +13,7 @@ class TahunAkademikRequest extends FormRequest
 
     public function rules(): array
     {
-        $id = $this->route('tahun_akademik');
+        $id = $this->route('id');
 
         return [
             'id' => 'required|integer|unique:tahun_akademiks,id' . ($id ? ',' . $id : ''),

@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
@@ -16,21 +16,25 @@
     />
   </head>
   <body>
-    <div class="dashboard-container">
-      <div id="sidebar-container"></div>
+    <div class="dashboard-layout-container dashboard-container">
+      <div id="sidebar-container" class="sidebar-left-panel"></div>
 
-      <main class="main-content">
+      <main class="main-right-panel main-content">
         <header class="content-header">
           <div class="header-title-area">
             <span class="breadcrumb">Akademik / Data Master</span>
-            <h2>Dosen Pengajar</h2>
-          </div>
-          <div class="header-profile">
-            <div class="profile-info">
-              <span class="profile-name">Nabila Aulia</span>
-              <span class="profile-role">Admin Academic</span>
+            <div class="title-with-icon">
+              <i class="fas fa-bars sidebar-toggle-icon"></i>
+              <h2>Dosen Pengajar</h2>
             </div>
-            <div class="profile-avatar">NA</div>
+          </div>
+
+          <div class="header-profile">
+            <div class="user-info-text">
+              <span class="user-name">Memuat...</span>
+              <span class="user-role">Admin Akademik</span>
+            </div>
+            <div class="user-avatar-badge">..</div>
           </div>
         </header>
 
@@ -46,18 +50,67 @@
             </div>
 
             <div class="filter-dropdowns">
-              <select id="filter-tahun">
-                <option>Tahun: 20262 (Genap)</option>
-              </select>
-              <select id="filter-prodi">
-                <option value="">Pilih Program Studi</option>
-              </select>
-              <select id="filter-semester">
-                <option value="">Pilih Semester</option>
-              </select>
+              
+              <div class="custom-dropdown" id="dropdown-tahun">
+                <div class="dropdown-trigger">
+                  <span id="selected-tahun">Semua Tahun Akademik</span>
+                  <i class="fas fa-chevron-down arrow-icon"></i>
+                </div>
+                <div class="dropdown-menu-list">
+                  <ul id="tahun-list-container">
+                    </ul>
+                </div>
+                <input type="hidden" id="filter-tahun" value="">
+              </div>
+              
+              <div class="custom-dropdown" id="dropdown-prodi">
+                <div class="dropdown-trigger">
+                  <span id="selected-prodi">Semua Program Studi</span>
+                  <i class="fas fa-chevron-down arrow-icon"></i>
+                </div>
+                <div class="dropdown-menu-list">
+                  <div class="dropdown-search-wrapper" style="padding: 10px; border-bottom: 1px solid #e2e8f0;">
+                    <div class="search-box" style="margin: 0; width: 100%; box-shadow: none; border: 1px solid #cbd5e1;">
+                      <i class="fas fa-search search-icon" style="left: 12px;"></i>
+                      <input 
+                        type="text" 
+                        id="search-prodi-dropdown" 
+                        placeholder="Cari program studi..." 
+                        style="padding-left: 36px; height: 38px; font-size: 14px;"
+                      />
+                    </div>
+                  </div>
+                  <ul id="prodi-list-container">
+                    </ul>
+                </div>
+                <input type="hidden" id="filter-prodi" value="">
+              </div>
+              
+              <div class="custom-dropdown" id="dropdown-semester">
+                <div class="dropdown-trigger">
+                  <span id="selected-semester">Semua Semester</span>
+                  <i class="fas fa-chevron-down arrow-icon"></i>
+                </div>
+                <div class="dropdown-menu-list">
+                  <ul>
+                    <li class="active" data-value="">Semua Semester <i class="fas fa-check check-icon"></i></li>
+                    <li data-value="ganjil">Semester Ganjil</li>
+                    <li data-value="genap">Semester Genap</li>
+                    <li data-value="1">Semester 1</li>
+                    <li data-value="2">Semester 2</li>
+                    <li data-value="3">Semester 3</li>
+                    <li data-value="4">Semester 4</li>
+                    <li data-value="5">Semester 5</li>
+                    <li data-value="6">Semester 6</li>
+                    <li data-value="7">Semester 7</li>
+                    <li data-value="8">Semester 8</li>
+                  </ul>
+                </div>
+                <input type="hidden" id="filter-semester" value="">
+              </div>
             </div>
 
-            <button class="btn-primary" id="btn-tambah-dosen">
+            <button class="btn-primary" id="btnTambahDosen">
               <i class="fas fa-plus"></i> Tambah Dosen Pengajar
             </button>
           </div>
@@ -73,17 +126,11 @@
                   <th style="text-align: center">Aksi</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="list-dosen">
                 <tr>
-                  <td
-                    colspan="5"
-                    style="text-align: center; padding: 40px; color: #64748b"
-                  >
-                    <i
-                      class="fas fa-spinner fa-spin"
-                      style="margin-right: 8px"
-                    ></i>
-                    Memuat data dosen pengajar...
+                  <td colspan="5" style="text-align: center; padding: 40px; color: #64748b">
+                    <i class="fas fa-spinner fa-spin" style="margin-right: 8px"></i>
+                    Memuat data alokasi dosen dari VPS Poliban...
                   </td>
                 </tr>
               </tbody>
@@ -91,6 +138,187 @@
           </div>
         </div>
       </main>
+    </div>
+
+    <div id="modalTambahDosen" class="modal-overlay hidden">
+      <div id="modalCard" class="modal-form-card scale-95 opacity-0" style="transition: all 0.2s ease-out;">
+        <div class="modal-form-header">
+          <h3>Buat Dosen Pengajar Kelas</h3>
+          <p>Tentukan alokasi mengajar dosen untuk mata kuliah dan kelas tertentu.</p>
+        </div>
+
+        <form id="formTambahDosen" class="modal-form-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Tahun Akademik</label>
+              <div class="input-icon-wrapper">
+                <input type="text" id="text-tambah-tahun" class="input-disabled" readonly value="Memuat...">
+                <input type="hidden" id="select-tambah-tahun">
+                <i class="fas fa-lock input-inside-icon" style="color: #94a3b8;"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Dosen Pengajar <span class="required">*</span></label>
+              <div class="select-wrapper">
+                <select id="select-tambah-dosen" required>
+                  <option value="" disabled selected>Pilih Dosen Pengajar</option>
+                </select>
+                <i class="fas fa-chevron-down select-icon"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Mata Kuliah <span class="required">*</span></label>
+              <div class="select-wrapper">
+                <select id="select-tambah-mk" required>
+                  <option value="" disabled selected>Pilih Mata Kuliah</option>
+                </select>
+                <i class="fas fa-chevron-down select-icon"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Kelas <span class="required">*</span></label>
+              <div class="select-wrapper">
+                <select id="select-tambah-kelas" required>
+                  <option value="" disabled selected>Pilih Kelas</option>
+                </select>
+                <i class="fas fa-chevron-down select-icon"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-form-actions">
+            <button type="button" id="btnBatal" class="btn-form-secondary">Batal</button>
+            <button type="submit" class="btn-form-primary">Simpan Data</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="edit-dosen-modal" class="modal-overlay" style="display: none;">
+      <div class="modal-form-card">
+        <div class="modal-form-header">
+          <h3>Ubah Dosen Pengajar Kelas</h3>
+          <p>Perbarui alokasi mata kuliah dan kelas untuk dosen terpilih.</p>
+        </div>
+
+        <form id="form-edit-dosen" class="modal-form-body">
+          <input type="hidden" id="edit-id-dosen" value="">
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Tahun Akademik</label>
+              <input type="text" id="edit-tahun-akademik" class="input-disabled" readonly value="">
+            </div>
+
+            <div class="form-group">
+              <label>Mata Kuliah</label>
+              <input type="text" id="edit-mata-kuliah" class="input-disabled" readonly value="">
+            </div>
+
+            <div class="form-group">
+              <label>Kelas Terpilih</label>
+              <input type="text" id="edit-kelas-dosen" class="input-disabled" readonly value="">
+            </div>
+
+            <div class="form-group">
+              <label>Dosen Pengajar Pengganti <span class="required">*</span></label>
+              <div class="select-wrapper">
+                <select id="edit-nama-dosen" required>
+                  </select>
+                <i class="fas fa-chevron-down select-icon"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-form-actions">
+            <button type="button" id="btn-cancel-edit" class="btn-form-secondary">Batal</button>
+            <button type="submit" class="btn-form-primary">Simpan Perubahan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+   <div id="view-dosen-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.6); z-index: 9999; align-items: center; justify-content: center;">
+  <div class="modal-form-card" style="max-width: 750px; width: 100%; background: #ffffff; padding: 32px; border-radius: 16px; position: relative; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 24px;">
+    
+    <i class="fas fa-times" id="btn-close-view" onclick="document.getElementById('view-dosen-modal').style.display='none'" style="position: absolute; top: 28px; right: 28px; font-size: 22px; color: #94a3b8; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#475569'" onmouseout="this.style.color='#94a3b8'"></i>
+
+    <div style="display: flex; align-items: center; gap: 20px; padding-bottom: 20px; border-bottom: 1px solid #e2e8f0;">
+      <div style="width: 76px; height: 76px; border-radius: 16px; background-color: #eff6ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <i class="fas fa-user" style="font-size: 32px; color: #2563eb;"></i>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <h2 id="view-header-nama" style="margin: 0; font-size: 26px; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;">—</h2>
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <span id="view-header-nip" style="font-size: 14px; color: #64748b; font-weight: 500;">NIP: —</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; background-color: #bbf7d0; color: #16a34a; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 9999px;">
+            <span style="width: 6px; height: 6px; background-color: #16a34a; border-radius: 50%;"></span> Dosen Pengajar Aktif
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      
+      <div>
+        <label style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: block;">Tahun Akademik</label>
+        <div id="view-tahun-akademik" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; font-size: 15px; font-weight: 600; color: #1e293b; min-height: 50px; display: flex; align-items: center;">—</div>
+      </div>
+
+      <div>
+        <label style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: block;">Dosen Pengajar</label>
+        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 18px; display: flex; align-items: center; gap: 12px; min-height: 50px;">
+          <div id="view-initial-circle" style="width: 32px; height: 32px; border-radius: 50%; background-color: #dbeafe; color: #2563eb; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0;">—</div>
+          <div style="font-size: 15px; font-weight: 600; color: #1e293b;">
+            <span id="view-block-nama">—</span>
+            <span id="view-block-nip" style="font-size: 14px; color: #64748b; font-weight: 400; margin-left: 6px;">- NIP: —</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: block;">Mata Kuliah</label>
+          <div id="view-mata-kuliah" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; font-size: 15px; font-weight: 600; color: #1e293b; min-height: 50px; display: flex; align-items: center;">—</div>
+        </div>
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: block;">Kelas & Program Studi</label>
+          <div id="view-kelas-prodi" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; font-size: 15px; font-weight: 600; color: #475569; min-height: 50px; display: flex; align-items: center;">—</div>
+        </div>
+      </div>
+
+      <div>
+        <label style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: block;">Informasi Peserta</label>
+        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; min-height: 50px;">
+          <span id="view-peserta-badge" style="background-color: #dcfce7; color: #15803d; font-size: 13px; padding: 6px 12px; border-radius: 6px; font-weight: 600; display: inline-block; white-space: nowrap; border: 1px solid #bbf7d0;">0 Mahasiswa</span>
+          <span style="font-size: 14px; color: #64748b; font-weight: 500;">telah terdaftar di kelas ini untuk mata kuliah bersangkutan.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+    <div id="logout-modal" class="logout-modal-overlay">
+      <div class="logout-modal-box">
+        <div class="logout-modal-icon-wrapper">
+          <img src="../../../Asset/kluar.png" alt="Logout" class="logout-modal-icon-img" />
+        </div>
+
+        <h3>Konfirmasi Keluar Akun</h3>
+        <p>
+          Apakah Anda yakin ingin keluar dari sistem?<br />
+          Anda harus login kembali menggunakan Email untuk mengakses data akademik SIMPADU.
+        </p>
+
+        <div class="logout-modal-actions">
+          <button id="btn-batal-logout" class="logout-btn-modal logout-btn-batal">Batal</button>
+          <button class="logout-btn-modal logout-btn-konfirmasi">Ya, Keluar Akun</button>
+        </div>
+      </div>
     </div>
 
     <script src="/Dashboard/admin_akademik/sidebar-loader.js"></script>

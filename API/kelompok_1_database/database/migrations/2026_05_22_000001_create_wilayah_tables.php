@@ -584,7 +584,7 @@ return new class extends Migration
             DB::table('kabupatens')->insert([
                 'provinsi_id' => $provinsiId,
                 'kode' => $k[0],
-                'nama' => $k[2],
+                'nama' => $k[1],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

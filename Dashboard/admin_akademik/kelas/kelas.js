@@ -206,9 +206,10 @@ function renderTable(dataToRender) {
     // Ambil jumlah mahasiswa terdaftar dari API
     // Prioritas 1: jumlah_mahasiswa (alias dari Controller)
     // Prioritas 2: mahasiswa_kelas_mks_count (default Laravel)
-    const terisi = item.jumlah_mahasiswa !== undefined 
-                   ? item.jumlah_mahasiswa 
-                   : (item.mahasiswa_kelas_mks_count || 0);
+    const terisi =
+      item.jumlah_mahasiswa !== undefined
+        ? item.jumlah_mahasiswa
+        : item.mahasiswa_kelas_mks_count || 0;
 
     // STRUKTUR DATA: Menggunakan Inline SVG dengan warna biru & isi bg sesuai gambar
     tr.innerHTML = `
@@ -669,6 +670,6 @@ async function handleUpdateKelas() {
  * Dipanggil dari tombol detail (ikon user) di tabel.
  * @param {number} id - ID Kelas
  */
-window.viewDetail = function(id) {
-    window.location.href = `detail_kelas.html?id=${id}`;
+window.viewDetail = function (id) {
+  window.location.href = `detail_kelas.html?id=${id}`;
 };

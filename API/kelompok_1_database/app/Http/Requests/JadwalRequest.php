@@ -28,6 +28,7 @@ class JadwalRequest extends FormRequest
             ],
             'id_kelas' => 'required|integer|exists:kelas,id',
             'tahun_akademik_id' => 'required|integer|exists:tahun_akademiks,id',
+            'ruang' => 'nullable|string|max:50',
             'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu',
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',

@@ -21,12 +21,16 @@ return new class extends Migration
             });
         }
 
-        DB::statement('ALTER TABLE mahasiswa_kelas_mk MODIFY id_mahasiswa_mk INT AUTO_INCREMENT');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE mahasiswa_kelas_mk MODIFY id_mahasiswa_mk INT AUTO_INCREMENT');
+        }
     }
 
     public function down(): void
     {
-        DB::statement('ALTER TABLE mahasiswa_kelas_mk MODIFY id_mahasiswa_mk INT NOT NULL');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE mahasiswa_kelas_mk MODIFY id_mahasiswa_mk INT NOT NULL');
+        }
 
         if (Schema::hasColumn('k_h_s', 'semester_mahasiswa')) {
             Schema::table('k_h_s', function (Blueprint $table) {

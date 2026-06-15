@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DosenRegisterRequest;
 use App\Http\Requests\MahasiswaRegisterRequest;
 use App\Http\Requests\MahasiswaStatusRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Models\KHS;
-use App\Models\MahasiswaKelasMk;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -43,6 +42,9 @@ class UserController extends Controller
      * Mengubah data user (name, username, nomor_identitas, email, role_id, password, status).
      * Semua field bersifat opsional — hanya field yang dikirim yang akan di-update.
      *
+     * Super Admin (1) → bisa update semua user, termasuk ganti role_id & status.
+     * Admin lain (2,3,4,5) → hanya bisa update akun sendiri, tidak bisa ubah role_id & status.
+     *
      * @param UpdateUserRequest $request
      * @param int $id_user
      * @return \Illuminate\Http\JsonResponse
@@ -51,16 +53,30 @@ class UserController extends Controller
      * @bodyParam username string optional Example: budisetiawan
      * @bodyParam nomor_identitas string optional Example: C00013
      * @bodyParam email string optional Example: budi@mahasiswa.simpadu.ac.id
-     * @bodyParam role_id int optional Example: 2
+     * @bodyParam role_id int optional (Super Admin only) Example: 2
      * @bodyParam password string optional Example: newpassword123
-     * @bodyParam status string optional Example: nonaktif
+     * @bodyParam status string optional (Super Admin only) Example: nonaktif
      */
     public function updateUser(UpdateUserRequest $request, $id_user)
     {
         $user = User::findOrFail($id_user);
-        $user->update($request->validated());
+        $authUser = auth()->user();
+        $authRoleIds = $authUser->roles->pluck('id_role')->toArray();
+        $isSuperAdmin = in_array(1, $authRoleIds);
 
-        if ($request->has('role_id')) {
+        if (!$isSuperAdmin && $authUser->id !== (int) $id_user) {
+            abort(403, 'Forbidden: Anda hanya dapat mengubah akun milik Anda sendiri.');
+        }
+
+        $data = $request->validated();
+
+        if (!$isSuperAdmin) {
+            unset($data['role_id'], $data['status']);
+        }
+
+        $user->update($data);
+
+        if ($request->has('role_id') && $isSuperAdmin) {
             $roleIds = [$request->role_id];
             if (in_array((int) $request->role_id, [2, 3, 4, 5, 7], true)) {
                 $roleIds[] = 8;
@@ -87,25 +103,16 @@ class UserController extends Controller
      */
     public function showByNim($nim)
     {
-        $user = User::where('nomor_identitas', $nim)
+        $user = User::with('prodi', 'semester')
+            ->where('nomor_identitas', $nim)
             ->where('role_id', 6)
             ->firstOrFail();
 
-        $prodiId = null;
-        $namaProdi = null;
+        $prodiId = $user->prodi_id;
+        $namaProdi = $user->prodi ? $user->prodi->nama_prodi : null;
 
-        $plotting = MahasiswaKelasMk::with('kelas.prodi')
-            ->where('nim', $nim)
-            ->latest('id_mahasiswa_mk')
-            ->first();
-
-        if ($plotting && $plotting->kelas && $plotting->kelas->prodi) {
-            $prodiId = $plotting->kelas->prodi->id;
-            $namaProdi = $plotting->kelas->prodi->nama_prodi;
-        }
-
-        $semesterSekarang = KHS::where('user_id', $user->id)
-            ->max('semester_mahasiswa');
+        $semesterAktif = $user->semester;
+        $semesterSekarang = $semesterAktif ? $semesterAktif->nomor_semester : null;
 
         return response()->json([
             'id' => $user->id,
@@ -114,12 +121,14 @@ class UserController extends Controller
             'email' => $user->email,
             'prodi_id' => $prodiId,
             'nama_prodi' => $namaProdi,
+            'semester_id' => $semesterAktif ? $semesterAktif->id : null,
             'semester_sekarang' => $semesterSekarang,
         ]);
     }
 
     /**
      * Membuat akun mahasiswa baru (role_id otomatis 6, status default aktif).
+     * Mahasiswa langsung ditempatkan ke semester dan program studi yang dipilih.
      *
      * @param MahasiswaRegisterRequest $request
      * @return \Illuminate\Http\JsonResponse
@@ -129,6 +138,8 @@ class UserController extends Controller
      * @bodyParam nomor_identitas string nullable Example: C00013
      * @bodyParam email string required Example: budisetiawan@mahasiswa.simpadu.ac.id
      * @bodyParam password string required Example: password123
+     * @bodyParam prodi_id int required Example: 3
+     * @bodyParam semester_id int required Example: 1
      */
     public function registerMahasiswa(MahasiswaRegisterRequest $request)
     {
@@ -142,6 +153,25 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Mahasiswa created successfully',
+            'user' => $user->load('roles', 'prodi.jurusan', 'semester.tahunAkademik'),
+        ], 201);
+    }
+
+    public function registerDosen(DosenRegisterRequest $request)
+    {
+        $data = $request->validated();
+        $data['role_id'] = 7;
+        $data['status'] = 'aktif';
+
+        $user = User::create($data);
+
+        DB::table('role_user')->insert([
+            ['user_id' => $user->id, 'role_id' => 7],
+            ['user_id' => $user->id, 'role_id' => 8],
+        ]);
+
+        return response()->json([
+            'message' => 'Dosen created successfully',
             'user' => $user->load('roles'),
         ], 201);
     }
@@ -153,7 +183,22 @@ class UserController extends Controller
      */
     public function mahasiswa()
     {
-        $users = User::where('role_id', 6)->with('roles')->get();
+        $users = User::where('role_id', 6)->with('roles', 'prodi', 'semester')->get();
+
+        return response()->json($users);
+    }
+
+    /**
+     * Menampilkan list seluruh dosen aktif (role_id = 7, status = aktif).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function dosen()
+    {
+        $users = User::where('role_id', 7)
+            ->where('status', 'aktif')
+            ->with('roles')
+            ->get();
 
         return response()->json($users);
     }
@@ -195,6 +240,27 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Password reset successfully',
+        ]);
+    }
+
+    /**
+     * Menampilkan profil user yang sedang login.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function me()
+    {
+        $user = auth()->user()->load('roles');
+
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'username' => $user->username,
+            'nomor_identitas' => $user->nomor_identitas,
+            'email' => $user->email,
+            'role_ids' => $user->roles->pluck('id_role')->toArray(),
+            'roles' => $user->roles->pluck('nama_role')->toArray(),
+            'status' => $user->status,
         ]);
     }
 }

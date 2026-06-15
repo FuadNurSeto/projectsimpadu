@@ -15,6 +15,7 @@ class Jadwal extends Model
         'dosen_id',
         'id_kelas',
         'tahun_akademik_id',
+        'ruang',
         'hari',
         'jam_mulai',
         'jam_selesai',
@@ -52,5 +53,10 @@ class Jadwal extends Model
     {
         return $this->hasMany(MahasiswaKelasMk::class, 'mata_kuliah_id', 'mata_kuliah_id')
             ->whereColumn('id_kelas', 'id_kelas');
+    }
+
+    public function materiPertemuan(): HasMany
+    {
+        return $this->hasMany(MateriPertemuan::class, 'jadwal_id');
     }
 }

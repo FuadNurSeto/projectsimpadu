@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MahasiswaRegisterRequest extends FormRequest
+class DosenRegisterRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,8 +19,6 @@ class MahasiswaRegisterRequest extends FormRequest
             'nomor_identitas' => 'nullable|string|max:50|unique:users,nomor_identitas',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:6',
-            'prodi_id' => 'required|exists:prodis,id',
-            'semester_id' => 'required|exists:semesters,id',
         ];
     }
 }

@@ -56,7 +56,7 @@ function setDynamicProfile() {
       .slice(0, 2)
       .join("")
       .toUpperCase();
-    
+
     avatarElements.forEach((el) => {
       el.innerText = initials || "AA";
     });
@@ -251,6 +251,10 @@ function renderTahunAkademik(daftarTahun) {
   daftarTahun.forEach((item) => {
     // Cek status aktif (bisa berupa string "aktif" atau angka "1")
     const isAktif = item.status === "aktif" || item.status === "1";
+
+    if (isAktif) {
+      localStorage.setItem("active_tahun_akademik", item.id.toString());
+    }
 
     if (isAktif) {
       // 2. TEMPLATE UNTUK TAHUN AKADEMIK AKTIF (KARTU BIRU + CENTANG)
@@ -535,18 +539,15 @@ function initAksiKeamananProfil() {
         btnSaveChanges.disabled = true;
 
         // Sesuai Dokumentasi #3: PUT ke /api/akademik/users/{id_user} untuk update profil
-        const response = await fetch(
-          `${API_BASE_URL}/users/${currentUserId}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: JSON.stringify({ name, email }),
+        const response = await fetch(`${API_BASE_URL}/users/${currentUserId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        );
+          body: JSON.stringify({ name, email }),
+        });
 
         if (!response.ok)
           throw new Error("Gagal memperbarui informasi profil di server VPS.");

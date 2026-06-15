@@ -7,12 +7,17 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("🔄 [System] DOM selesai dimuat. Memulai inisialisasi fitur...");
 
   // Ambil token dari storage
-  const token = localStorage.getItem("token") || localStorage.getItem("auth_token");
+  const token =
+    localStorage.getItem("token") || localStorage.getItem("auth_token");
 
   // Proteksi Halaman
   if (!token) {
-    console.warn("⚠️ [Auth] Token tidak ditemukan! Mengalihkan ke halaman login...");
-    alert("Sesi Anda habis atau Anda belum login. Silakan masuk terlebih dahulu.");
+    console.warn(
+      "⚠️ [Auth] Token tidak ditemukan! Mengalihkan ke halaman login...",
+    );
+    alert(
+      "Sesi Anda habis atau Anda belum login. Silakan masuk terlebih dahulu.",
+    );
     window.location.href = "../../../loginbaru/baru.html";
     return;
   }
@@ -21,8 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initUserData();
   fetchTahunAkademik(token);
   initModalLogic(token);
-  initEditModalLogic(token); 
-  initStatusToggleLogic(token); 
+  initEditModalLogic(token);
+  initStatusToggleLogic(token);
   initLogoutLogic();
 
   console.log("🚀 [System] Seluruh fungsi inisialisasi selesai dipanggil!");
@@ -54,7 +59,9 @@ function initUserData() {
 async function fetchTahunAkademik(token) {
   const tbody = document.getElementById("list-tahun-akademik");
   if (!tbody) {
-    console.error("❌ [Error] Elemen HTML 'list-tahun-akademik' tidak ditemukan!");
+    console.error(
+      "❌ [Error] Elemen HTML 'list-tahun-akademik' tidak ditemukan!",
+    );
     return;
   }
 
@@ -70,7 +77,7 @@ async function fetchTahunAkademik(token) {
     if (!response.ok) throw new Error(`Status: ${response.status}`);
 
     const data = await response.json();
-    tbody.innerHTML = ""; 
+    tbody.innerHTML = "";
 
     if (!data || data.length === 0) {
       tbody.innerHTML = `
@@ -92,7 +99,7 @@ async function fetchTahunAkademik(token) {
       const statusColor = isAktif ? "#137333" : "#475569";
       const statusLabel = isAktif ? "Aktif" : "Non-Aktif";
 
-      let toggleButton = isAktif 
+      let toggleButton = isAktif
         ? `<button class="btn-status-toggle" data-id="${item.id}" data-nama="${item.tahun_akademik}" data-status="aktif" title="Nonaktifkan Akses" style="background: #ffffff; border: 1px solid #cbd5e1; color: #64748b; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><i class="fas fa-ban"></i></button>`
         : `<button class="btn-status-toggle" data-id="${item.id}" data-nama="${item.tahun_akademik}" data-status="nonaktif" title="Aktifkan Akses" style="background: #e6f4ea; border: 1px solid #bbf7d0; color: #16a34a; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><i class="fas fa-check"></i></button>`;
 
@@ -124,7 +131,6 @@ async function fetchTahunAkademik(token) {
       txtSekarang.textContent = data.length;
       txtTotal.textContent = data.length;
     }
-
   } catch (error) {
     console.error("❌ [Error] fetchTahunAkademik Gagal:", error);
     tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #ef4444; padding: 24px;">❌ Gagal memuat data dari VPS.</td></tr>`;
@@ -142,7 +148,8 @@ function initModalLogic(token) {
 
   if (!modal) return;
 
-  if (btnBuka) btnBuka.addEventListener("click", () => modal.classList.remove("hidden"));
+  if (btnBuka)
+    btnBuka.addEventListener("click", () => modal.classList.remove("hidden"));
 
   const closeModal = () => {
     modal.classList.add("hidden");
@@ -157,15 +164,25 @@ function initModalLogic(token) {
       const payload = {
         id: document.getElementById("id-tahun").value.trim(),
         tahun_akademik: document.getElementById("nama-tahun").value.trim(),
-        status: document.getElementById("status-tahun").value === "Aktif" ? "aktif" : "nonaktif",
+        status:
+          document.getElementById("status-tahun").value === "Aktif"
+            ? "aktif"
+            : "nonaktif",
       };
 
       try {
-        const response = await fetch(`${BASE_URL}/api/akademik/tahun-akademik`, {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(payload),
-        });
+        const response = await fetch(
+          `${BASE_URL}/api/akademik/tahun-akademik`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(payload),
+          },
+        );
 
         if (response.ok) {
           alert("Tahun akademik baru berhasil disimpan!");
@@ -196,14 +213,20 @@ function initEditModalLogic(token) {
   tbody.addEventListener("click", (e) => {
     const btnEdit = e.target.closest(".btn-edit-tahun");
     if (btnEdit) {
-      document.getElementById("edit-id-tahun").value = btnEdit.getAttribute("data-id");
-      document.getElementById("edit-nama-tahun").value = btnEdit.getAttribute("data-nama");
-      document.getElementById("edit-status-tahun").value = btnEdit.getAttribute("data-status");
+      document.getElementById("edit-id-tahun").value =
+        btnEdit.getAttribute("data-id");
+      document.getElementById("edit-nama-tahun").value =
+        btnEdit.getAttribute("data-nama");
+      document.getElementById("edit-status-tahun").value =
+        btnEdit.getAttribute("data-status");
       modalEdit.classList.remove("hidden");
     }
   });
 
-  if (btnBatalEdit) btnBatalEdit.addEventListener("click", () => modalEdit.classList.add("hidden"));
+  if (btnBatalEdit)
+    btnBatalEdit.addEventListener("click", () =>
+      modalEdit.classList.add("hidden"),
+    );
 
   if (formEditTahun) {
     formEditTahun.addEventListener("submit", async (e) => {
@@ -216,11 +239,18 @@ function initEditModalLogic(token) {
       };
 
       try {
-        const response = await fetch(`${BASE_URL}/api/akademik/tahun-akademik/${idTahun}`, {
-          method: "PUT",
-          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(dataDiperbarui),
-        });
+        const response = await fetch(
+          `${BASE_URL}/api/akademik/tahun-akademik/${idTahun}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(dataDiperbarui),
+          },
+        );
 
         if (response.ok) {
           alert("Data berhasil diperbarui!");
@@ -281,7 +311,8 @@ function initStatusToggleLogic(token) {
         // MAU MENONAKTIFKAN (GAMBAR 1)
         targetStatusBaru = "nonaktif";
         if (iconBox) iconBox.innerHTML = svgWarning;
-        if (confirmTitle) confirmTitle.innerText = "Nonaktifkan Tahun Akademik?";
+        if (confirmTitle)
+          confirmTitle.innerText = "Nonaktifkan Tahun Akademik?";
         if (confirmDesc) {
           confirmDesc.innerHTML = `Apakah Anda yakin ingin menonaktifkan periode <strong>${targetIdTahun} (${targetNamaTahun})</strong>?<br><span style="color: #64748b; font-size: 13px; display: inline-block; margin-top: 8px;">Tahun akademik yang dinonaktifkan tidak dapat digunakan untuk mengisi nilai.</span>`;
         }
@@ -307,16 +338,30 @@ function initStatusToggleLogic(token) {
     }
   });
 
-  if (btnBatalStatus) btnBatalStatus.addEventListener("click", () => modalStatus.classList.add("hidden"));
+  if (btnBatalStatus)
+    btnBatalStatus.addEventListener("click", () =>
+      modalStatus.classList.add("hidden"),
+    );
 
   if (btnYaStatus) {
     btnYaStatus.addEventListener("click", async () => {
       try {
-        const response = await fetch(`${BASE_URL}/api/akademik/tahun-akademik/${targetIdTahun}`, {
-          method: "PUT",
-          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({ id: targetIdTahun, tahun_akademik: targetNamaTahun, status: targetStatusBaru }),
-        });
+        const response = await fetch(
+          `${BASE_URL}/api/akademik/tahun-akademik/${targetIdTahun}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              id: targetIdTahun,
+              tahun_akademik: targetNamaTahun,
+              status: targetStatusBaru,
+            }),
+          },
+        );
 
         if (response.ok) {
           alert("Status berhasil diubah!");
@@ -339,26 +384,27 @@ function initStatusToggleLogic(token) {
 function initLogoutLogic() {
   // Kita menempelkan event ke 'document', bukan ke tombol langsung
   // Dengan ini, kita tidak peduli kapan tombol logout muncul di halaman
-  document.addEventListener("click", function(e) {
-    
+  document.addEventListener("click", function (e) {
     // Cari apakah yang diklik adalah tombol logout
     const trigger = e.target.closest(".menu-item.logout a");
 
     if (trigger) {
       e.preventDefault();
       console.log("✅ Tombol logout diklik, memicu modal...");
-      
+
       const modal = document.querySelector(".logout-modal-overlay");
       if (modal) {
         modal.classList.add("show");
       } else {
-        console.error("❌ Modal logout (.logout-modal-overlay) tidak ditemukan di HTML!");
+        console.error(
+          "❌ Modal logout (.logout-modal-overlay) tidak ditemukan di HTML!",
+        );
       }
     }
   });
 
   // Logika tutup modal (Batal)
-  document.addEventListener("click", function(e) {
+  document.addEventListener("click", function (e) {
     if (e.target.matches(".logout-btn-batal")) {
       const modal = document.querySelector(".logout-modal-overlay");
       if (modal) modal.classList.remove("show");
@@ -366,7 +412,7 @@ function initLogoutLogic() {
   });
 
   // Logika eksekusi logout (Konfirmasi)
-  document.addEventListener("click", function(e) {
+  document.addEventListener("click", function (e) {
     if (e.target.matches(".logout-btn-konfirmasi")) {
       console.log("🚪 Logout diproses...");
       localStorage.clear();

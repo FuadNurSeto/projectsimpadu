@@ -60,33 +60,44 @@ document.addEventListener("DOMContentLoaded", function () {
         const btnBatal = document.getElementById("btn-batal-logout"); // Menggunakan ID yang benar
         const btnExecute = document.querySelector(".logout-btn-konfirmasi"); // Menggunakan selector kelas yang benar
 
-        // Mencari tombol logout di dalam sidebar yang baru dimuat
-        const triggerLogout = container.querySelector(
-          ".menu-item.logout a, #logout-trigger, a[href*='keluar']",
-        );
+        // 4. LOGIKA MODAL LOGOUT GLOBAL: Menggunakan Event Delegation agar lebih robust
+        document.addEventListener("click", function (e) {
+          // Mencari tombol logout dengan berbagai kemungkinan selector class yang ada di CSS
+          const triggerLogout = e.target.closest(
+            ".menu-item.logout a, .nav-item.item-logout a, #logout-trigger, a[href*='keluar']",
+          );
 
-        if (triggerLogout && modalLogout) {
-          triggerLogout.addEventListener("click", function (e) {
+          if (triggerLogout) {
             e.preventDefault();
-            modalLogout.classList.add("show"); // Menggunakan kelas 'show' untuk menampilkan modal
-          });
+            if (modalLogout) {
+              modalLogout.classList.add("show");
+            } else {
+              // Fallback jika modal tidak ditemukan di HTML: Gunakan konfirmasi browser bawaan
+              if (confirm("Apakah Anda yakin ingin keluar dari sistem?")) {
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = "/loginbaru/baru.html";
+              }
+            }
+          }
+        });
 
+        if (modalLogout) {
           if (btnBatal) {
-            btnBatal.addEventListener(
-              "click",
-              () => modalLogout.classList.remove("show"), // Menggunakan kelas 'show' untuk menyembunyikan modal
+            btnBatal.addEventListener("click", () =>
+              modalLogout.classList.remove("show"),
             );
           }
 
           modalLogout.addEventListener("click", (e) => {
-            if (e.target === modalLogout) modalLogout.classList.remove("show"); // Menggunakan kelas 'show'
+            if (e.target === modalLogout) modalLogout.classList.remove("show");
           });
 
           if (btnExecute) {
             btnExecute.addEventListener("click", function () {
               localStorage.clear();
               sessionStorage.clear();
-              // Menggunakan path absolut agar redirect logout berhasil dari subfolder mana pun
+              // Path absolut agar redirect logout berhasil dari subfolder mana pun
               window.location.href = "/loginbaru/baru.html";
             });
           }

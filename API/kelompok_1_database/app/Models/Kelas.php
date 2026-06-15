@@ -35,6 +35,11 @@ class Kelas extends Model
         return $this->hasMany(MahasiswaKelasMk::class, 'id_kelas');
     }
 
+    public function mahasiswaKelas(): HasMany
+    {
+        return $this->hasMany(MahasiswaKelas::class, 'kelas_id');
+    }
+
     public function nilais(): HasMany
     {
         return $this->hasMany(Nilai::class, 'kelas_id');

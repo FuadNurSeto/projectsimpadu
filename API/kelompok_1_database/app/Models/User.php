@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -27,6 +28,8 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
         'role_id',
+        'prodi_id',
+        'semester_id',
         'status',
     ];
 
@@ -101,6 +104,16 @@ class User extends Authenticatable implements JWTSubject
     public function mahasiswaKelasMk(): HasMany
     {
         return $this->hasMany(MahasiswaKelasMk::class, 'nim', 'nomor_identitas');
+    }
+
+    public function prodi(): BelongsTo
+    {
+        return $this->belongsTo(Prodi::class, 'prodi_id');
+    }
+
+    public function semester(): BelongsTo
+    {
+        return $this->belongsTo(Semester::class, 'semester_id');
     }
 
     public function jadwals(): HasMany

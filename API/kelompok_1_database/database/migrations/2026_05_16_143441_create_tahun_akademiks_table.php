@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 return new class extends Migration {
     public function up() {
         Schema::create('tahun_akademiks', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->id();
             $table->string('tahun_akademik')->unique();
             $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
             $table->timestamps();

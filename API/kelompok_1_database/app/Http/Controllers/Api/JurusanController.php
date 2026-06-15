@@ -37,4 +37,24 @@ class JurusanController extends Controller
             'data' => $jurusan,
         ], 201);
     }
+
+    /**
+     * Mengubah nama jurusan berdasarkan ID.
+     *
+     * @param JurusanRequest $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @bodyParam nama_jurusan string required Example: Teknik Elektro
+     */
+    public function update(JurusanRequest $request, $id)
+    {
+        $jurusan = Jurusan::findOrFail($id);
+        $jurusan->update($request->validated());
+
+        return response()->json([
+            'message' => 'Jurusan updated successfully',
+            'data' => $jurusan,
+        ]);
+    }
 }
