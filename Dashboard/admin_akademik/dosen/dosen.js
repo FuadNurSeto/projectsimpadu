@@ -1,9 +1,12 @@
 // d:\Semester 4\PBL\projectsimpadu\Dashboard\admin_akademik\dosen\dosen.js
 
 const API_BASE_URL = "https://admin4e06.vps-poliban.my.id/api/akademik";
-const API_TOKEN = localStorage.getItem("token"); // Token diambil sekali di awal, tapi akan di-refresh saat fetch
+const API_TOKEN = localStorage.getItem("token");
 
-let allDosenData = []; // Global State
+let allDosenData = []; // Global State Data Master
+let currentFilteredData = []; // Global State Data Terfilter
+let currentPage = 1; // Halaman Active saat ini
+const rowsPerPage = 10; // Jumlah baris maksimum per halaman
 
 const requestHeaders = {
   "Content-Type": "application/json",
@@ -27,9 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initCustomSemesterDropdown();
 
   // Search Box Event Listener
-  document
-    .getElementById("search-dosen")
-    ?.addEventListener("input", applyFilters);
+  document.getElementById("search-dosen")?.addEventListener("input", () => {
+    currentPage = 1; // Reset ke halaman pertama saat mengetik kata kunci
+    applyFilters();
+  });
 
   // Inisialisasi Modal Tambah & View Dosen
   initTambahDosenModal();
@@ -69,8 +73,14 @@ async function loadDosenPengajarData() {
       Authorization: `Bearer ${token}`,
     };
 
-    // Mengambil data beban, tahun, dosen, matkul, dan kelas secara paralel dari localhost
-    const [bebanResponse, tahunResponse, dosenResponse, mkResponse, kelasResponse] = await Promise.all([
+    // Mengambil data beban, tahun, dosen, matkul, dan kelas secara paralel
+    const [
+      bebanResponse,
+      tahunResponse,
+      dosenResponse,
+      mkResponse,
+      kelasResponse,
+    ] = await Promise.all([
       fetch(`${API_BASE_URL}/dosen/beban-mengajar`, {
         method: "GET",
         headers: headers,
@@ -84,7 +94,13 @@ async function loadDosenPengajarData() {
       fetch(`${API_BASE_URL}/kelas`, { method: "GET", headers: headers }),
     ]);
 
-    if (!bebanResponse.ok || !tahunResponse.ok || !dosenResponse.ok || !mkResponse.ok || !kelasResponse.ok) {
+    if (
+      !bebanResponse.ok ||
+      !tahunResponse.ok ||
+      !dosenResponse.ok ||
+      !mkResponse.ok ||
+      !kelasResponse.ok
+    ) {
       throw new Error(
         `Gagal mengambil data (Beban: ${bebanResponse.status}, MK: ${mkResponse.status}, Kelas: ${kelasResponse.status})`,
       );
@@ -105,7 +121,9 @@ async function loadDosenPengajarData() {
       ? dosenJson
       : dosenJson.data || [];
     const dataMK = Array.isArray(mkJson) ? mkJson : mkJson.data || [];
-    const dataKelas = Array.isArray(kelasJson) ? kelasJson : kelasJson.data || [];
+    const dataKelas = Array.isArray(kelasJson)
+      ? kelasJson
+      : kelasJson.data || [];
 
     if (
       !Array.isArray(allDosenData) ||
@@ -120,11 +138,10 @@ async function loadDosenPengajarData() {
     // Distribusikan data ke generator penyuplai list custom dropdown
     populateCustomTahunFilter(dataTahun);
     populateCustomProdiFilter(allDosenData);
-    
-    // Populasi pilihan untuk modal Tambah & Edit
-    populateLecturerDropdown(dataDosen); // Untuk edit
-    populateTambahModalOptions(dataDosen, dataMK, dataKelas); // Untuk tambah baru
 
+    // Populasi pilihan untuk modal Tambah & Edit
+    populateLecturerDropdown(dataDosen);
+    populateTambahModalOptions(dataDosen, dataMK, dataKelas);
   } catch (error) {
     console.error("Detail Kendala Fetching:", error);
     tableBody.innerHTML = `
@@ -237,7 +254,7 @@ function populateCustomProdiFilter(data) {
   bindProdiItemsClick();
 }
 
-// Populasi Dropdown Dosen Pengajar di Modal Edit dengan semua dosen tersedia
+// Populasi Dropdown Dosen Pengajar di Modal Edit
 function populateLecturerDropdown(dosenList) {
   const selectNamaDosen = document.getElementById("edit-nama-dosen");
   if (!selectNamaDosen) return;
@@ -258,7 +275,7 @@ function initTambahDosenModal() {
   const modal = document.getElementById("modalTambahDosen");
   const card = document.getElementById("modalCard");
   const btnBatal = document.getElementById("btnBatal");
-  const btnCancelTambah = document.getElementById("btn-cancel-tambah"); 
+  const btnCancelTambah = document.getElementById("btn-cancel-tambah");
   const form = document.getElementById("formTambahDosen");
 
   if (!modal) return;
@@ -267,10 +284,10 @@ function initTambahDosenModal() {
     modal.style.display = "flex";
     modal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
-    
+
     const selectTambahTahun = document.getElementById("select-tambah-tahun");
     const textTambahTahun = document.getElementById("text-tambah-tahun");
-    
+
     try {
       const currentToken = localStorage.getItem("token");
       const response = await fetch(`${API_BASE_URL}/tahun-akademik/aktif`, {
@@ -282,13 +299,19 @@ function initTambahDosenModal() {
       });
 
       if (!response.ok) {
-        throw new Error(`Gagal mengambil tahun akademik aktif: ${response.status}`);
+        throw new Error(
+          `Gagal mengambil tahun akademik aktif: ${response.status}`,
+        );
       }
 
       const data = await response.json();
       if (data && data.id && data.tahun_akademik) {
-        const semesterText = data.tahun_akademik.toLowerCase().includes('ganjil') ? 'Ganjil' : 'Genap';
-        
+        const semesterText = data.tahun_akademik
+          .toLowerCase()
+          .includes("ganjil")
+          ? "Ganjil"
+          : "Genap";
+
         if (selectTambahTahun) selectTambahTahun.value = data.id;
         if (textTambahTahun) {
           textTambahTahun.value = `${data.id} (${semesterText})`;
@@ -299,9 +322,10 @@ function initTambahDosenModal() {
       }
     } catch (error) {
       console.error("Error fetching active academic year:", error);
-      const fallbackYear = localStorage.getItem("active_tahun_akademik") || "20262";
+      const fallbackYear =
+        localStorage.getItem("active_tahun_akademik") || "20262";
       const fallbackSemester = fallbackYear.endsWith("1") ? "Ganjil" : "Genap";
-      
+
       if (selectTambahTahun) selectTambahTahun.value = fallbackYear;
       if (textTambahTahun) {
         textTambahTahun.value = `${fallbackYear} (${fallbackSemester})`;
@@ -327,8 +351,8 @@ function initTambahDosenModal() {
 
   btnTambah?.addEventListener("click", openModal);
   btnBatal?.addEventListener("click", closeModal);
-  btnCancelTambah?.addEventListener("click", closeModal); 
-  
+  btnCancelTambah?.addEventListener("click", closeModal);
+
   modal.addEventListener("click", (e) => {
     if (e.target === modal) closeModal();
   });
@@ -363,7 +387,7 @@ function initTambahDosenModal() {
       if (response.ok) {
         alert("Dosen pengajar berhasil ditambahkan ke kelas!");
         closeModal();
-        loadDosenPengajarData(); 
+        loadDosenPengajarData();
       } else {
         const err = await response.json();
         alert(`Gagal: ${err.message || "Terjadi kesalahan pada server."}`);
@@ -381,7 +405,8 @@ function populateTambahModalOptions(dosenArr, mkArr, kelasArr) {
   const selectKelas = document.getElementById("select-tambah-kelas");
 
   if (selectDosen) {
-    selectDosen.innerHTML = '<option value="" disabled selected>Pilih Dosen Pengajar</option>';
+    selectDosen.innerHTML =
+      '<option value="" disabled selected>Pilih Dosen Pengajar</option>';
     dosenArr.forEach((d) => {
       const opt = new Option(d.name, d.id);
       selectDosen.add(opt);
@@ -389,7 +414,8 @@ function populateTambahModalOptions(dosenArr, mkArr, kelasArr) {
   }
 
   if (selectMK) {
-    selectMK.innerHTML = '<option value="" disabled selected>Pilih atau cari mata kuliah...</option>';
+    selectMK.innerHTML =
+      '<option value="" disabled selected>Pilih atau cari mata kuliah...</option>';
     mkArr.forEach((m) => {
       const opt = new Option(`${m.nama_mk} (${m.sks} SKS)`, m.id_mk);
       selectMK.add(opt);
@@ -397,7 +423,8 @@ function populateTambahModalOptions(dosenArr, mkArr, kelasArr) {
   }
 
   if (selectKelas) {
-    selectKelas.innerHTML = '<option value="" disabled selected>Cari kelas (mis. TI-4E)...</option>';
+    selectKelas.innerHTML =
+      '<option value="" disabled selected>Cari kelas (mis. TI-4E)...</option>';
     kelasArr.forEach((k) => {
       if (k.status === "aktif" || k.status == 1) {
         const opt = new Option(`${k.nama_kelas} (${k.kode_kelas})`, k.id);
@@ -420,7 +447,7 @@ function applyFilters() {
 
   if (!Array.isArray(allDosenData)) return;
 
-  const filteredData = allDosenData
+  currentFilteredData = allDosenData
     .map((item) => {
       if (!item.mata_kuliah) return { ...item, mata_kuliah: [] };
 
@@ -449,7 +476,7 @@ function applyFilters() {
     })
     .filter((item) => item.mata_kuliah.length > 0);
 
-  renderDosenTable(filteredData);
+  renderDosenTable(currentFilteredData);
 }
 
 function getSemesterNumber(mk) {
@@ -527,11 +554,13 @@ function bindTahunItemsClick() {
       }
 
       wrapper.classList.remove("open");
+      currentPage = 1;
       applyFilters();
     });
   });
 }
 
+// Inisialisasi Custom Dropdown Program Studi
 function initCustomProdiDropdown() {
   const wrapper = document.getElementById("dropdown-prodi");
   const innerSearchInput = document.getElementById("search-prodi-dropdown");
@@ -585,6 +614,7 @@ function bindProdiItemsClick() {
       item.appendChild(checkIcon);
 
       wrapper.classList.remove("open");
+      currentPage = 1;
       applyFilters();
     });
   });
@@ -626,6 +656,7 @@ function initCustomSemesterDropdown() {
       item.appendChild(checkIcon);
 
       wrapper.classList.remove("open");
+      currentPage = 1;
       applyFilters();
     });
   });
@@ -638,7 +669,7 @@ document.addEventListener("click", () => {
 });
 
 // ==========================================================================
-// RENDER TABEL UTAMA
+// RENDER TABEL UTAMA + CLIENT SIDE PAGINATION ENGINE
 // ==========================================================================
 function renderDosenTable(dosenData) {
   const tableBody = document.getElementById("list-dosen");
@@ -646,86 +677,227 @@ function renderDosenTable(dosenData) {
 
   tableBody.innerHTML = "";
 
-  if (dosenData.length === 0) {
-    tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px; color:#64748b;">Tidak ada data dosen yang sesuai dengan filter.</td></tr>`;
-    return;
-  }
-
+  // 1. Flatten Data: Struktur data bersarang dipecah jadi baris tunggal
+  const flattenedRows = [];
   dosenData.forEach((item) => {
     const dosen = item.dosen;
     const mataKuliahList = item.mata_kuliah;
-
     if (!dosen || !mataKuliahList) return;
 
-    mataKuliahList.forEach((mk, index) => {
-      const row = document.createElement("tr");
-      const mkSem = getSemesterNumber(mk);
-      const semLabel = /^[1-8]$/.test(mkSem)
-        ? `Sms ${mkSem} (${parseInt(mkSem) % 2 !== 0 ? "Ganjil" : "Genap"})`
-        : "—";
-
-      row.innerHTML = `
-        <td>
-          ${
-            index === 0
-              ? `
-            <div class="dosen-profile-cell">
-              <div class="avatar-circle ${getAvatarColorClass(dosen?.name)}">${getInitials(dosen?.name)}</div>
-              <div class="dosen-meta">
-                <span class="dosen-name">${dosen.name}</span>
-                <span class="dosen-nip">NIP. ${dosen.nomor_identitas || "-"}</span>
-              </div>
-            </div>
-          `
-              : ""
-          }
-        </td>
-        <td>
-          <div class="mk-cell">
-            <span class="mk-name">${mk.nama_mk}</span>
-            <span class="badge-sks">${mk.sks} SKS</span>
-          </div>
-        </td>
-        <td>
-          <div class="kelas-cell">
-            <span class="kelas-code">${mk.kelas?.kode_kelas || "-"} <span class="prodi-slash">/ ${mk.prodi?.nama_prodi || "-"}</span></span>
-            <span class="kelas-tahun">TA: ${mk.tahun_akademik?.id || "-"} — ${semLabel}</span>
-          </div>
-        </td>
-        <td>
-          <span class="badge-peserta ${getPesertaBadgeClass(mk.jumlah_mahasiswa, mk.kelas?.kapasitas_mahasiswa || 40)}">
-            ${mk.jumlah_mahasiswa} Mahasiswa
-          </span>
-        </td>
-        <td>
-          <div class="action-buttons" style="text-align:center">
-            <button class="btn-action view-btn" 
-                    data-dosen-name="${dosen.name || ""}" 
-                    data-dosen-nip="${dosen.nomor_identitas || "-"}"
-                    data-mk-name="${mk.nama_mk || ""}"
-                    data-mk-sks="${mk.sks || 0}"
-                    data-kelas-code="${mk.kelas?.kode_kelas || "-"}"
-                    data-prodi-name="${mk.prodi?.nama_prodi || "-"}"
-                    data-tahun-id="${mk.tahun_akademik?.id || "-"}"
-                    data-tahun-sem="${semLabel}"
-                    data-jumlah-mhs="${mk.jumlah_mahasiswa || 0}">
-              <i class="far fa-eye"></i>
-            </button>
-            <button class="btn-action btn-edit" 
-                    data-id-jadwal="${mk.id_jadwal || ""}"
-                    data-id-kelas="${mk.kelas?.id || ""}"
-                    data-dosen-id="${dosen.id || ""}"
-                    data-dosen-name="${dosen.name || ""}"
-                    data-mk-name="${mk.nama_mk || ""}"
-                    data-kelas-code="${mk.kelas?.kode_kelas || ""}">
-              <i class="fas fa-pencil-alt"></i>
-            </button>
-          </div>
-        </td>
-      `;
-      tableBody.appendChild(row);
+    mataKuliahList.forEach((mk) => {
+      flattenedRows.push({ dosen, mk });
     });
   });
+
+  const totalRecords = flattenedRows.length;
+
+  const currentCountEl = document.getElementById("current-count");
+  const totalCountEl = document.getElementById("total-count");
+  const paginationControlsEl = document.getElementById("pagination-controls");
+
+  if (totalRecords === 0) {
+    tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px; color:#64748b;">Tidak ada data dosen yang sesuai dengan filter.</td></tr>`;
+    if (currentCountEl) currentCountEl.innerText = "0";
+    if (totalCountEl) totalCountEl.innerText = "0";
+    if (paginationControlsEl) paginationControlsEl.innerHTML = "";
+    return;
+  }
+
+  // 2. Kalkulasi Pagination Math
+  const totalPages = Math.ceil(totalRecords / rowsPerPage);
+  if (currentPage > totalPages) currentPage = totalPages;
+
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = Math.min(startIndex + rowsPerPage, totalRecords);
+  const paginatedRows = flattenedRows.slice(startIndex, endIndex);
+
+  // 3. Update Text Keterangan Sisi Kiri Footer
+  if (currentCountEl) currentCountEl.innerText = paginatedRows.length;
+  if (totalCountEl) totalCountEl.innerText = totalRecords;
+
+  // 4. Render Data Ke Tabel DOM
+  let lastDosenId = null;
+
+  paginatedRows.forEach((rowObj) => {
+    const dosen = rowObj.dosen;
+    const mk = rowObj.mk;
+    const row = document.createElement("tr");
+
+    const mkSem = getSemesterNumber(mk);
+    const semLabel = /^[1-8]$/.test(mkSem)
+      ? `Sms ${mkSem} (${parseInt(mkSem) % 2 !== 0 ? "Ganjil" : "Genap"})`
+      : "—";
+
+    const isFirstCellForLecturer = dosen.id !== lastDosenId;
+    lastDosenId = dosen.id;
+
+    row.innerHTML = `
+      <td>
+        ${
+          isFirstCellForLecturer
+            ? `
+          <div class="dosen-profile-cell">
+            <div class="avatar-circle ${getAvatarColorClass(dosen?.name)}">${getInitials(dosen?.name)}</div>
+            <div class="dosen-meta">
+              <span class="dosen-name">${dosen.name}</span>
+              <span class="dosen-nip">NIP. ${dosen.nomor_identitas || "-"}</span>
+            </div>
+          </div>
+        `
+            : ""
+        }
+      </td>
+      <td>
+        <div class="mk-cell">
+          <span class="mk-name">${mk.nama_mk}</span>
+          <span class="badge-sks">${mk.sks} SKS</span>
+        </div>
+      </td>
+      <td>
+        <div class="kelas-cell">
+          <span class="kelas-code">${mk.kelas?.kode_kelas || "-"} <span class="prodi-slash">/ ${mk.prodi?.nama_prodi || "-"}</span></span>
+          <span class="kelas-tahun">TA: ${mk.tahun_akademik?.id || "-"} — ${semLabel}</span>
+        </div>
+      </td>
+      <td>
+        <span class="badge-peserta ${getPesertaBadgeClass(mk.jumlah_mahasiswa, mk.kelas?.kapasitas_mahasiswa || 40)}">
+          ${mk.jumlah_mahasiswa} Mahasiswa
+        </span>
+      </td>
+      <td>
+        <div class="action-buttons" style="text-align:center">
+          <button class="btn-action view-btn" 
+                  data-dosen-name="${dosen.name || ""}" 
+                  data-dosen-nip="${dosen.nomor_identitas || "-"}"
+                  data-mk-name="${mk.nama_mk || ""}"
+                  data-mk-sks="${mk.sks || 0}"
+                  data-kelas-code="${mk.kelas?.kode_kelas || "-"}"
+                  data-prodi-name="${mk.prodi?.nama_prodi || "-"}"
+                  data-tahun-id="${mk.tahun_akademik?.id || "-"}"
+                  data-tahun-sem="${semLabel}"
+                  data-jumlah-mhs="${mk.jumlah_mahasiswa || 0}">
+            <i class="far fa-eye"></i>
+          </button>
+          <button class="btn-action btn-edit" 
+                  data-id-jadwal="${mk.id_jadwal || ""}"
+                  data-id-kelas="${mk.kelas?.id || ""}"
+                  data-dosen-id="${dosen.id || ""}"
+                  data-dosen-name="${dosen.name || ""}"
+                  data-mk-name="${mk.nama_mk || ""}"
+                  data-kelas-code="${mk.kelas?.kode_kelas || ""}">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+        </div>
+      </td>
+    `;
+    tableBody.appendChild(row);
+  });
+
+  // 5. Gambar Ulang Navigasi Kontrol
+  renderPaginationControls(totalPages);
+}
+
+function renderPaginationControls(totalPages) {
+  const container = document.getElementById("pagination-controls");
+  if (!container) return;
+  container.innerHTML = "";
+
+  // Mengatur kerapatan antar tombol pagination
+  container.style.display = "flex";
+  container.style.gap = "6px";
+  container.style.alignItems = "center";
+
+  // UKURAN DIPERKECIL: Padding dari 8px 14px -> 5px 10px | Font dari 14px -> 12px
+  const baseBtnStyle =
+    "padding: 5px 10px; font-size: 12px; font-weight: 600; border-radius: 6px; border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;";
+  const disabledBtnStyle =
+    "padding: 5px 10px; font-size: 12px; font-weight: 600; border-radius: 6px; border: 1px solid #e2e8f0; color: #cbd5e1; background-color: #f8fafc; cursor: not-allowed; font-family: 'Inter', sans-serif;";
+
+  // ==========================================
+  // 1. TOMBOL BACKWARD (<)
+  // ==========================================
+  const prevBtn = document.createElement("button");
+  prevBtn.innerText = "<";
+
+  if (currentPage === 1) {
+    prevBtn.style.cssText = disabledBtnStyle;
+    prevBtn.disabled = true;
+  } else {
+    prevBtn.style.cssText =
+      baseBtnStyle + " background-color: #ffffff; color: #475569;";
+    prevBtn.onmouseover = () => {
+      prevBtn.style.backgroundColor = "#f8fafc";
+      prevBtn.style.borderColor = "#cbd5e1";
+    };
+    prevBtn.onmouseout = () => {
+      prevBtn.style.backgroundColor = "#ffffff";
+      prevBtn.style.borderColor = "#e2e8f0";
+    };
+    prevBtn.addEventListener("click", () => {
+      currentPage--;
+      renderDosenTable(currentFilteredData);
+    });
+  }
+  container.appendChild(prevBtn);
+
+  // ==========================================
+  // 2. TOMBOL ANGKA HALAMAN (1 2 3 ...)
+  // ==========================================
+  for (let i = 1; i <= totalPages; i++) {
+    const btn = document.createElement("button");
+    btn.innerText = i;
+
+    if (i === currentPage) {
+      btn.style.cssText =
+        baseBtnStyle +
+        " background-color: #2563eb; color: #ffffff; border-color: #2563eb;";
+    } else {
+      btn.style.cssText =
+        baseBtnStyle + " background-color: #ffffff; color: #475569;";
+      btn.onmouseover = () => {
+        btn.style.backgroundColor = "#f8fafc";
+        btn.style.borderColor = "#cbd5e1";
+      };
+      btn.onmouseout = () => {
+        btn.style.backgroundColor = "#ffffff";
+        btn.style.borderColor = "#e2e8f0";
+      };
+    }
+
+    btn.addEventListener("click", () => {
+      currentPage = i;
+      renderDosenTable(currentFilteredData);
+    });
+
+    container.appendChild(btn);
+  }
+
+  // ==========================================
+  // 3. TOMBOL FORWARD (>)
+  // ==========================================
+  const nextBtn = document.createElement("button");
+  nextBtn.innerText = ">";
+
+  if (currentPage === totalPages || totalPages === 0) {
+    nextBtn.style.cssText = disabledBtnStyle;
+    nextBtn.disabled = true;
+  } else {
+    nextBtn.style.cssText =
+      baseBtnStyle + " background-color: #ffffff; color: #475569;";
+    nextBtn.onmouseover = () => {
+      nextBtn.style.backgroundColor = "#f8fafc";
+      nextBtn.style.borderColor = "#cbd5e1";
+    };
+    nextBtn.onmouseout = () => {
+      nextBtn.style.backgroundColor = "#ffffff";
+      nextBtn.style.borderColor = "#e2e8f0";
+    };
+    nextBtn.addEventListener("click", () => {
+      currentPage++;
+      renderDosenTable(currentFilteredData);
+    });
+  }
+  container.appendChild(nextBtn);
 }
 
 function getInitials(name) {
@@ -780,7 +952,6 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       const idDosen = targetEdit.getAttribute("data-dosen-id") || "";
-      const namaDosen = targetEdit.getAttribute("data-dosen-name") || "";
       const namaMK = targetEdit.getAttribute("data-mk-name") || "";
       const kodeKelas = targetEdit.getAttribute("data-kelas-code") || "";
 
@@ -860,33 +1031,46 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==========================================================================
 // CONTROLLER: EVENT HANDLER UNTUK MODAL VIEW DETAIL DOSEN
 // ==========================================================================
-// ==========================================================================
-// CONTROLLER: EVENT HANDLER UNTUK MODAL VIEW DETAIL DOSEN
-// ==========================================================================
 function initViewDosenModal() {
   const modalView = document.getElementById("view-dosen-modal");
-  const cardView = document.getElementById("viewModalCard");
   const btnCloseView = document.getElementById("btn-close-view");
   const tableBody = document.getElementById("list-dosen");
+
+  const cardView = modalView?.querySelector(".modal-form-card");
 
   if (!modalView || !tableBody) return;
 
   const openViewModal = (data) => {
-    // Menghasilkan inisial nama secara ringkas (contoh: Ahmad Husaini -> AH)
-    const initials = data.nama.split(" ").filter(n => n.length > 0).map(n => n[0]).slice(0, 2).join("").toUpperCase();
+    const initials = data.nama
+      .split(" ")
+      .filter((n) => n.length > 0)
+      .map((n) => n[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
 
-    // Petakan data ke elemen HTML Modal View
-    document.getElementById("view-header-nama").innerText = data.nama;
-    document.getElementById("view-header-nip").innerText = data.nip;
-    document.getElementById("view-tahun-akademik").innerText = `${data.tahunId} (${data.tahunSem.replace("Sms ", "Semester ")})`;
-    document.getElementById("view-initial-circle").innerText = initials || "??";
-    document.getElementById("view-block-nama").innerText = data.nama;
-    document.getElementById("view-block-nip").innerText = data.nip;
-    document.getElementById("view-mata-kuliah").innerText = `${data.mkNama} (${data.mkSks} SKS)`;
-    document.getElementById("view-kelas-prodi").innerHTML = `<span style="font-weight: 700;">${data.kelasCode}</span> / <span style="color: #64748b; font-weight: 400;">${data.prodiName}</span>`;
-    document.getElementById("view-peserta-badge").innerText = `${data.jumlahMhs} Mahasiswa`;
+    const headerNama = document.getElementById("view-header-nama");
+    const headerNip = document.getElementById("view-header-nip");
+    const tahunAkademik = document.getElementById("view-tahun-akademik");
+    const initialCircle = document.getElementById("view-initial-circle");
+    const blockNama = document.getElementById("view-block-nama");
+    const blockNip = document.getElementById("view-block-nip");
+    const mataKuliah = document.getElementById("view-mata-kuliah");
+    const kelasProdi = document.getElementById("view-kelas-prodi");
+    const pesertaBadge = document.getElementById("view-peserta-badge");
 
-    // Tampilkan Modal & jalankan efek transisi CSS
+    if (headerNama) headerNama.innerText = data.nama;
+    if (headerNip) headerNip.innerText = `NIP: ${data.nip}`;
+    if (tahunAkademik)
+      tahunAkademik.innerText = `${data.tahunId} (${data.tahunSem.replace("Sms ", "Semester ")})`;
+    if (initialCircle) initialCircle.innerText = initials || "??";
+    if (blockNama) blockNama.innerText = data.nama;
+    if (blockNip) blockNip.innerText = `- NIP: ${data.nip}`;
+    if (mataKuliah) mataKuliah.innerText = `${data.mkNama} (${data.mkSks} SKS)`;
+    if (kelasProdi)
+      kelasProdi.innerHTML = `<span style="font-weight: 700;">${data.kelasCode}</span> / <span style="color: #64748b; font-weight: 400;">${data.prodiName}</span>`;
+    if (pesertaBadge) pesertaBadge.innerText = data.jumlahMhs;
+
     modalView.style.display = "flex";
     modalView.classList.remove("hidden");
     document.body.style.overflow = "hidden";
@@ -907,36 +1091,28 @@ function initViewDosenModal() {
     }, 200);
   };
 
-  // Event Delegation untuk menangkap klik tombol .view-btn di dalam tbody tabel
-  tableBody.addEventListener("click", (e) => {
-    const targetBtn = e.target.closest(".view-btn");
-    
-    if (targetBtn) {
-      e.preventDefault();
-      
-      // Ambil data-attribute dari tombol yang diklik sesuai mapping di renderDosenTable
-      const dataDetail = {
-        nama: targetBtn.getAttribute("data-dosen-name"),
-        nip: targetBtn.getAttribute("data-dosen-nip"),
-        tahunId: targetBtn.getAttribute("data-tahun-id"),
-        tahunSem: targetBtn.getAttribute("data-tahun-sem"),
-        mkNama: targetBtn.getAttribute("data-mk-name"),
-        mkSks: targetBtn.getAttribute("data-mk-sks"),
-        kelasCode: targetBtn.getAttribute("data-kelas-code"),
-        prodiName: targetBtn.getAttribute("data-prodi-name"),
-        jumlahMhs: targetBtn.getAttribute("data-jumlah-mhs")
-      };
-      
-      // Kirim objek data ke fungsi penampil modal
-      openViewModal(dataDetail);
-    }
-  });
-
-  // Tombol X / Close Modal View klik handler
   btnCloseView?.addEventListener("click", closeViewModal);
 
-  // Klik di luar card modal untuk menutup popup otomatis
   modalView.addEventListener("click", (e) => {
     if (e.target === modalView) closeViewModal();
+  });
+
+  tableBody.addEventListener("click", (e) => {
+    const targetView = e.target.closest(".view-btn");
+    if (targetView) {
+      e.preventDefault();
+      const data = {
+        nama: targetView.getAttribute("data-dosen-name"),
+        nip: targetView.getAttribute("data-dosen-nip"),
+        mkNama: targetView.getAttribute("data-mk-name"),
+        mkSks: targetView.getAttribute("data-mk-sks"),
+        kelasCode: targetView.getAttribute("data-kelas-code"),
+        prodiName: targetView.getAttribute("data-prodi-name"),
+        tahunId: targetView.getAttribute("data-tahun-id"),
+        tahunSem: targetView.getAttribute("data-tahun-sem"),
+        jumlahMhs: targetView.getAttribute("data-jumlah-mhs"),
+      };
+      openViewModal(data);
+    }
   });
 }

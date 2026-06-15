@@ -617,13 +617,13 @@ header.content-header h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px;
-  padding-top: 16px;
+  margin-top: 14px;
+  padding-top: 10px;
   border-top: 1px solid #f1f5f9;
 }
 
 .pagination-info {
-  font-size: 11px;
+  font-size: 10px;
   color: #64748b;
 }
 
@@ -634,7 +634,7 @@ header.content-header h2 {
 
 .pagination-controls {
   display: flex;
-  gap: 6px;
+  gap: 4px;
 }
 
 .page-num-btn,
@@ -868,7 +868,7 @@ header.content-header h2 {
   padding: 0 16px;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 15px;
   color: #0f172a;
   background-color: #ffffff;
@@ -892,7 +892,7 @@ header.content-header h2 {
 }
 
 /* Wrapper untuk Input ber-Ikon (Mata Kuliah & Kelas) */
-.input-icon-wrapper, 
+.input-icon-wrapper,
 .select-wrapper {
   position: relative;
   width: 100%;
