@@ -55,11 +55,7 @@
             <div class="action-bar-block">
               <div class="search-box-container">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input
-                  type="text"
-                  id="search-input"
-                  placeholder="Cari nama jurusan..."
-                />
+                <input type="text" id="search-input" placeholder="Cari nama " />
               </div>
 
               <div class="action-buttons-group">
@@ -293,6 +289,213 @@
       </main>
     </div>
 
+    <!-- Modal Tambah Jurusan Baru -->
+    <div id="modal-tambah-jurusan" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title">Data Jurusan Baru</h2>
+          <p class="modal-subtitle">
+            Masukkan nama jurusan baru ke dalam sistem terpadu.
+          </p>
+        </div>
+
+        <form id="form-tambah-jurusan" class="modal-form">
+          <div class="input-group">
+            <label for="input-nama-jurusan" class="input-label">
+              Nama Jurusan <span class="required-star">*</span>
+            </label>
+            <input
+              type="text"
+              id="input-nama-jurusan"
+              class="form-input"
+              required
+            />
+          </div>
+
+          <div class="modal-actions">
+            <button
+              type="button"
+              id="btn-batal-jurusan"
+              class="btn-modal btn-cancel"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              id="btn-simpan-jurusan"
+              class="btn-modal btn-submit"
+            >
+              Simpan Data
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Ubah Jurusan -->
+    <div id="modal-edit-jurusan" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title">Ubah Jurusan</h2>
+          <p class="modal-subtitle">
+            Perbarui nama jurusan di dalam sistem terpadu.
+          </p>
+        </div>
+
+        <form id="form-edit-jurusan" class="modal-form">
+          <input type="hidden" id="input-edit-id-jurusan" />
+
+          <div class="input-group">
+            <label for="input-edit-nama-jurusan" class="input-label">
+              Nama Jurusan <span class="required-star">*</span>
+            </label>
+            <input
+              type="text"
+              id="input-edit-nama-jurusan"
+              class="form-input"
+              required
+            />
+          </div>
+
+          <div class="modal-actions">
+            <button
+              type="button"
+              id="btn-batal-edit-jurusan"
+              class="btn-modal btn-cancel"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              id="btn-simpan-edit-jurusan"
+              class="btn-modal btn-submit"
+            >
+              Simpan Perubahan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Tambah Program Studi Baru -->
+    <div id="modal-tambah-prodi" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title">Data Program Studi Baru</h2>
+          <p class="modal-subtitle">
+            Masukkan informasi program studi baru dan tentukan jurusan induknya.
+          </p>
+        </div>
+
+        <form id="form-tambah-prodi" class="modal-form">
+          <div class="input-group">
+            <label for="select-jurusan-induk" class="input-label">
+              Pilih Jurusan Induk <span class="required-star">*</span>
+            </label>
+            <div class="custom-select-container" id="prodi-custom-select">
+              <div class="custom-select-trigger">
+                <span id="selected-jurusan-label">Pilih Jurusan Induk</span>
+                <i class="fa-solid fa-chevron-down custom-select-arrow"></i>
+              </div>
+
+              <div
+                class="custom-options-menu hidden"
+                id="custom-options-jurusan"
+              ></div>
+            </div>
+            <!-- Hidden input untuk menyimpan nilai yang dipilih -->
+            <input
+              type="hidden"
+              id="select-jurusan-induk"
+              name="id_jurusan"
+              required
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="input-nama-prodi" class="input-label">
+              Nama Program Studi <span class="required-star">*</span>
+            </label>
+            <input
+              type="text"
+              id="input-nama-prodi"
+              class="form-input"
+              required
+            />
+          </div>
+
+          <div class="modal-actions">
+            <button
+              type="button"
+              id="btn-batal-prodi"
+              class="btn-modal btn-cancel"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              id="btn-simpan-prodi"
+              class="btn-modal btn-submit"
+            >
+              Simpan Data
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Ubah Data Program Studi -->
+    <div id="modal-edit-prodi" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title">Ubah Data Program Studi</h2>
+          <p class="modal-subtitle">
+            Perbarui nama program studi beserta dengan pilihan jurusan induknya.
+          </p>
+        </div>
+
+        <form id="form-edit-prodi" class="modal-form">
+          <input type="hidden" id="input-edit-id-prodi" />
+
+          <div class="input-group">
+            <label class="input-label">
+              Pilih Jurusan Induk <span class="required-star">*</span>
+            </label>
+            <div class="custom-select-container" id="prodi-edit-custom-select">
+              <div class="custom-select-trigger">
+                <span id="selected-edit-jurusan-label"
+                  >Pilih Jurusan Induk</span
+                >
+                <i class="fa-solid fa-chevron-down custom-select-arrow"></i>
+              </div>
+
+              <div
+                class="custom-options-menu hidden"
+                id="custom-edit-options-jurusan"
+              ></div>
+            </div>
+            <input
+              type="hidden"
+              id="select-edit-jurusan-induk"
+              name="id_jurusan"
+              required
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="input-edit-nama-prodi" class="input-label">
+              Nama Program Studi <span class="required-star">*</span>
+            </label>
+            <input type="text" id="input-edit-nama-prodi" class="form-input" required />
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" id="btn-batal-edit-prodi" class="btn-modal btn-cancel">Batal</button>
+            <button type="submit" id="btn-simpan-edit-prodi" class="btn-modal btn-submit">Simpan Perubahan</button>
+          </div>
+        </form>
+      </div>
+    </div>
     <script src="/Dashboard/admin_akademik/sidebar-loader.js"></script>
     <script src="jurusan.js"></script>
   </body>

@@ -24,41 +24,45 @@
 /* ==========================================================================
    --- STYLING MODAL FLOATING ---
    ========================================================================== */
+/* --- Overlay & Container Utama Modal --- */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4); /* Efek background gelap transparan */
+  background-color: rgba(15, 23, 42, 0.4); /* Efek gelap transparan */
+  backdrop-filter: blur(4px); /* Efek blur halus pada background */
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   z-index: 9999;
-  opacity: 1;
-  transition: opacity 0.2s ease;
+  transition: all 0.3s ease;
 }
 
-/* Class utility untuk menyembunyikan modal */
+/* Utility class untuk menyembunyikan modal */
 .modal-overlay.hidden {
-  display: none !important;
   opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
-/* Card kontainer putih melayang */
+/* --- Kartu Modal Box --- */
 .modal-card {
   background: #ffffff;
   width: 100%;
-  max-width: 560px;
-  border-radius: 16px; /* Sudut melengkung halus sesuai gambar */
+  max-width: 520px;
   padding: 32px;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.08);
-  animation: slideUp 0.3s ease;
+  border-radius: 16px;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: slideDown 0.3s ease-out;
 }
 
-@keyframes slideUp {
+@keyframes slideDown {
   from {
-    transform: translateY(20px);
+    transform: translateY(-20px);
     opacity: 0;
   }
   to {
@@ -67,96 +71,194 @@
   }
 }
 
-/* Header Text */
+/* --- Header Modal --- */
 .modal-header {
-  border-bottom: 1px solid #f0f2f5;
-  padding-bottom: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
+
 .modal-title {
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: #111827;
-  margin: 0 0 6px 0;
+  color: #0f172a;
+  margin: 0 0 4px 0;
 }
+
 .modal-subtitle {
-  font-size: 13px;
-  color: #6b7280;
+  font-size: 0.875rem;
+  color: #64748b;
   margin: 0;
 }
 
-/* Form & Input Fields */
+/* --- Form & Input Style --- */
 .modal-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
 }
-.form-group {
+
+.input-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
-.form-group label {
-  font-size: 13px;
+
+.input-label {
+  font-size: 0.84rem;
   font-weight: 600;
-  color: #374151;
+  color: #1e293b;
 }
-.text-danger {
+
+.required-star {
   color: #ef4444;
 }
 
-/* Gaya Input & Select Box */
 .form-input {
   width: 100%;
-  padding: 11px 14px;
-  font-size: 14px;
-  border: 1px solid #d1d5db;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  border: 1.5px solid #cbd5e1;
   border-radius: 8px;
-  color: #1f2937;
-  background-color: #fff;
+  color: #0f172a;
   outline: none;
-  box-sizing: border-box;
   transition: all 0.2s ease;
 }
 
-/* Efek Border Biru Fokus pas di-klik */
 .form-input:focus {
-  border-color: #1e5bb9;
-  box-shadow: 0 0 0 3px rgba(30, 91, 185, 0.15);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
 }
 
-/* Footer & Buttons */
-.modal-footer {
+/* --- Tombol Aksi (Buttons) --- */
+.modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 12px;
+  margin-top: 8px;
 }
+
+.btn-modal {
+  padding: 12px 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
 .btn-cancel {
-  background-color: #f4f4f5;
-  color: #4b5563;
-  border: none;
-  padding: 10px 24px;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s;
+  background-color: #f1f5f9;
+  color: #475569;
 }
+
 .btn-cancel:hover {
-  background-color: #e4e4e7;
+  background-color: #e2e8f0;
+  color: #334155;
 }
+
 .btn-submit {
-  background-color: #1e5bb9; /* Warna biru SIMPADU */
+  background-color: #2563eb;
   color: #ffffff;
-  border: none;
-  padding: 10px 24px;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s;
 }
+
 .btn-submit:hover {
-  background-color: #164691;
+  background-color: #1d4ed8;
+}
+
+.btn-submit:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+/* --- Container Utama Custom Dropdown --- */
+.custom-select-container {
+  position: relative;
+  width: 100%;
+}
+
+/* --- Tombol Utama Dropdown --- */
+.custom-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #0f172a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.custom-select-container.open .custom-select-trigger {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+.custom-select-arrow {
+  color: #2563eb; /* Sesuai warna biru di gambar */
+  font-size: 0.9rem;
+  transition: transform 0.2s ease;
+}
+
+/* Memutar panah ke atas saat dropdown terbuka */
+.custom-select-container.open .custom-select-arrow {
+  transform: rotate(180deg);
+}
+
+/* --- Menu List Box Opsi --- */
+.custom-options-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.05),
+    0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+}
+
+.custom-options-menu.hidden {
+  display: none;
+}
+
+/* --- Item Pilihan di Dalam Dropdown --- */
+.custom-option-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  color: #334155;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.custom-option-item:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+/* Style saat item terpilih aktif (Sesuai Gambar) */
+.custom-option-item.selected {
+  background-color: #eff6ff; /* Biru muda samar */
+  color: #2563eb; /* Teks biru */
+  font-weight: 500;
+}
+
+.custom-option-check {
+  color: #2563eb;
+  font-size: 0.85rem;
 }

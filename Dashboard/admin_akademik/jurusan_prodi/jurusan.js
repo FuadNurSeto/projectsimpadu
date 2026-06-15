@@ -351,15 +351,12 @@ function initTabAndSearchEvents() {
       if (currentTab === "jurusan") {
         bukaModalJurusan();
       } else {
-        alert("Fitur Tambah Program Studi dipilih!");
+        bukaModalProdi(); // Memicu fungsi buka modal prodi baru
       }
     });
   }
 }
 
-function openEditJurusan(id) {
-  alert(`Aksi Manajemen: Edit data Jurusan dengan ID: ${id}`);
-}
 // --- LOGIKA MODAL POPUP & KIRIM DATA JURUSAN KE API ---
 function bukaModalJurusan() {
   const modal = document.getElementById("modal-tambah-jurusan");
@@ -414,8 +411,297 @@ function bukaModalJurusan() {
     }
   };
 }
+// --- LOGIKA MODAL POPUP & UPDATE DATA JURUSAN (PUT) ---
+async function openEditJurusan(id) {
+  const modal = document.getElementById("modal-edit-jurusan");
+  const form = document.getElementById("form-edit-jurusan");
+  const inputId = document.getElementById("input-edit-id-jurusan");
+  const inputNama = document.getElementById("input-edit-nama-jurusan");
+
+  if (!modal || !form || !inputNama) return;
+
+  // 1. Cari data jurusan yang sesuai di dalam array global dataJurusan
+  const jurusanDipilih = dataJurusan.find(j => String(j.id) === String(id));
+  
+  if (!jurusanDipilih) {
+    alert("❌ Data jurusan tidak ditemukan secara lokal.");
+    return;
+  }
+
+  // 2. Isi nilai form dengan data yang sudah ada
+  inputId.value = jurusanDipilih.id;
+  inputNama.value = jurusanDipilih.nama_jurusan || jurusanDipilih.nama || "";
+
+  // 3. Tampilkan modal edit
+  modal.classList.remove("hidden");
+
+  // Handler tombol Batal
+  document.getElementById("btn-batal-edit-jurusan").onclick = () => {
+    modal.classList.add("hidden");
+  };
+
+  // 4. Handler Submit Form Edit
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token") || localStorage.getItem("auth_token");
+    const namaJurusanDiperbarui = inputNama.value.trim();
+    const btnSimpan = document.getElementById("btn-simpan-edit-jurusan");
+
+    btnSimpan.textContent = "Menyimpan...";
+    btnSimpan.disabled = true;
+
+    try {
+      // Mengirimkan request PUT ke API sesuai ID jurusan
+      const response = await fetch(`${BASE_URL}/api/akademik/jurusan/${id}`, {
+        method: "PUT", // Atau gunakan "POST" dengan _method: "PUT" jika API mewajibkannya
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({ nama_jurusan: namaJurusanDiperbarui })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Gagal memperbarui data di server.");
+      }
+
+      alert("Data Jurusan berhasil diperbarui!");
+      modal.classList.add("hidden");
+      
+      // Ambil ulang data master terupdate dari server VPS dan render ulang tabel
+      await fetchMasterData(token);
+
+    } catch (error) {
+      alert("❌ Gagal Memperbarui: " + error.message);
+    } finally {
+      btnSimpan.textContent = "Simpan Perubahan";
+      btnSimpan.disabled = false;
+    }
+  };
+}
+
+// --- LOGIKA MODAL POPUP & KIRIM DATA PRODI KE API ---
+function bukaModalProdi() {
+  const modal = document.getElementById("modal-tambah-prodi");
+  const form = document.getElementById("form-tambah-prodi");
+  const selectJurusan = document.getElementById("select-jurusan-induk");
+  const inputNama = document.getElementById("input-nama-prodi");
+
+  if (!modal || !form || !selectJurusan) return;
+
+  // 1. Reset form dan render dropdown jurusan secara dinamis
+  form.reset();
+  
+  // Bersihkan opsi lama kecuali opsi petunjuk pertama
+  selectJurusan.innerHTML = '<option value="" disabled selected hidden>Pilih Jurusan Induk</option>';
+  
+  // Masukkan data jurusan induk yang tersedia dari array global dataJurusan
+  dataJurusan.forEach(jurusan => {
+    const option = document.createElement("option");
+    option.value = jurusan.id; // Menggunakan ID Jurusan sebagai value pengiriman ke API
+    option.textContent = jurusan.nama_jurusan || jurusan.nama;
+    selectJurusan.appendChild(option);
+  });
+
+  // 2. Tampilkan Modal
+  modal.classList.remove("hidden");
+
+  // Handler Tombol Batal
+  document.getElementById("btn-batal-prodi").onclick = () => {
+    modal.classList.add("hidden");
+  };
+
+  // 3. Handler Submit Form Tambah Prodi
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token") || localStorage.getItem("auth_token");
+    const idJurusanTerpilih = selectJurusan.value;
+    const namaProdiBaru = inputNama.value.trim();
+
+    const btnSimpan = document.getElementById("btn-simpan-prodi");
+    btnSimpan.textContent = "Menyimpan...";
+    btnSimpan.disabled = true;
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/akademik/prodis`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({ 
+          jurusan_id: idJurusanTerpilih, // Sesuaikan dengan key API Anda
+          nama_prodi: namaProdiBaru 
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Gagal menyimpan data Program Studi.");
+      }
+
+      alert("Data Program Studi berhasil ditambahkan!");
+      modal.classList.add("hidden");
+      
+      // Refresh database lokal dan perbarui tabel
+      await fetchMasterData(token);
+
+    } catch (error) {
+      alert("❌ Gagal: " + error.message);
+    } finally {
+      btnSimpan.textContent = "Simpan Data";
+      btnSimpan.disabled = false;
+    }
+  };
+}
+
+// --- LOGIKA MODAL POPUP & UPDATE DATA PROGRAM STUDI (PUT) ---
+async function openEditProdi(id) {
+  const modal = document.getElementById("modal-edit-prodi");
+  const form = document.getElementById("form-edit-prodi");
+  const inputIdProdi = document.getElementById("input-edit-id-prodi");
+  const inputNamaProdi = document.getElementById("input-edit-nama-prodi");
+  
+  // Elemen custom select komponen untuk modal edit
+  const selectContainer = document.getElementById("prodi-edit-custom-select");
+  const selectTrigger = selectContainer.querySelector(".custom-select-trigger");
+  const labelTerpilih = document.getElementById("selected-edit-jurusan-label");
+  const menuOpsi = document.getElementById("custom-edit-options-jurusan");
+  const hiddenInputIdJurusan = document.getElementById("select-edit-jurusan-induk");
+
+  if (!modal || !form || !selectContainer) return;
+
+  // 1. Cari data prodi terpilih dari array global dataProdi
+  const prodiDipilih = dataProdi.find(p => String(p.id) === String(id));
+  if (!prodiDipilih) {
+    alert("❌ Data program studi tidak ditemukan secara lokal.");
+    return;
+  }
+
+  // 2. Isi nilai awal pada form edit prodi
+  inputIdProdi.value = prodiDipilih.id;
+  inputNamaProdi.value = prodiDipilih.nama_prodi || prodiDipilih.nama || "";
+  hiddenInputIdJurusan.value = prodiDipilih.id_jurusan || "";
+
+  // Reset state kelas open dropdown
+  selectContainer.classList.remove("open");
+  menuOpsi.classList.add("hidden");
+
+  // 3. Render list pilihan Jurusan secara dinamis & tandai yang aktif saat ini
+  menuOpsi.innerHTML = "";
+  dataJurusan.forEach((jurusan) => {
+    const itemNama = jurusan.nama_jurusan || jurusan.nama;
+    const isCurrentActive = String(jurusan.id) === String(prodiDipilih.id_jurusan);
+    
+    const optionRow = document.createElement("div");
+    optionRow.className = `custom-option-item ${isCurrentActive ? 'selected' : ''}`;
+    optionRow.innerHTML = `<span>${itemNama}</span>`;
+    
+    if (isCurrentActive) {
+      labelTerpilih.textContent = itemNama;
+      labelTerpilih.style.color = "#0f172a";
+      optionRow.insertAdjacentHTML("beforeend", '<i class="fa-solid fa-check custom-option-check"></i>');
+    }
+
+    // Event Klik pada baris pilihan opsi baru
+    optionRow.addEventListener("click", (e) => {
+      e.stopPropagation();
+      
+      menuOpsi.querySelectorAll(".custom-option-item").forEach(item => {
+        item.classList.remove("selected");
+        item.querySelector(".custom-option-check")?.remove();
+      });
+
+      optionRow.classList.add("selected");
+      optionRow.insertAdjacentHTML("beforeend", '<i class="fa-solid fa-check custom-option-check"></i>');
+
+      labelTerpilih.textContent = itemNama;
+      hiddenInputIdJurusan.value = jurusan.id;
+
+      selectContainer.classList.remove("open");
+      menuOpsi.classList.add("hidden");
+    });
+
+    menuOpsi.appendChild(optionRow);
+  });
+
+  // Jika prodi belum memiliki id_jurusan yang valid
+  if (!hiddenInputIdJurusan.value) {
+    labelTerpilih.textContent = "Pilih Jurusan Induk";
+    labelTerpilih.style.color = "#94a3b8";
+  }
+
+  // 4. Toggle Event Dropdown
+  selectTrigger.onclick = (e) => {
+    e.stopPropagation();
+    const isOpen = selectContainer.classList.contains("open");
+    selectContainer.classList.toggle("open", !isOpen);
+    menuOpsi.classList.toggle("hidden", isOpen);
+  };
+
+  const closeDropdownOutsideEdit = (e) => {
+    if (!selectContainer.contains(e.target)) {
+      selectContainer.classList.remove("open");
+      menuOpsi.classList.add("hidden");
+      document.removeEventListener("click", closeDropdownOutsideEdit);
+    }
+  };
+  document.addEventListener("click", closeDropdownOutsideEdit);
+
+  // 5. Tampilkan Modal Edit Prodi
+  modal.classList.remove("hidden");
+
+  // Handler tombol batal
+  document.getElementById("btn-batal-edit-prodi").onclick = () => {
+    modal.classList.add("hidden");
+  };
+
+  // 6. Handler Submit Perubahan Data ke Server (PUT)
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token") || localStorage.getItem("auth_token");
+    const btnSimpan = document.getElementById("btn-simpan-edit-prodi");
+
+    btnSimpan.textContent = "Menyimpan...";
+    btnSimpan.disabled = true;
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/akademik/prodis/${id}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          id_jurusan: hiddenInputIdJurusan.value,
+          nama_prodi: inputNamaProdi.value.trim()
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Gagal memperbarui data Program Studi.");
+      }
+
+      alert("Data Program Studi berhasil diperbarui!");
+      modal.classList.add("hidden");
+      await fetchMasterData(token);
+
+    } catch (error) {
+      alert("❌ Gagal Memperbarui: " + error.message);
+    } finally {
+      btnSimpan.textContent = "Simpan Perubahan";
+      btnSimpan.disabled = false;
+    }
+  };
+}
+
 // ==========================================================================
-// 5. Interaktivitas Dropdown Sort & Filter (Click & Outside Click Handler)
+// 7. Interaktivitas Dropdown Sort & Filter (Click & Outside Click Handler)
 // ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
   const sortContainers = document.querySelectorAll(".dropdown-sort-container");
@@ -529,10 +815,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-
-function openEditJurusan(id) {
-  alert(`Aksi Manajemen: Edit data Jurusan dengan ID: ${id}`);
-}
-function openEditProdi(id) {
-  alert(`Aksi Manajemen: Edit data Program Studi dengan ID: ${id}`);
-}
