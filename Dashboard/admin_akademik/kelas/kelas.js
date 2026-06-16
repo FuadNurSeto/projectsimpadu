@@ -726,11 +726,31 @@ async function handleUpdateKelas() {
     return "";
   };
 
+  // ---------------------------------------------------------
+  // 🛡️ BENTENG FRONTEND: VALIDASI KODE KELAS DUPLIKAT
+  // ---------------------------------------------------------
+  const inputKodeKelas = getValue(["edit-kode-kelas", "kode_kelas"]).trim();
+  
+  // Kita cari apakah ada kode yang sama di tabel (abaikan huruf besar/kecil)
+  const isDuplicate = allKelasData.find(kelas => {
+    const kodeExisting = (kelas.kode_kelas || kelas.kode || "").trim().toLowerCase();
+    const currentId = String(kelas.id || kelas.id_kelas || kelas.kode_kelas);
+    
+    // Syarat duplikat: Kodenya sama, TAPI ID-nya berbeda (bukan dirinya sendiri)
+    return kodeExisting === inputKodeKelas.toLowerCase() && currentId !== String(id);
+  });
+
+  if (isDuplicate) {
+    alert(`Peringatan: Kode Kelas "${inputKodeKelas}" sudah digunakan oleh kelas lain! Silakan gunakan kode yang berbeda.`);
+    return; // Hentikan proses, jangan kirim ke API
+  }
+  // ---------------------------------------------------------
+
   let rawStatus = getValue(["edit-status", "status", "status_kelas"]);
   let secureStatus = typeof rawStatus === "string" ? rawStatus.toLowerCase().trim() : "aktif";
 
   const payload = {
-    kode_kelas: getValue(["edit-kode-kelas", "kode_kelas"]),
+    kode_kelas: inputKodeKelas, // Gunakan variabel yang sudah di-trim di atas
     nama_kelas: getValue(["edit-nama-kelas", "nama_kelas"]),
     prodi_id: parseInt(getValue(["edit-prodi", "prodi_id", "id_prodi"])) || getValue(["edit-prodi", "prodi_id", "id_prodi"]),
     tahun_akademik_id: parseInt(getValue(["edit-tahun", "tahun_akademik_id", "id_tahun_akademik"])) || getValue(["edit-tahun", "tahun_akademik_id", "id_tahun_akademik"]),

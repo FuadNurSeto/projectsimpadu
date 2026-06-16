@@ -1115,4 +1115,5 @@ function initViewDosenModal() {
       openViewModal(data);
     }
   });
+  
 }
