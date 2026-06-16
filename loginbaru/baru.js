@@ -28,14 +28,21 @@ loginForm.addEventListener("submit", async function (e) {
   btnLogin.disabled = true;
 
   try {
+<<<<<<< HEAD
     const response = await fetch(
       "https://hurdle-tinkling-crazy.ngrok-free.dev/api/akademik/login",
+=======
+    const response = await fetch("http://127.0.0.1:8000/api/akademik/login",
+>>>>>>> 2bf585840cdecd2d265ff718cf01ea7adf76d7d8
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+<<<<<<< HEAD
           "ngrok-skip-browser-warning": "true",
+=======
+>>>>>>> 2bf585840cdecd2d265ff718cf01ea7adf76d7d8
         },
         body: JSON.stringify({
           email: email,
