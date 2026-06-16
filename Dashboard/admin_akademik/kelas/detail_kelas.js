@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://admin4e06.vps-poliban.my.id/api/akademik";
+const API_BASE_URL = "https://hurdle-tinkling-crazy.ngrok-free.dev/api/akademik";
 const token = localStorage.getItem("token");
 
 let allStudents = []; // Menyimpan data asli dari API untuk fitur search lokal
@@ -62,6 +62,7 @@ async function fetchDetailKelas(id) {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
+        "ngrok-skip-browser-warning": "true",
       },
     });
     if (!res.ok) throw new Error("Gagal mengambil detail kelas");
@@ -135,6 +136,7 @@ async function fetchMahasiswaKelas(id) {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
+        "ngrok-skip-browser-warning": "true",
       },
     });
     if (!res.ok) throw new Error("Gagal mengambil daftar mahasiswa");
@@ -366,6 +368,7 @@ document.addEventListener("DOMContentLoaded", () => {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
+            "ngrok-skip-browser-warning": "true",
           },
         },
       );

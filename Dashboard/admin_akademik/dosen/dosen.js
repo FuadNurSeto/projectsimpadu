@@ -1,6 +1,7 @@
 // d:\Semester 4\PBL\projectsimpadu\Dashboard\admin_akademik\dosen\dosen.js
 
-const API_BASE_URL = "https://admin4e06.vps-poliban.my.id/api/akademik";
+const API_BASE_URL =
+  "https://hurdle-tinkling-crazy.ngrok-free.dev/api/akademik";
 const API_TOKEN = localStorage.getItem("token");
 
 let allDosenData = []; // Global State Data Master
@@ -12,6 +13,7 @@ const requestHeaders = {
   "Content-Type": "application/json",
   Accept: "application/json",
   Authorization: `Bearer ${API_TOKEN}`,
+  "ngrok-skip-browser-warning": "true",
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -71,6 +73,7 @@ async function loadDosenPengajarData() {
       "Content-Type": "application/json",
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "true",
     };
 
     // Mengambil data beban, tahun, dosen, matkul, dan kelas secara paralel
@@ -295,6 +298,7 @@ function initTambahDosenModal() {
         headers: {
           Authorization: `Bearer ${currentToken}`,
           Accept: "application/json",
+          "ngrok-skip-browser-warning": "true",
         },
       });
 
@@ -379,6 +383,7 @@ function initTambahDosenModal() {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          "ngrok-skip-browser-warning": "true",
           Authorization: `Bearer ${localStorage.getItem("token") || API_TOKEN}`,
         },
         body: JSON.stringify(payload),
@@ -1002,6 +1007,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "Content-Type": "application/json",
             Accept: "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "ngrok-skip-browser-warning": "true",
           },
           body: JSON.stringify(dataPayload),
         },
@@ -1115,5 +1121,4 @@ function initViewDosenModal() {
       openViewModal(data);
     }
   });
-  
 }

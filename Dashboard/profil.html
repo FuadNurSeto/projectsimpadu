@@ -586,7 +586,7 @@
 
         // Mengambil detail user berdasarkan id dari database melalui Endpoint API #36
         fetch(
-          `https://admin4e06.vps-poliban.my.id/api/akademik/users/${userSession.id}`,
+          `https://hurdle-tinkling-crazy.ngrok-free.dev/api/akademik/users/${userSession.id}`,
           {
             method: "GET",
             headers: {
@@ -675,7 +675,7 @@
             btnSimpan.disabled = true;
 
             fetch(
-              `https://admin4e06.vps-poliban.my.id/api/akademik/users/${idUser}`,
+              `https://hurdle-tinkling-crazy.ngrok-free.dev/api/akademik/users/${idUser}`,
               {
                 method: "PUT",
                 headers: {
@@ -735,7 +735,7 @@
             }
 
             fetch(
-              `https://admin4e06.vps-poliban.my.id/api/akademik/users/${userSession.id}/reset-password`,
+              `https://hurdle-tinkling-crazy.ngrok-free.dev/api/akademik/users/${userSession.id}/reset-password`,
               {
                 method: "POST",
                 headers: {

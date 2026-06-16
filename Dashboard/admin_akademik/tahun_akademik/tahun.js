@@ -1,7 +1,7 @@
 // ==========================================================================
 // --- KONFIGURASI UTAMA & BASE URL ---
 // ==========================================================================
-const BASE_URL = "https://admin4e06.vps-poliban.my.id";
+const BASE_URL = "https://hurdle-tinkling-crazy.ngrok-free.dev";
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("🔄 [System] DOM selesai dimuat. Memulai inisialisasi fitur...");
@@ -71,6 +71,7 @@ async function fetchTahunAkademik(token) {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
+        "ngrok-skip-browser-warning": "true",
       },
     });
 
@@ -179,6 +180,7 @@ function initModalLogic(token) {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
               Accept: "application/json",
+              "ngrok-skip-browser-warning": "true",
             },
             body: JSON.stringify(payload),
           },
@@ -247,6 +249,7 @@ function initEditModalLogic(token) {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
               Accept: "application/json",
+              "ngrok-skip-browser-warning": "true",
             },
             body: JSON.stringify(dataDiperbarui),
           },
@@ -354,6 +357,7 @@ function initStatusToggleLogic(token) {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
               Accept: "application/json",
+              "ngrok-skip-browser-warning": "true",
             },
             body: JSON.stringify({
               id: targetIdTahun,

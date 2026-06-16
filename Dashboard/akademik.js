@@ -9,6 +9,7 @@ const requestHeaders = {
   "Content-Type": "application/json",
   Accept: "application/json",
   Authorization: `Bearer ${API_TOKEN}`, // Dikirim jika endpoint API diproteksi auth:sanctum
+  "ngrok-skip-browser-warning": "true",
 }; // Mengganti nama variabel menjadi 'headers' agar konsisten dengan prompt
 
 // Variable global untuk menyimpan ID user yang sedang login (diperlukan untuk reset password)
@@ -461,6 +462,7 @@ async function getProfilDariVPS() {
       "Content-Type": "application/json",
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "true",
     };
 
     // Sesuai Dokumentasi #45: Endpoint profil user login
@@ -545,6 +547,7 @@ function initAksiKeamananProfil() {
             "Content-Type": "application/json",
             Accept: "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "ngrok-skip-browser-warning": "true",
           },
           body: JSON.stringify({ name, email }),
         });

@@ -612,15 +612,19 @@ document.addEventListener("DOMContentLoaded", function () {
       submitBtn.innerHTML =
         '<i class="fas fa-spinner fa-spin"></i> Memproses...';
 
-      fetch("https://admin4e06.vps-poliban.my.id/api/akademik/register", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
+      fetch(
+        "https://hurdle-tinkling-crazy.ngrok-free.dev/api/akademik/register",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "ngrok-skip-browser-warning": "true",
+          },
+          body: JSON.stringify(payload),
         },
-        body: JSON.stringify(payload),
-      })
+      )
         .then(async (response) => {
           if (!response.ok) {
             const alasanGagal = await bacaPesanError(response);
@@ -680,13 +684,14 @@ document.addEventListener("DOMContentLoaded", function () {
         '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
 
       fetch(
-        `https://admin4e06.vps-poliban.my.id/api/akademik/users/${userId}`,
+        `https://hurdle-tinkling-crazy.ngrok-free.dev/api/akademik/users/${userId}`,
         {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
             Accept: "application/json",
+            "ngrok-skip-browser-warning": "true",
           },
           body: JSON.stringify(payload),
         },
@@ -720,12 +725,13 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  fetch("https://admin4e06.vps-poliban.my.id/api/akademik/users", {
+  fetch("https://hurdle-tinkling-crazy.ngrok-free.dev/api/akademik/users", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": "true",
     },
   })
     .then((response) => response.json())
@@ -878,12 +884,13 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!confirm("Yakin ingin menghapus data pegawai ini?")) return;
 
         fetch(
-          `https://admin4e06.vps-poliban.my.id/api/akademik/users/${userId}`,
+          `https://hurdle-tinkling-crazy.ngrok-free.dev/api/akademik/users/${userId}`,
           {
             method: "DELETE",
             headers: {
               Authorization: `Bearer ${userToken}`,
               Accept: "application/json",
+              "ngrok-skip-browser-warning": "true",
             },
           },
         )
@@ -942,13 +949,14 @@ document.addEventListener("DOMContentLoaded", function () {
       const userToken = localStorage.getItem("token");
 
       fetch(
-        `https://admin4e06.vps-poliban.my.id/api/akademik/users/${userId}`,
+        `https://hurdle-tinkling-crazy.ngrok-free.dev/api/akademik/users/${userId}`,
         {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${userToken}`,
             "Content-Type": "application/json",
             Accept: "application/json",
+            "ngrok-skip-browser-warning": "true",
           },
           body: JSON.stringify({ status: "nonaktif" }),
         },
@@ -974,13 +982,14 @@ document.addEventListener("DOMContentLoaded", function () {
       const userToken = localStorage.getItem("token");
 
       fetch(
-        `https://admin4e06.vps-poliban.my.id/api/akademik/users/${userId}`,
+        `https://hurdle-tinkling-crazy.ngrok-free.dev/api/akademik/users/${userId}`,
         {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${userToken}`,
             "Content-Type": "application/json",
             Accept: "application/json",
+            "ngrok-skip-browser-warning": "true",
           },
           body: JSON.stringify({ status: "aktif" }),
         },
