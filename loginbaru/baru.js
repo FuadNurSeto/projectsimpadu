@@ -28,17 +28,19 @@ loginForm.addEventListener("submit", async function (e) {
   btnLogin.disabled = true;
 
   try {
-    const response = await fetch("https://admin4e06.vps-poliban.my.id/api/akademik/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+    const response = await fetch("http://127.0.0.1:8000/api/akademik/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
       },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    });
+    );
 
     const result = await response.json();
 
